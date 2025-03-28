@@ -6,6 +6,8 @@ import Background from '../../../public/background2.jpg';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
+import MessiEnojado from '../../../public/messiEnojado.png';
+import Image from 'next/image';
 
 export default function AccessDenied() {
     const navigate = useRouter();
@@ -26,9 +28,10 @@ export default function AccessDenied() {
         backgroundPosition: 'right',
       }}
     >
-    <div className=' bg-slate-800 bg-opacity-70 border-none items-center rounded-md p-10' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+    <div className=' bg-slate-800 bg-opacity-70 border-none items-center rounded-md p-10 flex flex-col justify-center' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
       <h1 className="text-4xl font-bold mb-4">Acceso denegado</h1>
-      <p className="text-xl mb-4">No tenes acceso para visitar esa página.</p>
+      <p className="text-xl mb-4">No tenés acceso para ver esa página.</p>
+      <Image src={MessiEnojado} alt="background" width={400} height={400}/>
       <MainButton onClick={handleRedirect} text={'Volver'} isLoading={false} />
     </div>
     </main>
