@@ -1,8 +1,11 @@
 'use client'
 import { RootState } from '@/redux/store';
+import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import endpoint from '../../../../endpoint';
+import Bayern from '../../../../public/bayern.png'
+import { useRouter } from 'next/navigation';
+import SoccerLoadingAnimation from '@/app/components/loadingAnimation';
 
 interface Jugador {
   id: number,
@@ -29,20 +32,20 @@ const groupByPosition = (jugadores: Jugador[]): Record<string, Jugador[]> => {
 const MyTeam: React.FC = () => {
 
   const [players, setPlayers] = useState<Jugador[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const jugadoresPorPosicion = groupByPosition(players);
   const loggedUser = useSelector((state: RootState) => state.user);
+  const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
+  const URL_IMG = process.env.NEXT_PUBLIC_URL_IMG;
+  const router = useRouter();
 
   const fetchTeamPlayers = async () => {
     try {
       if (loggedUser.user) {
         const teamId = loggedUser.user.team.id;
   
-        const response = await fetch(endpoint + "players-by-team-id", {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ teamId }),
+        const response = await fetch(`${URL_SERVER}players/get-by/${teamId}`, {
+          method: 'GET',
         });
   
         if (response.ok) {
@@ -54,28 +57,41 @@ const MyTeam: React.FC = () => {
       }
     } catch (error) {
       console.error('Error en la solicitud:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
+    if(!loggedUser?.user?.team){
+      router.push('/home')
+    }
     fetchTeamPlayers();
   }, []);
 
+  if (isLoading) {
+    return (
+        <SoccerLoadingAnimation/>
+    );
+  }
+
   return (
-    <div className="h-full flex flex-col items-center w-full justify-center" style={{animation: 'moveTopToBottom 0.3s ease'}}>
-      <div className='pl-52 pr-52 p-5 mb-24 bg-slate-800 bg-opacity-50 flex justify-center items-center' style={{boxShadow:"rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
-        <h2 className='text-2xl'>{loggedUser.user?.team.name}</h2>
-      </div>
-      <div className="w-4/5 h-3/6">
-        <div className="grid grid-cols-4 gap-4">
+    <div className="min-h-screen flex flex-col items-center w-full justify-center gap-10" style={{animation: 'moveTopToBottom 0.3s ease'}}>
+      {loggedUser?.user?.team && (
+        <Image src={URL_IMG + loggedUser.user.team.logo} alt={`Foto del equipo ${loggedUser.user?.team.name}`} width={120} height={120} className="rounded-full object-fit:cover object-center" style={{aspectRatio: "1/1"}}/>
+      )}
+      <div className="w-full max-w-7xl px-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 categories-container">
           {Object.entries(jugadoresPorPosicion).map(([posicion, jugadores]) => (
-            <div key={posicion} className='bg-slate-800 bg-opacity-50 min-h-full text-white h-96' style={{boxShadow:"rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
-              <h2 className='mb-5 text-center w-full p-3 bg-transparent' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>{posicion}</h2>
-              {jugadores.map((jugador, index) => (
-                <div key={index}>
-                  <p className='pl-7 pb-2'>{`${jugador.name} - ${jugador.number}`}</p>
-                </div>
-              ))}
+            <div key={posicion} className='bg-slate-800 bg-opacity-70 rounded-md text-white min-h-[16rem] h-auto' style={{boxShadow:"rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
+              <h2 className='mb-3 text-center w-full p-2 sm:p-3 bg-transparent text-sm sm:text-base' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>{posicion}</h2>
+              <div className="p-2 sm:p-4">
+                {jugadores.map((jugador, index) => (
+                  <div key={index} className="mb-2">
+                    <p className='text-sm sm:text-base'>{`${jugador.name} - ${jugador.number}`}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
         </div>
@@ -87,6 +103,31 @@ const MyTeam: React.FC = () => {
           }
           to {
             transform: translateY(0);
+          }
+        }
+        @media (max-width: 700px) {
+          .categories-container {
+            overflow-y: scroll;
+            scrollbar-width: thin;
+            scrollbar-color: white rgba(255, 255, 255, 0.1);
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            grid-template-columns: none;
+          }
+          .categories-container::-webkit-scrollbar {
+            width: 8px;
+          }
+          .categories-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+          }
+          .categories-container::-webkit-scrollbar-thumb {
+            background-color: white;
+            border-radius: 4px;
+          }
+          .categories-container > div {
+            width: 100%;
           }
         }
       `}</style>

@@ -3,12 +3,16 @@ import React, { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import jwt_decode from 'jwt-decode';
-import { setUser, UserData } from '../../redux/Features/user/userSlice';
-import endpoint from '../../../endpoint'
+import { setToken, setUser, UserData } from '../../redux/Features/user/userSlice';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import MainButton from './mainButton';
 
 const LoginForm: React.FC = () => {
 
-  const [errorMessagge, setErrorMessagge] = useState('')
+  const [errorMessagge, setErrorMessagge] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -24,8 +28,9 @@ const LoginForm: React.FC = () => {
   };
 
   const loginUser = async (username: string, password: string) => {
+    setIsLoading(true);
     try {
-      const response = await fetch(endpoint + 'login', {
+      const response = await fetch(`${URL_SERVER}users/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,22 +38,24 @@ const LoginForm: React.FC = () => {
         body: JSON.stringify({ username, password }),
       });
   
-      if (response.ok) {
-        const { token } = await response.json();
-        const decodedToken = jwt_decode(token) as UserData;
-        dispatch(setUser(decodedToken));
-        router.push('/home');
-      } else {
-        console.error('Error de autenticación');
-        setErrorMessagge('Error al iniciar sesion')
+      if (!response.ok) {
+        throw new Error('Error al iniciar sesion');
       }
+      const { token } = await response.json();
+      const decodedToken = jwt_decode(token) as UserData;
+      dispatch(setUser(decodedToken));
+      dispatch(setToken(token));
+      console.log(decodedToken);
+      decodedToken.role === 'admin' ? router.push('/admin') : router.push('/home');
     } catch (error) {
-      console.error('Error al enviar la solicitud:', error);
+      setErrorMessagge('Error al iniciar sesion')
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-96 bg-slate-50 bg-opacity-50 p-10 rounded-[30px]" style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-96 bg-slate-50 bg-opacity-70 p-10 rounded-[30px]" style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
       {errorMessagge && (
         <h2 className='text-[#c25454] font-bold'>
           {errorMessagge}
@@ -60,23 +67,30 @@ const LoginForm: React.FC = () => {
           type="text"
           id="username"
           name="username"
-          className="border p-3 rounded-[15px] text-[#02124a] bg-slate-50 bg-opacity-20 border-none"
+          className="border p-3 rounded-[15px] text-[#02124a] bg-slate-50 bg-opacity-50 border-none"
           placeholder="Usuario.."
         />
       </div>
       <div className='flex flex-col text-[#02124a]'>
         <label htmlFor="password">Contraseña</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          className="border p-3 rounded-[15px] text-black bg-slate-50 bg-opacity-20 border-none"
-          placeholder="Contraseña.."
-        />
+        <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            id="password"
+            name="password"
+            className="border p-3 rounded-[15px] text-black bg-slate-50 bg-opacity-50 border-none w-full"
+            placeholder="Contraseña.."
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#02124a]"
+          >
+            {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+          </button>
+        </div>
       </div>
-        <button type="submit" className="bg-[#02124a] text-white p-2 mt-4 rounded-[15px] hover:bg-opacity-80 transition-all duration-300" style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
-          Iniciar sesión
-        </button>
+        <MainButton type='submit' text='Iniciar sesion' isLoading={isLoading} />
     </form>
   );
 };
