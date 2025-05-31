@@ -1,7 +1,9 @@
   'use client'
 
   import SoccerLoadingAnimation from '@/app/components/loadingAnimation';
+import MainButton from '@/app/components/mainButton';
 import Notification from '@/app/components/notification';
+import PopUpNotification from '@/app/components/popUpNotification';
   import React, { useEffect, useState } from 'react'
 
   interface User {
@@ -14,7 +16,8 @@ import Notification from '@/app/components/notification';
     const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
     const [isLoading, setIsLoading] = useState(true);
     const [users, setUsers] = useState<User[]>([]);
-    const [selectedUser, setSelectedUser] = useState<number>(0);
+    const [selectedUser, setSelectedUser] = useState<User>();
+    const [showDeleteUserPopup, setShowUserDeletePopup] = useState(false);
 
     const [notification, setNotification] = useState({
       show: false,
@@ -42,7 +45,7 @@ import Notification from '@/app/components/notification';
     const handleDelete = async () => {
       if (!selectedUser) return;
       try {
-        const response = await fetch(`${URL_SERVER}users/delete/${selectedUser}`, {
+        const response = await fetch(`${URL_SERVER}users/delete/${selectedUser.id}`, {
           method: 'DELETE',
         });
         const data = await response.json();
@@ -68,11 +71,31 @@ import Notification from '@/app/components/notification';
       }, 3000);
     }
 
+    const handleUserDelete = () =>{
+      if (!selectedUser) {
+        return
+      }
+      setShowUserDeletePopup(true);
+    }
+
     if (isLoading) {
       return <SoccerLoadingAnimation/>
     }
     return (
       <div className='w-4/5 md:w-2/5 bg-slate-800 bg-opacity-70 pb-10 border-none flex flex-col items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+        {showDeleteUserPopup && (
+          <PopUpNotification closeNotification={() => setShowUserDeletePopup(false)}>
+            <div className='flex flex-col justify-center align-middle items-center gap-5 w-4/5 h-full'>
+              <p className='text-slate-800 text-2xl text-center'>
+                Estás seguro que querés eliminar a <span className="text-slate-900 font-bold">{selectedUser?.username}</span>?
+              </p>
+              <div className='flex flex-row justify-center align-middle items-center gap-5'>
+                <MainButton text={'Eliminar'} isLoading={false} onClick={handleDelete}/>
+                <MainButton text={'Cancelar'} isLoading={false} isCancel={true} onClick={() => setShowUserDeletePopup(false)} />
+              </div>
+            </div>
+          </PopUpNotification>
+        )}
         {notification.show && (
         <Notification
           type={notification.type}
@@ -83,9 +106,9 @@ import Notification from '@/app/components/notification';
       )}
         <h2 className='mb-5 text-center w-full p-3 bg-transparent' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>Borrar usuario</h2>
         <select 
-          className="w-4/5 p-2 mb-4 bg-slate-700 rounded-md"
-          value={selectedUser}
-          onChange={(e) => setSelectedUser(Number(e.target.value))}
+          className="w-3/5 p-2 mb-4 bg-slate-700 rounded-md"
+          value={selectedUser?.id}
+          onChange={(e) => setSelectedUser(users.find(user => user.id === Number(e.target.value)))}
         >
           <option value={0}>Seleccionar usuario</option>
           {users.map((user) => (
@@ -94,13 +117,9 @@ import Notification from '@/app/components/notification';
             </option>
           ))}
         </select>
-        <button 
-          onClick={handleDelete}
-          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
-          disabled={!selectedUser}
-        >
-          Eliminar
-        </button>
+        <div className='flex flex-col w-3/5'>
+          <MainButton text={'Eliminar'} isLoading={false} onClick={handleUserDelete} />
+        </div>
       </div>
     )
   }

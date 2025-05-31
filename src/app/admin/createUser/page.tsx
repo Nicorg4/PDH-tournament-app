@@ -1,7 +1,10 @@
 
 'use client'
 
+import MainButton from '@/app/components/mainButton';
 import Notification from '@/app/components/notification';
+import PopUpNotification from '@/app/components/popUpNotification';
+import Image from 'next/image';
 import React, { useState } from 'react'
 
 const createUser = () => {
@@ -9,7 +12,8 @@ const createUser = () => {
     username: '',
     role: 'user',
     password: '',
-    picture: null as File | null
+    picture: null as File | null,
+    previewUrl: '' as string
   })
 
   const [notification, setNotification] = useState({
@@ -19,9 +23,17 @@ const createUser = () => {
   });
 
   const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
+  const [isLoading, setIsLoading] = useState(false);
+  const [showCreateUserPopup, setShowCreateUserPopup] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setShowCreateUserPopup(true);
+    
+  }
+
+  const createUser = async () =>{
+    setIsLoading(true);
     if (!formData.picture || !formData.username || !formData.password) {
       return
     }
@@ -46,19 +58,22 @@ const createUser = () => {
             username: '',
             role: 'user',
             password: '',
-            picture: null
+            picture: null,
+            previewUrl: ''
         })
         showNotification('Usuario creado correctamente.', 'success');
     }catch(error){
         console.error('Error al crear el usuario:', error);
     }finally{
-
+      setIsLoading(false);
+      setShowCreateUserPopup(false);
     }
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFormData({ ...formData, picture: e.target.files[0] })
+      const file = e.target.files[0];
+      setFormData({ ...formData, picture: e.target.files[0], previewUrl: URL.createObjectURL(file)})
     }
   }
 
@@ -71,6 +86,28 @@ const createUser = () => {
 
   return (
     <div className='w-4/5 md:w-2/5 bg-slate-800 bg-opacity-70 pb-10 border-none flex flex-col items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+      {showCreateUserPopup && (
+        <PopUpNotification closeNotification={() => setShowCreateUserPopup(false)}>
+          <div className='flex flex-col justify-center align-middle items-center gap-5 w-4/5 h-full'>
+                <p className='text-slate-800 text-2xl text-center'>
+                  Estás seguro que querés crear a <span className="text-slate-900 font-bold">{formData?.username}</span>?
+                </p>
+                {formData.previewUrl && (
+                    <Image 
+                      src={formData.previewUrl} 
+                      alt="Preview" 
+                      className="rounded-full object-fit:cover object-center aspect-square"
+                      width={128}
+                      height={128}
+                    />
+                )}
+                <div className='flex flex-row justify-center align-middle items-center gap-5'>
+                  <MainButton text={'Crear'} isLoading={false} onClick={createUser}/>
+                  <MainButton text={'Cancelar'} isLoading={false} isCancel={true} onClick={() => setShowCreateUserPopup(false)} />
+                </div>
+              </div>
+        </PopUpNotification>
+      )}
       {notification.show && (
         <Notification
           type={notification.type}
@@ -117,13 +154,9 @@ const createUser = () => {
             className="w-full p-2 border rounded"
           />
         </div>
-
-        <button
-          type="submit"
-          className="bg-[#02124a] text-white p-2 mt-4 rounded-[15px] hover:bg-opacity-80 transition-all duration-300" style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}
-        >
-          Crear usuario
-        </button>
+        <div className='flex flex-col'>
+          <MainButton text={'Crear usuario'} isLoading={isLoading} type="submit"/>
+        </div>
       </form>
     </div>
   )

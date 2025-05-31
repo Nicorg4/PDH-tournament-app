@@ -1,9 +1,11 @@
 'use client'
 
 import SoccerLoadingAnimation from '@/app/components/loadingAnimation';
+import MainButton from '@/app/components/mainButton';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { CgArrowsExchange } from "react-icons/cg";
 
 interface User {
     id: number;
@@ -172,16 +174,17 @@ const TeamRafflePage = () => {
                 <h2 className='mb-5 text-center w-full p-3 bg-transparent' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>Sorteo</h2>
                 <div className='flex items-center gap-5'>
                     {(selectedPairs.length === 8 || selectedPairs.length === 16) ? (
-                        <button className="bg-[#02124a] text-white p-2 w-30 mt-4 rounded-[15px] hover:bg-opacity-80 transition-all duration-300 mb-5" style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}} onClick={handleGroupsRaffle}>Armar grupos</button>
+                        <MainButton text={'Armar grupos'} isLoading={isLoading} onClick={handleGroupsRaffle}/>
                     ) : (
-                        <button className="bg-[#02124a] text-white p-2 w-30 mt-4 rounded-[15px] hover:bg-opacity-80 transition-all duration-300 mb-5" style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}} onClick={handleRaffle}>Sortear</button>
+                        <MainButton text={'Sortear'} isLoading={isLoading} onClick={handleRaffle}/>
                     )}
-                    <button className="bg-[#687ab8] text-white p-2 w-30 mt-4 rounded-[15px] hover:bg-opacity-80 transition-all duration-300 mb-5" style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}} onClick={handleReset}>Reiniciar</button>
+                    <MainButton text={'Reiniciar'} isLoading={isLoading} onClick={handleReset} isCancel={true}/>
                 </div>
-                <div>
+                <div className='mt-10'>
                     {selectedPairs.map((pair, index) => (
                         <div className='flex gap-3 items-center mb-2' key={index}>
                             <Image src={URL_IMG + pair.team.logo} alt={pair.team.name} width={35} height={35}/>
+                            <CgArrowsExchange className='text-2xl'/>
                             <Image src={URL_IMG + pair.user.picture} alt={"User image"} width={35} height={35} className="rounded-full object-cover aspect-square"/>
                         </div>
                     ))}
@@ -201,24 +204,19 @@ const TeamRafflePage = () => {
             {showPopup && currentPair && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                     <div className="bg-slate-800 p-20 pl-32 pr-32 rounded-md flex flex-col items-center gap-10" style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
-                        <h3 className="text-xl mb-4">Equipo sorteado:</h3>
-                        <div className="flex items-center gap-32">
+                        <h3 className="text-3xl mb-4">Equipo sorteado:</h3>
+                        <div className="flex items-center gap-12">
                             <div className="flex flex-col items-center">
                                 <Image src={URL_IMG + currentPair.team.logo} alt={currentPair.team.name} width={150} height={150}/>
                                 <span className="mt-2">{currentPair.team.name}</span>
                             </div>
+                            <CgArrowsExchange className='text-8xl'/>
                             <div className="flex flex-col items-center">
                                 <Image src={URL_IMG + currentPair.user.picture} alt={"User image"} width={150} height={150} className="rounded-full object-cover aspect-square"/>
                                 <span className="mt-2">{currentPair.user.username}</span>
                             </div>
                         </div>
-                        <button 
-                            className="bg-[#02124a] text-white p-2 w-30 mt-4 rounded-[15px] hover:bg-opacity-80 transition-all duration-300"
-                            style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}
-                            onClick={handleContinue}
-                        >
-                            Continuar
-                        </button>
+                        <MainButton text={'Continuar'} isLoading={isLoading} onClick={handleContinue} isCancel={true}/>
                     </div>
                 </div>
             )}

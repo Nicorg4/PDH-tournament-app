@@ -11,14 +11,14 @@ interface NotificationProps {
 
 const Notification: React.FC<NotificationProps> = ({ type, message, timer, closeNotification }) => {
   return (
-    <div className='absolute bottom-5 left-5 w-2/12 h-32 bg-slate-800 bg-opacity-70 p-5 rounded-md text-white'>
+    <div className='absolute bottom-5 right-5 w-2/12 h-28 bg-slate-800 p-8 pt-5 rounded-md text-white'>
         <button onClick={closeNotification} className='absolute top-2 right-2 text-slate-500 text-2xl'><MdClose /></button>
-        <p className='text-zinc-400 text-16'>
+        <p className='text-zinc-200 text-16'>
             {message}
         </p>
         <div className='absolute bottom-5 w-5/6 h-1 bg-gray-700 rounded-full overflow-hidden'>
             <div  
-                className={`h-full ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`}
+                className={`h-full ${type === 'success' ? 'bg-green-400' : 'bg-red-400'}`}
                 style={{
                     width: '100%',
                     animation: `fillProgress ${timer}ms linear`

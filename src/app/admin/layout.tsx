@@ -11,13 +11,13 @@ import { RiLogoutCircleLine } from "react-icons/ri";
 import Background2 from '../../../public/background2.jpg'
 import Background3 from '../../../public/background3.jpg'
 import { setLogout } from '@/redux/Features/user/userSlice';
-import { LiaDiceSolid } from "react-icons/lia";
-import { LuUserPlus, LuUserMinus } from "react-icons/lu";
-import { GoTrophy } from "react-icons/go";
-import { BsShieldPlus } from "react-icons/bs";
-import { HiOutlineUserGroup } from "react-icons/hi2";
+import { FaDice, FaTrophy } from "react-icons/fa";
+import { BsPersonPlusFill, BsPersonDashFill  } from "react-icons/bs";
+import { BsShieldFillPlus  } from "react-icons/bs";
+import { HiUserGroup } from "react-icons/hi2";
 import useSessionCheck from '../components/useSessionCheck';
 import ProtectedRoute from '../components/protectedRoute';
+import { PiTreeStructureFill  } from "react-icons/pi";
 
 interface LayoutProps {
   children: ReactNode;
@@ -82,38 +82,44 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               </Link>
               <Link href="/admin/createUser">
                 <li className={`mb-2 p-3 rounded-[10px] font-bold bg-[#05113b] bg-opacity-90 ${pathname === '/admin/createUser' ? 'bg-gray-400 text-[#02124a] ' : ''} hover:bg-gray-400 hover:bg-opacity-70 hover:text-[#02124a] flex items-center`} style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", cursor: "pointer", transition: "0.5s ease" }}>
-                  <LuUserPlus className="text-xl" />
+                  <BsPersonPlusFill className="text-xl" />
                   {isExpanded && <span className="ml-3">Crear usuario</span>}
                 </li>
               </Link>
               <Link href="/admin/deleteUser">
                 <li className={`mb-2 p-3 rounded-[10px] font-bold bg-[#05113b] bg-opacity-90 ${pathname === '/admin/deleteUser' ? 'bg-gray-400 text-[#02124a] ' : ''} hover:bg-gray-400 hover:bg-opacity-70 hover:text-[#02124a] flex items-center`} style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", cursor: "pointer", transition: "0.5s ease" }}>
-                  <LuUserMinus className="text-xl" />
+                  <BsPersonDashFill  className="text-xl" />
                   {isExpanded && <span className="ml-3">Borrar usuario</span>}
                 </li>
               </Link>
               <Link href="/admin/createTeam">
                 <li className={`mb-2 p-3 rounded-[10px] font-bold bg-[#05113b] bg-opacity-90 ${pathname === '/admin/createTeam' ? 'bg-gray-400 text-[#02124a] ' : ''} hover:bg-gray-400 hover:bg-opacity-70 hover:text-[#02124a] flex items-center`} style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", cursor: "pointer", transition: "0.5s ease" }}>
-                  <BsShieldPlus className="text-xl" />
+                  <BsShieldFillPlus  className="text-xl" />
                   {isExpanded && <span className="ml-3">Crear equipo</span>}
                 </li>
               </Link>
               <Link href="/admin/teamRaffle">
                 <li className={`mb-2 p-3 rounded-[10px] font-bold bg-[#05113b] bg-opacity-90 ${pathname === '/admin/teamRaffle' ? 'bg-gray-400 text-[#02124a] ' : ''} hover:bg-gray-400 hover:bg-opacity-70 hover:text-[#02124a] flex items-center`} style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", cursor: "pointer", transition: "0.5s ease" }}>
-                  <LiaDiceSolid className="text-xl" />
+                  <FaDice className="text-xl" />
                   {isExpanded && <span className="ml-3">Sorteo</span>}
                 </li>
               </Link>
               <Link href="/admin/groups">
                 <li className={`mb-2 p-3 rounded-[10px] font-bold bg-[#05113b] bg-opacity-90 ${pathname === '/admin/groups' ? 'bg-gray-400 text-[#02124a] ' : ''} hover:bg-gray-400 hover:bg-opacity-70 hover:text-[#02124a] flex items-center`} style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", cursor: "pointer", transition: "0.5s ease" }}>
-                  <HiOutlineUserGroup  className="text-xl" />
+                  <HiUserGroup  className="text-xl" />
                   {isExpanded && <span className="ml-3">Grupos</span>}
                 </li>
               </Link>
-              <Link href="/admin/results">
-                <li className={`mb-2 p-3 rounded-[10px] font-bold bg-[#05113b] bg-opacity-90 ${pathname === '/admin/results' ? 'bg-gray-400 text-[#02124a] ' : ''} hover:bg-gray-400 hover:bg-opacity-70 hover:text-[#02124a] flex items-center`} style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", cursor: "pointer", transition: "0.5s ease" }}>
-                  <GoTrophy  className="text-xl" />
-                  {isExpanded && <span className="ml-3">Resultados</span>}
+              <Link href="/admin/editGroupStageMatches">
+                <li className={`mb-2 p-3 rounded-[10px] font-bold bg-[#05113b] bg-opacity-90 ${pathname === '/admin/editGroupStageMatches' ? 'bg-gray-400 text-[#02124a] ' : ''} hover:bg-gray-400 hover:bg-opacity-70 hover:text-[#02124a] flex items-center`} style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", cursor: "pointer", transition: "0.5s ease" }}>
+                  <FaTrophy  className="text-xl" />
+                  {isExpanded && <span className="ml-3">Editar partidos (grupos)</span>}
+                </li>
+              </Link>
+              <Link href="/admin/editFinalStageMatches">
+                <li className={`mb-2 p-3 rounded-[10px] font-bold bg-[#05113b] bg-opacity-90 ${pathname === '/admin/editFinalStageMatches' ? 'bg-gray-400 text-[#02124a] ' : ''} hover:bg-gray-400 hover:bg-opacity-70 hover:text-[#02124a] flex items-center`} style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", cursor: "pointer", transition: "0.5s ease" }}>
+                  <PiTreeStructureFill   className="text-xl transform scale-x-[-1]" />
+                  {isExpanded && <span className="ml-3">Editar partidos (fase final)</span>}
                 </li>
               </Link>
             </ul>

@@ -52,6 +52,7 @@ const Page: React.FC = ({}) => {
             });
             const data: GroupsResponse = await response.json();
             setGroups(data.groups);
+            console.log(data.groups);
         }catch(error){
 
         }finally{
@@ -93,8 +94,8 @@ const Page: React.FC = ({}) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {group.teams.sort((a, b) => b.stats.points === a.stats.points ? b.stats.goal_diff - a.stats.goal_diff : b.stats.points - a.stats.points).map((groupTeam) => (
-                                <tr key={groupTeam.team.id} className="border-b border-slate-500">
+                            {group.teams.sort((a, b) => b.stats.points === a.stats.points ? b.stats.goal_diff - a.stats.goal_diff : b.stats.points - a.stats.points).map((groupTeam, index) => (
+                                <tr key={`group-${group.group_id}-team-${groupTeam.team.id}-${index}`} className="border-b border-slate-500">
                                     <td className="pb-3 pt-3 pl-3">
                                         <Image className="rounded-full object-fit:cover object-center aspect-square" src={URL_IMG + groupTeam.team.user.picture} alt={'Team logo'} width={30} height={30}/>
                                     </td>

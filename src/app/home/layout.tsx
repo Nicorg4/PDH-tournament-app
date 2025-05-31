@@ -15,6 +15,7 @@ import { setLogout } from '@/redux/Features/user/userSlice';
 import { RiHistoryFill } from "react-icons/ri";
 import useSessionCheck from '../components/useSessionCheck';
 import ProtectedRoute from '../components/protectedRoute';
+import { PiTreeStructureFill  } from "react-icons/pi";
 
 
 interface LayoutProps {
@@ -104,10 +105,16 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </Link>
               </>
               )}
-              <Link href="/home/results">
-                <li className={`mb-2 p-3 rounded-[10px] font-bold bg-[#05113b] bg-opacity-90 ${pathname === '/home/results' ? 'bg-gray-400 text-[#02124a]' : ''} hover:bg-gray-400 hover:bg-opacity-70 hover:text-[#02124a] flex items-center`} style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", cursor: "pointer", transition: "0.5s ease"}}>
+              <Link href="/home/groupStage">
+                <li className={`mb-2 p-3 rounded-[10px] font-bold bg-[#05113b] bg-opacity-90 ${pathname === '/home/groupStage' ? 'bg-gray-400 text-[#02124a]' : ''} hover:bg-gray-400 hover:bg-opacity-70 hover:text-[#02124a] flex items-center`} style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", cursor: "pointer", transition: "0.5s ease"}}>
                   <FaTrophy className="text-xl" />
-                  {isExpanded && <span className="ml-3">Resultados</span>}
+                  {isExpanded && <span className="ml-3">Fase de grupos</span>}
+                </li>
+              </Link>
+              <Link href="/home/finalStage">
+                <li className={`mb-2 p-3 rounded-[10px] font-bold bg-[#05113b] bg-opacity-90 ${pathname === '/home/finalStage' ? 'bg-gray-400 text-[#02124a] ' : ''} hover:bg-gray-400 hover:bg-opacity-70 hover:text-[#02124a] flex items-center`} style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", cursor: "pointer", transition: "0.5s ease" }}>
+                  <PiTreeStructureFill   className="text-xl transform scale-x-[-1]" />
+                  {isExpanded && <span className="ml-3">Fase eliminatoria</span>}
                 </li>
               </Link>
             </ul>

@@ -1,3 +1,4 @@
+import MainButton from '@/app/components/mainButton';
 import { RootState } from '@/redux/store';
 import React from 'react'
 import { FaRegTrashCan } from "react-icons/fa6";
@@ -19,45 +20,14 @@ interface Player {
 
 interface MyAuctionsProps {
   players: Player[];
-  fetchMyPlayers: (teamId: number) => Promise<void>;
-  fetchPlayersOnAuction: (teamId: number) => Promise<void>;
-  fetchAuctions: () => Promise<void>;
-  showNotification: (message: string, type: 'success' | 'error') => void;
+  handleShowPopupNotification: (player: Player) => void;
+  isLoading: boolean;
 }
 
-const myAuctions: React.FC<MyAuctionsProps> = ({ players, fetchMyPlayers, fetchPlayersOnAuction, fetchAuctions, showNotification }) => {
-  const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
-  const loggedUser = useSelector((state: RootState) => state.user);
-  const teamId = loggedUser.user?.team.id;
-
-  const handleRemovePlayerFromAuction = async (playerId: number) => {
-    if (!teamId) {
-      return;
-    }
-    try{
-      const response = await fetch(`${URL_SERVER}auctions/unpublish-player`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          playerId: playerId,
-        }),
-      });
-
-      if(!response.ok){
-        showNotification('Error al eliminar el jugador de la venta.', 'error');
-        throw new Error('Error al eliminar el jugador de la venta');
-      }
-
-      fetchMyPlayers(teamId);
-      fetchPlayersOnAuction(teamId);
-      fetchAuctions();
-      showNotification('El jugador ya no está a la venta.', 'success');
-    }catch(error){
-      console.error('Error al eliminar el jugador de la venta:', error);
-    } finally{
-
+const myAuctions: React.FC<MyAuctionsProps> = ({ players, handleShowPopupNotification, isLoading}) => {
+  const handlePlayerRemove = (player: Player) => {
+    if (player) {
+      handleShowPopupNotification(player);
     }
   };
 
@@ -82,7 +52,7 @@ const myAuctions: React.FC<MyAuctionsProps> = ({ players, fetchMyPlayers, fetchP
                   <td className="border-b border-white border-opacity-30 p-3 text-center">{player.name}</td>
                   <td className="border-b border-white border-opacity-30 p-3 text-center">{new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(player.price)}</td>
                   <td className="border-b border-white border-opacity-30 p-3 text-center">
-                    <button className="bg-[#ed6f6f] text-white p-2 rounded-md bg-opacity-80 hover:bg-gray-400 hover:bg-opacity-70 hover:text-[#ed6f6f]" style={{boxShadow:"rgba(0, 0, 0, 0.35) 0px 5px 15px", transition: "0.5s ease"}} onClick={() => handleRemovePlayerFromAuction(player.id)}><FaRegTrashCan/></button>
+                  <MainButton onClick={() => handlePlayerRemove(player)} text={'Eliminar'} isLoading={isLoading}/>
                   </td>
                 </tr>
               ))}

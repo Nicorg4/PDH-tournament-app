@@ -30,7 +30,7 @@ const Login: React.FC = () => {
 
   return (
     <main
-      className="flex min-h-screen items-center justify-center bg-gray-800"
+      className="flex min-h-screen items-center justify-center bg-slate-800"
       style={{
         backgroundImage: `url(${Background2.src})`,
         backgroundSize: 'cover',

@@ -61,17 +61,17 @@ const LoginForm: React.FC = () => {
           {errorMessagge}
         </h2>
       )}
-      <div className='flex flex-col text-[#02124a]'>
+      <div className='flex flex-col text-slate-800'>
         <label htmlFor="username">Nombre de usuario</label>
         <input
           type="text"
           id="username"
           name="username"
-          className="border p-3 rounded-[15px] text-[#02124a] bg-slate-50 bg-opacity-50 border-none"
+          className="border p-3 rounded-[15px] text-slate-800 bg-slate-50 bg-opacity-50 border-none"
           placeholder="Usuario.."
         />
       </div>
-      <div className='flex flex-col text-[#02124a]'>
+      <div className='flex flex-col text-slate-800'>
         <label htmlFor="password">Contraseña</label>
         <div className="relative">
           <input
@@ -84,7 +84,7 @@ const LoginForm: React.FC = () => {
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#02124a]"
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-800"
           >
             {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
           </button>

@@ -1,7 +1,5 @@
 import MainButton from '@/app/components/mainButton';
-import { RootState } from '@/redux/store';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 
 interface Team {
   id: number;
@@ -18,63 +16,21 @@ interface Player {
 
 interface PublishFormProps {
   players: Player[];
-  fetchMyPlayers: (teamId: number) => Promise<void>;
-  fetchPlayersOnAuction: (teamId: number) => Promise<void>;
-  fetchAuctions: () => Promise<void>;
-  showNotification: (message: string, type: 'success' | 'error') => void;
+  handleShowPopupNotification: (player: Player, price: number) => void;
+  isLoading: boolean;
 }
 
 const PublishForm: React.FC<PublishFormProps> = ({
   players,
-  fetchMyPlayers,
-  fetchPlayersOnAuction,
-  fetchAuctions,
-  showNotification,
+  handleShowPopupNotification,
+  isLoading
 }) => {
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [price, setPrice] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState(false);
-  const loggedUser = useSelector((state: RootState) => state.user);
-  const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
-  const teamId = loggedUser.user?.team.id;
 
-  const handlePublish = async () => {
-    setIsLoading(true);
-    try {
-      if (!selectedPlayer || price <= 0 || !teamId) {
-        showNotification('Por favor, selecciona un jugador y un precio válido.', 'error');
-        return;
-      }
-
-      const response = await fetch(`${URL_SERVER}auctions/publish-player`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          playerId: selectedPlayer.id,
-          teamId: teamId,
-          price: price,
-        }),
-      });
-
-      if (!response.ok) {
-        showNotification('Error al publicar el jugador.', 'error');
-        throw new Error('Error al publicar el jugador.');
-      }
-
-      await fetchMyPlayers(teamId);
-      await fetchPlayersOnAuction(teamId);
-      await fetchAuctions();
-
-      setSelectedPlayer(null);
-      setPrice(0);
-
-      showNotification('Jugador publicado correctamente.', 'success');
-    } catch (error) {
-      console.error('Error al publicar el jugador:', error);
-    } finally {
-      setIsLoading(false);
+  const handlePlayerPublish = () => {
+    if (selectedPlayer) {
+      handleShowPopupNotification(selectedPlayer, price);
     }
   };
 
@@ -119,7 +75,7 @@ const PublishForm: React.FC<PublishFormProps> = ({
         </div>
       </div>
       <div className="absolute bottom-5 left-0 w-full flex justify-center">
-        <MainButton text="Publicar" onClick={handlePublish} isLoading={isLoading} />
+        <MainButton text="Publicar" onClick={handlePlayerPublish} isLoading={isLoading} />
       </div>
     </div>
   );
