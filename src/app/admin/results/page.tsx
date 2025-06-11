@@ -71,7 +71,7 @@ const Page: React.FC = ({}) => {
     return (
       <>
         {groups.length === 0 ? 
-        <div className=' bg-slate-800 bg-opacity-70 border-none items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+        <div className=' bg-gray-200 bg-opacity-70 border-none items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
           <h1 className="text-2xl text-center p-96">Todavia no hay grupos armados.</h1>
         </div>
           : (

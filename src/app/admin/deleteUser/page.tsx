@@ -82,7 +82,7 @@ import PopUpNotification from '@/app/components/popUpNotification';
       return <SoccerLoadingAnimation/>
     }
     return (
-      <div className='w-4/5 md:w-2/5 bg-slate-800 bg-opacity-70 pb-10 border-none flex flex-col items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+      <div className='w-4/5 md:w-2/5 bg-gray-200 bg-opacity-70 pb-10 border-none flex flex-col items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
         {showDeleteUserPopup && (
           <PopUpNotification closeNotification={() => setShowUserDeletePopup(false)}>
             <div className='flex flex-col justify-center align-middle items-center gap-5 w-4/5 h-full'>
@@ -104,9 +104,9 @@ import PopUpNotification from '@/app/components/popUpNotification';
           closeNotification={() => setNotification({ ...notification, show: false })}
         />
       )}
-        <h2 className='mb-5 text-center w-full p-3 bg-transparent' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>Borrar usuario</h2>
+        <h2 className='mb-5 text-center w-full p-3 bg-transparent text-slate-800 font-bold' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>Borrar usuario</h2>
         <select 
-          className="w-3/5 p-2 mb-4 bg-slate-700 rounded-md"
+          className="w-3/5 p-2 mb-4 bg-gray-200 rounded-md text-slate-800"
           value={selectedUser?.id}
           onChange={(e) => setSelectedUser(users.find(user => user.id === Number(e.target.value)))}
         >

@@ -139,7 +139,7 @@ const GroupMatches = ({showNotification} : GroupMatchesProps) => {
       if(!response.ok){
         throw new Error('Error al crear los partidos de playoff');
       }
-      /* navigate.push('/admin/playoffs'); */
+      navigate.push('/admin/editFinalStageMatches');
     }catch(error){
         console.error("Error al crear los partidos de playoff:", error);
     }finally{
@@ -149,19 +149,82 @@ const GroupMatches = ({showNotification} : GroupMatchesProps) => {
 
   return (
     <>
-        {matches.length === 0 ? 
-        <div className=' bg-slate-800 bg-opacity-70 border-none items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
-          <h1 className="text-2xl text-center p-96">Todavia no hay partidos disponibles.</h1>
+      {matches.length === 0 ? 
+        <div className=' bg-gray-200 bg-opacity-70 border-none items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+          <h1 className="text-2xl text-center p-96 text-slate-800">Todavia no hay partidos disponibles.</h1>
         </div>
           : (
-    <div className='w-4/5 md:w-2/5 bg-slate-800 bg-opacity-70 pb-10 border-none flex flex-col items-center rounded-md p-6 max-w-4xl mx-auto' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
-      <h1 className="text-2xl font-bold mb-6">Editar Partidos</h1>
+    <div className='w-4/5 md:w-3/5 bg-gray-200 bg-opacity-70 pb-10 border-none flex flex-col items-center rounded-md p-6 max-w-4xl mx-auto' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+      <h1 className="text-2xl font-bold mb-6 text-slate-800">Editar Partidos</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-5 w-full">
+      {groupedMatches[currentMatchDay] && Object.entries(groupedMatches[currentMatchDay]).map(([group_id, groupMatches]) => (
+        <div key={group_id} className="space-y-2">
+        <h3 className="text-lg text-slate-800 font-bold text-center mb-2">Grupo {group_id}</h3>
+        {groupMatches.map((match) => (
+          <div
+          key={match.match_id}
+          className="p-3 border border-slate-800 rounded-lg shadow-sm flex items-center gap-2 flex-col w-72 mx-auto"
+          >
+          <div className="flex items-center justify-between w-full border-b border-slate-800 pb-3">
+            <div className="flex items-center">
+            <img
+              src={URL_IMG + match.team_A_logo}
+              alt={match.team_A_name}
+              className="w-8 h-8 rounded-full mr-2"
+            />
+            <span className="font-semibold">{match.team_A_name}</span>
+            </div>
+            <input
+            type="number"
+            min="0"
+            className="w-10 text-center rounded bg-slate-300 text-slate-800"
+            value={match.team_A_score !== null ? match.team_A_score : ""}
+            onChange={(e) =>
+              handleScoreChange(match.match_id, "team_A_score", e.target.value)
+            }
+            />
+            <div className="absolute ml-72 transform text-center">
+            {match.team_A_score !== null && match.team_B_score !== null && match.team_A_score > match.team_B_score && (
+              <span className="text-slate-800"><IoStar/></span>
+            )}
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center">
+            <img
+              src={URL_IMG + match.team_B_logo}
+              alt={match.team_B_name}
+              className="w-8 h-8 rounded-full mr-2"
+            />
+            <span className="font-semibold">{match.team_B_name}</span>
+            </div>
+            <input
+            type="number"
+            min="0"
+            className="w-10 text-center rounded bg-slate-300 text-slate-800"
+            value={match.team_B_score !== null ? match.team_B_score : ""}
+            onChange={(e) =>
+              handleScoreChange(match.match_id, "team_B_score", e.target.value)
+            }
+             />
+             <div className="absolute ml-72 transform text-center">
+            {match.team_A_score !== null && match.team_B_score !== null && match.team_A_score < match.team_B_score && (
+              <span className="text-slate-800"><IoStar/></span>
+            )}
+            </div>
+          </div>
+          </div>
+        ))}          
+        </div>
+      ))}
+      </div>
       <div className="flex justify-between items-center mb-4 gap-5">
         <MainButton
           onClick={handlePrevious}
           text={'Anterior'}
           isLoading={false}
-          isCancel={true}
+          isCancel={false}
         />
         <h2 className="text-lg font-semibold">Fecha {currentMatchDay}</h2>
         <MainButton
@@ -169,69 +232,6 @@ const GroupMatches = ({showNotification} : GroupMatchesProps) => {
           text={'Siguiente'}
           isLoading={false}
         />
-      </div>
-      <div className="space-y-8 mb-5">
-        {groupedMatches[currentMatchDay] && Object.entries(groupedMatches[currentMatchDay]).map(([group_id, groupMatches]) => (
-          <div key={group_id} className="space-y-2">
-            <h3 className="text-lg font-medium">Grupo {group_id}</h3>
-            {groupMatches.map((match) => (
-              <div
-                key={match.match_id}
-                className="p-3 border border-gray-400 rounded-lg shadow-sm flex items-center gap-2 flex-col w-72"
-              >
-                <div className="flex items-center justify-between w-full border-b border-gray-400 pb-3">
-                  <div className="flex items-center">
-                    <img
-                      src={URL_IMG + match.team_A_logo}
-                      alt={match.team_A_name}
-                      className="w-8 h-8 rounded-full mr-2"
-                    />
-                    <span className="font-semibold">{match.team_A_name}</span>
-                  </div>
-                  <input
-                    type="number"
-                    min="0"
-                    className="w-10 text-center rounded bg-gray-400 text-slate-800"
-                    value={match.team_A_score !== null ? match.team_A_score : ""}
-                    onChange={(e) =>
-                        handleScoreChange(match.match_id, "team_A_score", e.target.value)
-                    }
-                  />
-                  <div className="absolute ml-72 transform text-center">
-                    {match.team_A_score !== null && match.team_B_score !== null && match.team_A_score > match.team_B_score && (
-                        <span className="text-gray-400"><IoStar/></span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center">
-                    <img
-                      src={URL_IMG + match.team_B_logo}
-                      alt={match.team_B_name}
-                      className="w-8 h-8 rounded-full mr-2"
-                    />
-                    <span className="font-semibold">{match.team_B_name}</span>
-                  </div>
-                  <input
-                    type="number"
-                    min="0"
-                    className="w-10 text-center rounded bg-gray-400 text-slate-800"
-                    value={match.team_B_score !== null ? match.team_B_score : ""}
-                    onChange={(e) =>
-                        handleScoreChange(match.match_id, "team_B_score", e.target.value)
-                    }
-                   />
-                   <div className="absolute ml-72 transform text-center">
-                    {match.team_A_score !== null && match.team_B_score !== null && match.team_A_score < match.team_B_score && (
-                        <span className="text-gray-400"><IoStar/></span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}          
-            </div>
-        ))}
       </div>
       <div className="flex gap-5">
       <MainButton
@@ -244,7 +244,7 @@ const GroupMatches = ({showNotification} : GroupMatchesProps) => {
             onClick={handleCreatePlayoff}
             text={'Crear fase eliminatoria'}
             isLoading={isLoading}
-            isCancel={true}
+            isCancel={false}
           />
         )}
         </div>      

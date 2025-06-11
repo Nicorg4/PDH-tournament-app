@@ -53,29 +53,29 @@ const Home: React.FC = () => {
     
 
     const handlePrev = () => {
-        const step = width > 800 ? 6 : 3;
+        const step = width > 800 ? 4 : 2;
         setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - step : 0))
     };
 
     const handleNext = () => {
-        const step = width > 800 ? 6 : 3;
+        const step = width > 800 ? 4 : 2;
         setCurrentIndex((prevIndex) => (prevIndex < cardsData.length - step ? prevIndex + step : prevIndex)); 
     }
 
   return (
     <div className={`${width > 800 ? 'grid grid-cols-2' : 'flex flex-col'} gap-4 m-auto justify-center`} style={{animation: 'moveTopToBottom 0.3s ease'}}>
-      {cardsData.slice(currentIndex, currentIndex + (width > 800 ? 6 : 3)).map((card) => (
+      {cardsData.slice(currentIndex, currentIndex + (width > 800 ? 4 : 2)).map((card) => (
         <Card key={card.id} {...card} />
       ))}
       <div className="col-span-2 flex justify-center mt-4 gap-4">
         {currentIndex > 0 && (
-          <div className='bg-[#05113b] bg-opacity-80 rounded-md hover:bg-gray-400 hover:bg-opacity-70 text-white' style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
-            <button className="p-3" onClick={handlePrev}>Anterior</button>
+          <div className='flex bg-gray-200 bg-opacity-70 p-3 border-none rounded-[15px] gap-2 items-center hover:bg-[white] hover:bg-opacity-70 text-slate-800 font-bold' style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
+            <button className="" onClick={handlePrev}>Anterior</button>
         </div>
         )}
         {currentIndex < cardsData.length - (width > 800 ? 6 : 3) && (
-        <div className='bg-[#05113b] bg-opacity-80 rounded-md hover:bg-gray-400 hover:bg-opacity-70 text-white' style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
-            <button className="p-3" onClick={handleNext}>Siguiente</button>
+        <div className='flex bg-gray-200 bg-opacity-70 p-3 border-none rounded-[15px] gap-2 items-center hover:bg-[white] hover:bg-opacity-70 text-slate-800 font-bold' style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
+            <button className="" onClick={handleNext}>Siguiente</button>
         </div>
         )}
       </div>

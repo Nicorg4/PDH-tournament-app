@@ -8,7 +8,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { FaHome, FaAngleDoubleRight, FaAngleDoubleLeft } from 'react-icons/fa';
 import { RiLogoutCircleLine } from "react-icons/ri";
-import Background2 from '../../../public/background2.jpg'
+import Background2 from '../../../public/background.jpg'
 import Background3 from '../../../public/background3.jpg'
 import { setLogout } from '@/redux/Features/user/userSlice';
 import { FaDice, FaTrophy } from "react-icons/fa";
@@ -19,7 +19,7 @@ import useSessionCheck from '../components/useSessionCheck';
 import ProtectedRoute from '../components/protectedRoute';
 import { PiTreeStructureFill  } from "react-icons/pi";
 
-interface LayoutProps {
+interface LayoutProps { 
   children: ReactNode;
 }
 

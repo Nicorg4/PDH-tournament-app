@@ -85,7 +85,7 @@ const createUser = () => {
   };
 
   return (
-    <div className='w-4/5 md:w-2/5 bg-slate-800 bg-opacity-70 pb-10 border-none flex flex-col items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+    <div className='w-4/5 md:w-2/5 bg-gray-200 bg-opacity-70 pb-10 border-none flex flex-col items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
       {showCreateUserPopup && (
         <PopUpNotification closeNotification={() => setShowCreateUserPopup(false)}>
           <div className='flex flex-col justify-center align-middle items-center gap-5 w-4/5 h-full'>
@@ -116,10 +116,10 @@ const createUser = () => {
           closeNotification={() => setNotification({ ...notification, show: false })}
         />
       )}
-      <h2 className='mb-5 text-center w-full p-3 bg-transparent' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>Crear usuario</h2>
+      <h2 className='mb-5 text-center w-full p-3 bg-transparent text-slate-800 font-bold' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>Crear usuario</h2>
       <form onSubmit={handleSubmit} className="space-y-4 w-3/5">
         <div>
-          <label htmlFor="username" className="block mb-2">Nombre de usuario</label>
+          <label htmlFor="username" className="block mb-2 text-slate-800">Nombre de usuario</label>
           <input
             type="text"
             id="username"
@@ -132,7 +132,7 @@ const createUser = () => {
         </div>
 
         <div>
-          <label htmlFor="password" className="block mb-2">Contraseña</label>
+          <label htmlFor="password" className="block mb-2 text-slate-800">Contraseña</label>
           <input
             type="password"
             id="password"
@@ -145,13 +145,13 @@ const createUser = () => {
         </div>
 
         <div>
-          <label htmlFor="picture" className="block mb-2">Foto de perfil</label>
+          <label htmlFor="picture" className="block mb-2 text-slate-800">Foto de perfil</label>
           <input
             type="file"
             id="picture"
             onChange={handleFileChange}
             accept="image/*"
-            className="w-full p-2 border rounded"
+            className="w-full p-2 border rounded text-slate-800"
           />
         </div>
         <div className='flex flex-col'>

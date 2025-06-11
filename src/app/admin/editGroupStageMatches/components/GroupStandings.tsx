@@ -70,14 +70,14 @@ const GroupStandings: React.FC = ({}) => {
     return (
       <>
         {groups.length === 0 ? 
-        <div className=' bg-slate-800 bg-opacity-70 border-none items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
-          <h1 className="text-2xl text-center p-96">Todavia no hay grupos armados.</h1>
+        <div className=' bg-gray-200 bg-opacity-70 border-none items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+          <h1 className="text-2xl text-center p-96 text-slate-800">Todavia no hay grupos armados.</h1>
         </div>
           : (
           <div className='p-10 grid grid-cols-2 gap-4 w-4/5 md:w-3/5' >
             
             {groups.map((group) => (
-                <div key={group.group_id} className=' bg-slate-800 bg-opacity-70 border-none items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+                <div key={group.group_id} className=' bg-gray-200 bg-opacity-70 border-none items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
                     <h2 className=" text-xl font-bold p-5 w-full text-center bg-slate-900 bg-opacity-50">Grupo {group.group_id}</h2>
                     <table className="w-full border-collapse">
                         <thead>

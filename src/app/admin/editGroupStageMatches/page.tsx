@@ -39,7 +39,7 @@ const GroupStage = () => {
             {!isGroupStageVisible ? 
             <button
                 onClick={toggleComponentVisibility}
-                className="flex bg-slate-800 bg-opacity-50 p-3 border-none rounded-[15px] gap-2 items-center hover:bg-[white] hover:bg-opacity-10"
+                className="flex bg-gray-200 bg-opacity-70 p-3 border-none rounded-[15px] gap-2 items-center hover:bg-[white] hover:bg-opacity-70 text-slate-800 font-bold"
                 style={{ boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px', transition: '0.5s ease' }}
             >
                 Partidos
@@ -47,7 +47,7 @@ const GroupStage = () => {
             </button> : 
             <button
                 onClick={toggleComponentVisibility}
-                className="flex bg-slate-800 bg-opacity-50 p-3 border-none rounded-[15px] gap-2 items-center hover:bg-[white] hover:bg-opacity-10"
+                className="flex bg-gray-200 bg-opacity-70 p-3 border-none rounded-[15px] gap-2 items-center hover:bg-[white] hover:bg-opacity-70 text-slate-800 font-bold"
                 style={{ boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px', transition: '0.5s ease' }}
             >
                 <FaArrowLeft />

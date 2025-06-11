@@ -70,13 +70,13 @@ const Page: React.FC = ({}) => {
     return (
         <>
         {groups.length === 0 ? 
-        <div className=' bg-slate-800 bg-opacity-70 border-none items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
-          <h1 className="text-2xl text-center p-96">Todavia no hay grupos armados.</h1>
+        <div className=' bg-gray-200 bg-opacity-70 border-none items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+          <h1 className="text-2xl text-center p-96 text-slate-800">Todavia no hay grupos armados.</h1>
         </div>
           : (
         <div className='p-10 grid grid-cols-2 gap-4 w-4/5 md:w-3/5'>
             {groups.map((group, groupIndex) => (
-                <div key={`group-${group.group_id}-${groupIndex}`} className=' bg-slate-800 bg-opacity-70 border-none items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+                <div key={`group-${group.group_id}-${groupIndex}`} className=' bg-gray-200 bg-opacity-70 border-none items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
                     <h2 className=" text-xl font-bold p-5 w-full text-center bg-slate-900 bg-opacity-50">Grupo {group.group_id}</h2>
                     <table className="w-full border-collapse">
                         <thead>
@@ -89,7 +89,7 @@ const Page: React.FC = ({}) => {
                             {group.teams.sort((a, b) => b.stats.points === a.stats.points ? b.stats.goal_diff - a.stats.goal_diff : b.stats.points - a.stats.points).map((groupTeam, teamIndex) => (
                                 <tr key={`team-${groupTeam.team.id}-${teamIndex}`} className="border-b border-slate-500">
                                     <td className="pb-3 pt-3 pl-5 gap-2 text-left border-r border-slate-500 w-1/2 hover:bg-slate-800 hover:bg-opacity-50">
-                                        <div className="flex flex-row items-center gap-2 ">
+                                        <div className="flex flex-row items-center gap-2">
                                             <Image className="rounded-full object-fit:cover object-center aspect-square" src={URL_IMG + groupTeam.team.logo} alt={'Team logo'} width={30} height={30}/>
                                             {groupTeam.team.name}
                                         </div>

@@ -217,16 +217,16 @@
         {createTeamFormVisible ? (
         <div className="flex flex-col justify-center align-middle items-center gap-5 w-full h-full" style={{animation: 'moveTopToBottom 0.3s ease'}}>
           <div>
-            <button onClick={() => {setCreateTeamFormVisible(!createTeamFormVisible)}} className="flex bg-slate-800 bg-opacity-50 p-3 border-none rounded-[15px] gap-2 items-center hover:bg-[white] hover:bg-opacity-10" style={{boxShadow:"rgba(0, 0, 0, 0.35) 0px 5px 15px", transition: "0.5s ease"}}>
+            <button onClick={() => {setCreateTeamFormVisible(!createTeamFormVisible)}} className="flex bg-gray-200 bg-opacity-70 p-3 border-none rounded-[15px] gap-2 items-center hover:bg-[white] hover:bg-opacity-70 text-slate-800 font-bold" style={{boxShadow:"rgba(0, 0, 0, 0.35) 0px 5px 15px", transition: "0.5s ease"}}>
               Agregar jugador
               <FaArrowRight/>
             </button>
           </div>
-          <div className='w-4/5 md:w-2/5 bg-slate-800 bg-opacity-70 pb-5 border-none flex flex-col items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
-          <h2 className='mb-5 text-center w-full p-3 bg-transparent' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>Crear equipo</h2>
+          <div className='w-4/5 md:w-2/5 bg-gray-200 bg-opacity-70 pb-5 border-none flex flex-col items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+          <h2 className='mb-5 text-center w-full p-3 bg-transparent text-slate-800 font-bold' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>Crear equipo</h2>
           <form onSubmit={handleSubmit} className="space-y-4 w-3/5">
             <div>
-              <label htmlFor="name" className="block mb-2">Nombre del equipo</label>
+              <label htmlFor="name" className="block mb-2 text-slate-800">Nombre del equipo</label>
               <input
                 type="text"
                 id="name"
@@ -238,7 +238,7 @@
               />
             </div>
             <div>
-              <label htmlFor="picture" className="block mb-2">Logo</label>
+              <label htmlFor="picture" className="block mb-2 text-slate-800">Logo</label>
               <input
                 type="file"
                 id="picture"
@@ -267,16 +267,16 @@
         ) : (
           <>
           <div>
-            <button onClick={() => {setCreateTeamFormVisible(!createTeamFormVisible)}} className="flex bg-slate-800 bg-opacity-50 p-3 border-none rounded-[15px] gap-2 items-center hover:bg-[white] hover:bg-opacity-10" style={{boxShadow:"rgba(0, 0, 0, 0.35) 0px 5px 15px", transition: "0.5s ease"}}>
+            <button onClick={() => {setCreateTeamFormVisible(!createTeamFormVisible)}} className="flex bg-gray-200 bg-opacity-70 p-3 border-none rounded-[15px] gap-2 items-center hover:bg-[white] hover:bg-opacity-70 text-slate-800 font-bold" style={{boxShadow:"rgba(0, 0, 0, 0.35) 0px 5px 15px", transition: "0.5s ease"}}>
               <FaArrowLeft/>
               Crear equipo
             </button>
           </div>
-          <div className='w-4/5 md:w-2/5 bg-slate-800 bg-opacity-70 pb-5 border-none flex flex-col items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
-          <h2 className='mb-5 text-center w-full p-3 bg-transparent' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>Agregar jugador</h2>
+          <div className='w-4/5 md:w-2/5 bg-gray-200 bg-opacity-70 pb-5 border-none flex flex-col items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+          <h2 className='mb-5 text-center w-full p-3 bg-transparent text-slate-800 font-bold' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>Agregar jugador</h2>
           <form onSubmit={handleSubmitAddPlayer} className="space-y-4 w-3/5">
             <div>
-              <label htmlFor="team" className="block mb-2">Equipo</label>
+              <label htmlFor="team" className="block mb-2 text-slate-800">Equipo</label>
               <select
                 id="team"
                 value={formAddPlayerData.team_id}
@@ -291,7 +291,7 @@
               </select>
             </div>
             <div>
-              <label htmlFor="playername" className="block mb-2">Nombre completo</label>
+              <label htmlFor="playername" className="block mb-2 text-slate-800">Nombre completo</label>
               <input
                 type="text"
                 id="playername"
@@ -303,7 +303,7 @@
               />
             </div>
             <div>
-              <label htmlFor="number" className="block mb-2">Camiseta</label>
+              <label htmlFor="number" className="block mb-2 text-slate-800">Camiseta</label>
               <input
                 type="number"
                 id="number"
@@ -317,7 +317,7 @@
               />
             </div>
             <div>
-              <label htmlFor="position" className="block mb-2">Posición</label>
+              <label htmlFor="position" className="block mb-2 text-slate-800">Posición</label>
               <select
                 id="position"
                 value={formAddPlayerData.position}

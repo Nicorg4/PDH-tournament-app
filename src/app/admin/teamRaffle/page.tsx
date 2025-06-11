@@ -159,44 +159,52 @@ const TeamRafflePage = () => {
 
     return (
         <div className="flex w-full justify-between h-[90vh] gap-5">
-            <div className='w-1/3 bg-slate-800 bg-opacity-70 pb-10 border-none flex flex-col items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
-                <h2 className='text-center w-full p-3 bg-transparent mb-10' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>Usuarios</h2>
+            <div className='w-1/6 bg-gray-200 bg-opacity-70 pb-10 border-none flex flex-col items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+                <h2 className='text-center w-full p-3 bg-transparent mb-10 text-slate-800 font-bold' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>Usuarios</h2>
                 <ul>
                     {users.map((user, index) => (
-                        <div className='flex gap-3 items-center mb-2' key={index}>
+                        <div className='flex gap-3 items-center mb-2 text-slate-800' key={index}>
                             <Image src={URL_IMG + user.picture} alt={"User image"} width={35} height={35} className="rounded-full object-cover aspect-square"/>
                             <h3>{user.username}</h3>
                         </div>
                     ))}
                 </ul>
             </div>
-            <div className='w-1/3 bg-slate-800 bg-opacity-70 pb-10 border-none flex flex-col items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
-                <h2 className='mb-5 text-center w-full p-3 bg-transparent' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>Sorteo</h2>
+            <div className='w-2/3 bg-gray-200 bg-opacity-70 border-none flex flex-col items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+                <h2 className='mb-5 text-center w-full p-3 bg-transparent text-slate-800 font-bold' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>Sorteo</h2>
                 <div className='flex items-center gap-5'>
-                    {(selectedPairs.length === 8 || selectedPairs.length === 16) ? (
+                    {(selectedPairs.length === 16) ? (
                         <MainButton text={'Armar grupos'} isLoading={isLoading} onClick={handleGroupsRaffle}/>
                     ) : (
                         <MainButton text={'Sortear'} isLoading={isLoading} onClick={handleRaffle}/>
                     )}
                     <MainButton text={'Reiniciar'} isLoading={isLoading} onClick={handleReset} isCancel={true}/>
                 </div>
-                <div className='mt-10'>
+                <div className='mt-5 grid'>
                     {selectedPairs.map((pair, index) => (
                         <div className='flex gap-3 items-center mb-2' key={index}>
-                            <Image src={URL_IMG + pair.team.logo} alt={pair.team.name} width={35} height={35}/>
-                            <CgArrowsExchange className='text-2xl'/>
-                            <Image src={URL_IMG + pair.user.picture} alt={"User image"} width={35} height={35} className="rounded-full object-cover aspect-square"/>
+                            <div className="flex items-center gap-2 min-w-[160px] justify-end">
+                                <p className='text-slate-800'>{pair.user.username}</p>
+                                <Image src={URL_IMG + pair.user.picture} alt={"User image"} width={35} height={35} className="rounded-full object-cover aspect-square"/>
+                            </div>
+                            <div className="flex justify-center items-center w-12">
+                                <CgArrowsExchange className='text-2xl mx-auto'/>
+                            </div>
+                            <div className="flex items-center gap-2 min-w-[160px]">
+                                <Image src={URL_IMG + pair.team.logo} alt={pair.team.name} width={35} height={35}/>
+                                <p className='text-slate-800'>{pair.team.name}</p>
+                            </div>
                         </div>
                     ))}
                 </div>
             </div>
-            <div className='w-1/3 bg-slate-800 bg-opacity-70 pb-10 border-none flex flex-col items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
-                <h2 className='text-center w-full p-3 bg-transparent mb-10' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>Equipos</h2>
+            <div className='w-1/6 bg-gray-200 bg-opacity-70 pb-10 border-none flex flex-col items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+                <h2 className='text-center w-full p-3 bg-transparent mb-10 text-slate-800 font-bold' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>Equipos</h2>
                 <ul>
                     {teams.map((team, index) => (
                         <li className='flex gap-3 items-center mb-2' key={index} style={{ color: 'white', fontSize: '1.1rem' }}>
                             <Image src={URL_IMG + team.logo} alt={team.name} width={35} height={35} />
-                            {team.name}
+                            <h3 className='text-slate-800'>{team.name}</h3>
                         </li>
                     ))}
                 </ul>
@@ -207,7 +215,15 @@ const TeamRafflePage = () => {
                         <h3 className="text-3xl mb-4">Equipo sorteado:</h3>
                         <div className="flex items-center gap-12">
                             <div className="flex flex-col items-center">
-                                <Image src={URL_IMG + currentPair.team.logo} alt={currentPair.team.name} width={150} height={150}/>
+                                <div style={{ width: 150, height: 150, position: 'relative' }}>
+                                    <Image
+                                        src={URL_IMG + currentPair.team.logo}
+                                        alt={currentPair.team.name}
+                                        fill
+                                        style={{ objectFit: 'cover', borderRadius: '0.5rem' }}
+                                        sizes="150px"
+                                    />
+                                </div>
                                 <span className="mt-2">{currentPair.team.name}</span>
                             </div>
                             <CgArrowsExchange className='text-8xl'/>
