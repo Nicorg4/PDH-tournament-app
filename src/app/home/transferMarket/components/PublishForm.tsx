@@ -36,18 +36,18 @@ const PublishForm: React.FC<PublishFormProps> = ({
 
   return (
     <div
-      className="relative bg-slate-800 bg-opacity-70 pb-10 border-none w-80 h-4/5 rounded-md"
+      className="relative bg-gray-200 bg-opacity-70 pb-10 border-none w-80 h-4/5 rounded-md"
       style={{ boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px' }}
     >
       <div>
         <h2
-          className="mb-5 text-center w-full p-3 bg-transparent"
+          className="mb-5 text-center w-full p-3 bg-transparent text-slate-800 font-bold"
           style={{ boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px' }}
         >
           Publicar Jugador
         </h2>
         <div className="mb-4 pl-10 pr-10">
-          <label className="block mb-2">Seleccionar Jugador:</label>
+          <label className="block mb-2 text-slate-800">Seleccionar Jugador:</label>
           <select
             className="border p-2 w-full text-black rounded-[10px]"
             value={selectedPlayer?.name || ''}
@@ -65,7 +65,7 @@ const PublishForm: React.FC<PublishFormProps> = ({
           </select>
         </div>
         <div className="mb-4 pl-10 pr-10">
-          <label className="block mb-2">Precio:</label>
+          <label className="block mb-2 text-slate-800">Precio:</label>
           <input
             type="number"
             className="border p-2 w-full text-black rounded-[10px]"

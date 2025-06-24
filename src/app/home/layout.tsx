@@ -9,7 +9,7 @@ import Image from 'next/image';
 import { FaHome, FaUsers, FaExchangeAlt, FaTrophy, FaBars, FaAngleDoubleRight, FaAngleDoubleLeft } from 'react-icons/fa';
 import { RiLogoutCircleLine } from "react-icons/ri";
 import ProfileImage from '../../../public/default.webp'
-import Background2 from '../../../public/background2.jpg'
+import Background2 from '../../../public/background.jpg'
 import Background3 from '../../../public/background3.jpg'
 import { setLogout } from '@/redux/Features/user/userSlice';
 import { RiHistoryFill } from "react-icons/ri";

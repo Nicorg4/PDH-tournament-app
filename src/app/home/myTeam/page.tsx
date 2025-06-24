@@ -83,7 +83,7 @@ const MyTeam: React.FC = () => {
       <div className="w-full max-w-7xl px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 categories-container">
           {Object.entries(jugadoresPorPosicion).map(([posicion, jugadores]) => (
-            <div key={posicion} className='bg-slate-800 bg-opacity-70 rounded-md text-white min-h-[16rem] h-auto' style={{boxShadow:"rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
+            <div key={posicion} className='bg-gray-200 bg-opacity-70 rounded-md text-slate-800 font-bold min-h-[16rem] h-auto' style={{boxShadow:"rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
               <h2 className='mb-3 text-center w-full p-2 sm:p-3 bg-transparent text-sm sm:text-base' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>{posicion}</h2>
               <div className="p-2 sm:p-4">
                 {jugadores.map((jugador, index) => (

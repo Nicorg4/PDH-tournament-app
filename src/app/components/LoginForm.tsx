@@ -45,7 +45,6 @@ const LoginForm: React.FC = () => {
       const decodedToken = jwt_decode(token) as UserData;
       dispatch(setUser(decodedToken));
       dispatch(setToken(token));
-      console.log(decodedToken);
       decodedToken.role === 'admin' ? router.push('/admin') : router.push('/home');
     } catch (error) {
       setErrorMessagge('Error al iniciar sesion')

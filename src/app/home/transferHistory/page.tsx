@@ -76,7 +76,7 @@ const TransferHistory = () => {
     const slicedTransfers = transfers.slice((currentPage - 1) * 4, currentPage * 4);
     
     return (
-        <div className='w-4/5 h-4/5 bg-slate-800 bg-opacity-70 pb-10 border-none flex flex-col items-center rounded-md gap-5' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+        <div className='w-4/5 h-4/5 bg-gray-200 bg-opacity-70 pb-10 border-none flex flex-col items-center gap-2 rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
             {slicedTransfers.length === 0 ? (
             <div className="flex justify-center items-center h-full">
             <p className="text-center text-xl">No se realizaron transacciones.</p>
@@ -84,18 +84,18 @@ const TransferHistory = () => {
         ) : (
             <>
             {slicedTransfers.map((transfer) => (
-                <div key={transfer.id} className='w-full h-20 bg-slate-800 bg-opacity-70 flex flex-row items-center justify-center p-20 hover:bg-gray-400 hover:bg-opacity-70'>
+                <div key={transfer.id} className='w-full h-20 bg-gray-300 bg-opacity-70 flex flex-row items-center justify-center p-20 hover:bg-gray-100 hover:bg-opacity-70'>
                     <div className='w-1/3 h-full flex flex-row items-center justify-center'>
                         <Image src={URL_IMG + transfer.from.logo} alt={transfer.from.name} className="rounded-full" width={100} height={100}/>
                     </div>
-                    <div><FaLongArrowAltRight className='size-10'/></div>
+                    <div><FaLongArrowAltRight className='size-10 text-slate-800'/></div>
                     <div className='w-1/3 h-full flex flex-col items-center justify-center'>
-                        <p className='text-center text-2xl'>{transfer.player.name}</p>
-                        <p className='text-center text-green-500'>
+                        <p className='text-center text-2xl text-slate-800'>{transfer.player.name}</p>
+                        <p className='text-center text-green-500 font-bold'>
                         {new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(transfer.price)}
                         </p>
                     </div>
-                    <div><FaLongArrowAltRight className='size-10'/></div>
+                    <div><FaLongArrowAltRight className='size-10 text-slate-800'/></div>
                     <div className='w-1/3 h-full flex flex-row items-center justify-center'>
                         <Image src={URL_IMG + transfer.to.logo} alt={transfer.to.name} className="rounded-full" width={100} height={100}/>
                     </div>
