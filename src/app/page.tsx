@@ -1,22 +1,23 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { Suspense } from 'react';
 import Image from 'next/image';
-import { useDispatch } from 'react-redux';
-import { setLogout } from '../redux/Features/user/userSlice';
-import { useSearchParams } from 'next/navigation';
-
 import LoginForm from './components/LoginForm';
 import Logo from '../../public/logo2.png';
 import Background from '../../public/background.jpg';
 import Background2 from '../../public/background2.jpg';
 import Notification from './components/notification';
 
-const Login: React.FC = () => {
+const LoginClient: React.FC = () => {
+  const { useEffect, useState } = React;
+  const { useDispatch } = require('react-redux');
+  const { setLogout } = require('../redux/Features/user/userSlice');
+  const { useSearchParams } = require('next/navigation');
+
   const dispatch = useDispatch();
   const searchParams = useSearchParams();
   const sessionExpired = searchParams.get('sessionExpired');
-  const [showNotification, setShowNotification] = React.useState(false);
+  const [showNotification, setShowNotification] = useState(false);
 
   useEffect(() => {
     if (sessionExpired) {
@@ -28,6 +29,17 @@ const Login: React.FC = () => {
     }
   }, [sessionExpired, dispatch]);
 
+  return (
+    <>
+      <div className="w-1/2 flex min-h-screen items-center justify-center">
+        <LoginForm />
+      </div>
+      {showNotification && <Notification type="error" message="La sesión ha finalizado." timer={5000} closeNotification={() => setShowNotification(false)}/>}
+    </>
+  );
+};
+
+const Login: React.FC = () => {
   return (
     <main
       className="flex min-h-screen items-center justify-center bg-slate-800"
@@ -49,10 +61,9 @@ const Login: React.FC = () => {
       >
         <Image src={Logo} alt="Logo" width={500} height={300} />
       </div>
-      <div className="w-1/2 flex min-h-screen items-center justify-center">
-        <LoginForm />
-      </div>
-      {showNotification && <Notification type="error" message="La sesión ha finalizado." timer={5000} closeNotification={() => setShowNotification(false)}/>}
+      <Suspense fallback={<div className="w-1/2 flex min-h-screen items-center justify-center"></div>}>
+        <LoginClient />
+      </Suspense>
     </main>
   );
 };
