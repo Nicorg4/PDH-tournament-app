@@ -43,11 +43,15 @@ const MyTeam: React.FC = () => {
     try {
       if (loggedUser.user) {
         const teamId = loggedUser.user.team.id;
-  
+
         const response = await fetch(`${URL_SERVER}players/get-by/${teamId}`, {
           method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${loggedUser.token}`,
+          },
         });
-  
+
         if (response.ok) {
           const data = await response.json();
           setPlayers(data);
@@ -63,7 +67,7 @@ const MyTeam: React.FC = () => {
   };
 
   useEffect(() => {
-    if(!loggedUser?.user?.team){
+    if (!loggedUser?.user?.team) {
       router.push('/home')
     }
     fetchTeamPlayers();
@@ -71,19 +75,19 @@ const MyTeam: React.FC = () => {
 
   if (isLoading) {
     return (
-        <SoccerLoadingAnimation/>
+      <SoccerLoadingAnimation />
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center w-full justify-center gap-10" style={{animation: 'moveTopToBottom 0.3s ease'}}>
+    <div className="min-h-screen flex flex-col items-center w-full justify-center gap-10" style={{ animation: 'moveTopToBottom 0.3s ease' }}>
       {loggedUser?.user?.team && (
-        <Image src={URL_IMG + loggedUser.user.team.logo} alt={`Foto del equipo ${loggedUser.user?.team.name}`} width={120} height={120} className="rounded-full object-fit:cover object-center" style={{aspectRatio: "1/1"}}/>
+        <Image src={URL_IMG + loggedUser.user.team.logo} alt={`Foto del equipo ${loggedUser.user?.team.name}`} width={120} height={120} className="rounded-full object-fit:cover object-center" style={{ aspectRatio: "1/1" }} />
       )}
       <div className="w-full max-w-7xl px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 categories-container">
           {Object.entries(jugadoresPorPosicion).map(([posicion, jugadores]) => (
-            <div key={posicion} className='bg-gray-200 bg-opacity-70 rounded-md text-slate-800 font-bold min-h-[16rem] h-auto' style={{boxShadow:"rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
+            <div key={posicion} className='bg-gray-200 bg-opacity-70 rounded-md text-slate-800 font-bold min-h-[16rem] h-auto' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
               <h2 className='mb-3 text-center w-full p-2 sm:p-3 bg-transparent text-sm sm:text-base' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>{posicion}</h2>
               <div className="p-2 sm:p-4">
                 {jugadores.map((jugador, index) => (

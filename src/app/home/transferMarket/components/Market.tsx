@@ -36,17 +36,14 @@ const MyAuctions: React.FC<MyAuctionsProps> = ({ auctions, handleShowPopupNotifi
   const loggedUser = useSelector((state: RootState) => state.user);
   const URL_IMG = process.env.NEXT_PUBLIC_URL_IMG;
   
-  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
-  // Calculate pagination values
   const totalPages = Math.ceil(auctions.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentAuctions = auctions.slice(startIndex, endIndex);
 
-  // Pagination handlers
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -63,12 +60,10 @@ const MyAuctions: React.FC<MyAuctionsProps> = ({ auctions, handleShowPopupNotifi
     setCurrentPage(pageNumber);
   };
 
-  // Reset to first page when auctions change
   React.useEffect(() => {
     setCurrentPage(1);
   }, [auctions.length]);
 
-  // Pagination component
   const PaginationControls = () => {
     if (totalPages <= 1) return null;
 

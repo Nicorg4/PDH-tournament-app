@@ -3,87 +3,95 @@
 import React, { useEffect, useState } from 'react';
 import Card from '../components/ManagerCard'
 import SoccerLoadingAnimation from '../components/loadingAnimation';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 
 interface ManagerData {
-    id: number,
-    username: string,
-    picture: string,
-    team_name: string,
-    team_logo: string,
+  id: number,
+  username: string,
+  picture: string,
+  team_name: string,
+  team_logo: string,
 }
 
 const Home: React.FC = () => {
 
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [width, setWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
-    const [isLoading, setIsLoading] = useState(true);
-    const [cardsData, setCardsData] = useState<ManagerData[]>([])
-    const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [width, setWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [cardsData, setCardsData] = useState<ManagerData[]>([])
+  const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
+  const loggedUser = useSelector((state: RootState) => state.user);
 
-    const fetchCardsData = async () => {
-      try{
-        const response = await fetch(`${URL_SERVER}users/get-all`,{
-          method: 'GET',
-        });
-        if(!response.ok){
-          throw new Error("Error al obtener los managers");
+  const fetchCardsData = async () => {
+    try {
+      const response = await fetch(`${URL_SERVER}users/get-all`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${loggedUser.token}`
         }
-        const data = await response.json();
-        setCardsData(data);
 
-      }catch(error){
-        console.error('Error al obtener los managers:', error);
-      }finally{
-        setIsLoading(false);
+      });
+      if (!response.ok) {
+        throw new Error("Error al obtener los managers");
       }
+      const data = await response.json();
+      setCardsData(data);
+
+    } catch (error) {
+      console.error('Error al obtener los managers:', error);
+    } finally {
+      setIsLoading(false);
     }
+  }
 
-    useEffect(() => {
-      fetchCardsData();
-    }, [])
-    
+  useEffect(() => {
+    fetchCardsData();
+  }, [])
 
-    useEffect(() => {
-        const handleResize = () => {
-            setWidth(window.innerWidth);
-        };
-        window.addEventListener('resize', handleResize);
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, []);
-    
 
-    const handlePrev = () => {
-        const step = width > 800 ? 4 : 2;
-        setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - step : 0))
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth);
     };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
-    const handleNext = () => {
-        const step = width > 800 ? 4 : 2;
-        setCurrentIndex((prevIndex) => (prevIndex < cardsData.length - step ? prevIndex + step : prevIndex)); 
-    }
 
-    if (isLoading) {
-      return (
-          <SoccerLoadingAnimation/>
-      );
-    }
+  const handlePrev = () => {
+    const step = width > 800 ? 4 : 2;
+    setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - step : 0))
+  };
+
+  const handleNext = () => {
+    const step = width > 800 ? 4 : 2;
+    setCurrentIndex((prevIndex) => (prevIndex < cardsData.length - step ? prevIndex + step : prevIndex));
+  }
+
+  if (isLoading) {
+    return (
+      <SoccerLoadingAnimation />
+    );
+  }
   return (
-    <div className={`${width > 800 ? 'grid grid-cols-2' : 'flex flex-col'} gap-4 m-auto justify-center`} style={{animation: 'moveTopToBottom 0.3s ease'}}>
+    <div className={`${width > 800 ? 'grid grid-cols-2' : 'flex flex-col'} gap-4 m-auto justify-center`} style={{ animation: 'moveTopToBottom 0.3s ease' }}>
       {cardsData.slice(currentIndex, currentIndex + (width > 800 ? 4 : 2)).map((card) => (
         <Card key={card.id} {...card} />
       ))}
       <div className="col-span-2 flex justify-center mt-4 gap-4">
         {currentIndex > 0 && (
-          <div className='flex bg-gray-200 bg-opacity-70 p-3 border-none rounded-[15px] gap-2 items-center hover:bg-[white] hover:bg-opacity-70 text-slate-800 font-bold' style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
+          <div className='flex bg-gray-200 bg-opacity-70 p-3 border-none rounded-[15px] gap-2 items-center hover:bg-[white] hover:bg-opacity-70 text-slate-800 font-bold' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
             <button className="" onClick={handlePrev}>Anterior</button>
-        </div>
+          </div>
         )}
         {currentIndex < cardsData.length - (width > 800 ? 6 : 3) && (
-        <div className='flex bg-gray-200 bg-opacity-70 p-3 border-none rounded-[15px] gap-2 items-center hover:bg-[white] hover:bg-opacity-70 text-slate-800 font-bold' style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
+          <div className='flex bg-gray-200 bg-opacity-70 p-3 border-none rounded-[15px] gap-2 items-center hover:bg-[white] hover:bg-opacity-70 text-slate-800 font-bold' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
             <button className="" onClick={handleNext}>Siguiente</button>
-        </div>
+          </div>
         )}
       </div>
       <style jsx>{`

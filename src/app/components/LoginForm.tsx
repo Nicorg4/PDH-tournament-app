@@ -1,11 +1,12 @@
 'use client'
 import React, { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import jwt_decode from 'jwt-decode';
 import { setToken, setUser, UserData } from '../../redux/Features/user/userSlice';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import MainButton from './mainButton';
+import { RootState } from '@/redux/store';
 
 const LoginForm: React.FC = () => {
 
@@ -13,17 +14,18 @@ const LoginForm: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
+  const loggedUser = useSelector((state: RootState) => state.user);
 
   const router = useRouter();
   const dispatch = useDispatch();
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-  
+
     const form = event.currentTarget as HTMLFormElement;
     const username = form.username.value;
     const password = form.password.value;
-  
+
     await loginUser(username, password);
   };
 
@@ -34,10 +36,11 @@ const LoginForm: React.FC = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${loggedUser.token}`
         },
         body: JSON.stringify({ username, password }),
       });
-  
+
       if (!response.ok) {
         throw new Error('Error al iniciar sesion');
       }
@@ -54,7 +57,7 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-96 bg-slate-50 bg-opacity-70 p-10 rounded-[30px]" style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-3 w-96 bg-slate-50 bg-opacity-70 p-10 rounded-[30px]" style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
       {errorMessagge && (
         <h2 className='text-[#c25454] font-bold'>
           {errorMessagge}
@@ -89,7 +92,7 @@ const LoginForm: React.FC = () => {
           </button>
         </div>
       </div>
-        <MainButton type='submit' text='Iniciar sesion' isLoading={isLoading} />
+      <MainButton type='submit' text='Iniciar sesion' isLoading={isLoading} />
     </form>
   );
 };

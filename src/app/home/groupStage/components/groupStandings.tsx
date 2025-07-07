@@ -1,8 +1,10 @@
 'use client'
 
 import SoccerLoadingAnimation from '@/app/components/loadingAnimation';
+import { RootState } from '@/redux/store';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
 
 interface User {
     id: number;
@@ -44,11 +46,17 @@ const GroupStandings: React.FC = ({}) => {
     const URL_IMG = process.env.NEXT_PUBLIC_URL_IMG;
     const [groups, setGroups] = useState<Group[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const loggedUser = useSelector((state: RootState) => state.user);
+
 
     const fetchGroups = async () => {
         try{
             const response = await fetch(`${URL_SERVER}groups/get-all`, {
                 method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${loggedUser.token}`
+                }
             });
             const data: GroupsResponse = await response.json();
             setGroups(data.groups);

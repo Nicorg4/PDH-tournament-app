@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import Card from '../components/ManagerCard'
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 
 interface ManagerData {
     id: number,
@@ -17,11 +19,16 @@ const Home: React.FC = () => {
     const [width, setWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
     const [cardsData, setCardsData] = useState<ManagerData[]>([])
     const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
+    const loggedUser = useSelector((state: RootState) => state.user);
 
     const fetchCardsData = async () => {
       try{
         const response = await fetch(`${URL_SERVER}users/get-all`,{
           method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${loggedUser.token}`
+          }
         });
         if(!response.ok){
           throw new Error("Error al obtener los managers");

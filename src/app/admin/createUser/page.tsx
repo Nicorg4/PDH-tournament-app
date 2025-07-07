@@ -4,8 +4,10 @@
 import MainButton from '@/app/components/mainButton';
 import Notification from '@/app/components/notification';
 import PopUpNotification from '@/app/components/popUpNotification';
+import { RootState } from '@/redux/store';
 import Image from 'next/image';
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux';
 
 const createUser = () => {
   const [formData, setFormData] = useState({
@@ -17,54 +19,58 @@ const createUser = () => {
   })
 
   const [notification, setNotification] = useState({
-      show: false,
-      message: '',
-      type: 'success' as 'success' | 'error',
+    show: false,
+    message: '',
+    type: 'success' as 'success' | 'error',
   });
 
   const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
+  const loggedUser = useSelector((state: RootState) => state.user);
   const [isLoading, setIsLoading] = useState(false);
   const [showCreateUserPopup, setShowCreateUserPopup] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setShowCreateUserPopup(true);
-    
+
   }
 
-  const createUser = async () =>{
+  const createUser = async () => {
     setIsLoading(true);
     if (!formData.picture || !formData.username || !formData.password) {
       return
     }
     try {
-        const formDataToSend = new FormData();
-        formDataToSend.append('username', formData.username);
-        formDataToSend.append('role', formData.role);
-        formDataToSend.append('password', formData.password);
-        if (formData.picture) {
-            formDataToSend.append('picture', formData.picture);
-        }
+      const formDataToSend = new FormData();
+      formDataToSend.append('username', formData.username);
+      formDataToSend.append('role', formData.role);
+      formDataToSend.append('password', formData.password);
+      if (formData.picture) {
+        formDataToSend.append('picture', formData.picture);
+      }
 
-        const response = await fetch(`${URL_SERVER}users/create`, {
-            method: 'POST',
-            body: formDataToSend
-        });
-        if(!response.ok){
-          showNotification('Error al crear el usuario.', 'error');
-          throw new Error('Error al crear el usuario');
-        }
-        setFormData({
-            username: '',
-            role: 'user',
-            password: '',
-            picture: null,
-            previewUrl: ''
-        })
-        showNotification('Usuario creado correctamente.', 'success');
-    }catch(error){
-        console.error('Error al crear el usuario:', error);
-    }finally{
+      const response = await fetch(`${URL_SERVER}users/create`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${loggedUser.token}`
+        },
+        body: formDataToSend
+      });
+      if (!response.ok) {
+        showNotification('Error al crear el usuario.', 'error');
+        throw new Error('Error al crear el usuario');
+      }
+      setFormData({
+        username: '',
+        role: 'user',
+        password: '',
+        picture: null,
+        previewUrl: ''
+      })
+      showNotification('Usuario creado correctamente.', 'success');
+    } catch (error) {
+      console.error('Error al crear el usuario:', error);
+    } finally {
       setIsLoading(false);
       setShowCreateUserPopup(false);
     }
@@ -73,7 +79,7 @@ const createUser = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      setFormData({ ...formData, picture: e.target.files[0], previewUrl: URL.createObjectURL(file)})
+      setFormData({ ...formData, picture: e.target.files[0], previewUrl: URL.createObjectURL(file) })
     }
   }
 
@@ -89,23 +95,23 @@ const createUser = () => {
       {showCreateUserPopup && (
         <PopUpNotification closeNotification={() => setShowCreateUserPopup(false)}>
           <div className='flex flex-col justify-center align-middle items-center gap-5 w-4/5 h-full'>
-                <p className='text-slate-800 text-2xl text-center'>
-                  Estás seguro que querés crear a <span className="text-slate-900 font-bold">{formData?.username}</span>?
-                </p>
-                {formData.previewUrl && (
-                    <Image 
-                      src={formData.previewUrl} 
-                      alt="Preview" 
-                      className="rounded-full object-fit:cover object-center aspect-square"
-                      width={128}
-                      height={128}
-                    />
-                )}
-                <div className='flex flex-row justify-center align-middle items-center gap-5'>
-                  <MainButton text={'Crear'} isLoading={false} onClick={createUser}/>
-                  <MainButton text={'Cancelar'} isLoading={false} isCancel={true} onClick={() => setShowCreateUserPopup(false)} />
-                </div>
-              </div>
+            <p className='text-slate-800 text-2xl text-center'>
+              Estás seguro que querés crear a <span className="text-slate-900 font-bold">{formData?.username}</span>?
+            </p>
+            {formData.previewUrl && (
+              <Image
+                src={formData.previewUrl}
+                alt="Preview"
+                className="rounded-full object-fit:cover object-center aspect-square"
+                width={128}
+                height={128}
+              />
+            )}
+            <div className='flex flex-row justify-center align-middle items-center gap-5'>
+              <MainButton text={'Crear'} isLoading={false} onClick={createUser} />
+              <MainButton text={'Cancelar'} isLoading={false} isCancel={true} onClick={() => setShowCreateUserPopup(false)} />
+            </div>
+          </div>
         </PopUpNotification>
       )}
       {notification.show && (
@@ -155,7 +161,7 @@ const createUser = () => {
           />
         </div>
         <div className='flex flex-col'>
-          <MainButton text={'Crear usuario'} isLoading={isLoading} type="submit"/>
+          <MainButton text={'Crear usuario'} isLoading={isLoading} type="submit" />
         </div>
       </form>
     </div>

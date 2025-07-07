@@ -2,8 +2,10 @@
 
 import SoccerLoadingAnimation from "@/app/components/loadingAnimation";
 import Notification from "@/app/components/notification";
+import { RootState } from "@/redux/store";
 import React, { useState, useEffect } from "react";
 import { IoStar } from "react-icons/io5";
+import { useSelector } from "react-redux";
 
 interface Match {
   match_id: number;
@@ -31,6 +33,7 @@ const GroupMatches = () => {
   const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
   const URL_IMG = process.env.NEXT_PUBLIC_URL_IMG
   const [isLoading, setIsLoading] = useState(false);
+  const loggedUser = useSelector((state: RootState) => state.user);
 
   const getPhaseTitle = (phase: number) => {
     switch (phase) {
@@ -44,7 +47,15 @@ const GroupMatches = () => {
 
   const fetchPlayoffMatches = async () => {
     setIsLoading(true);
-    fetch(`${URL_SERVER}playoffs/get-all`)
+    fetch(`${URL_SERVER}playoffs/get-all`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${loggedUser.token}`
+        },
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         setMatches(data.matches);

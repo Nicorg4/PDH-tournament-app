@@ -2,10 +2,12 @@
 
 import SoccerLoadingAnimation from '@/app/components/loadingAnimation';
 import MainButton from '@/app/components/mainButton';
+import { RootState } from '@/redux/store';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { CgArrowsExchange } from "react-icons/cg";
+import { useSelector } from 'react-redux';
 
 interface User {
     id: number;
@@ -34,21 +36,46 @@ const TeamRafflePage = () => {
     const router = useRouter();
     const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
     const URL_IMG = process.env.NEXT_PUBLIC_URL_IMG;
+    const loggedUser = useSelector((state: RootState) => state.user);
 
     const fetchUsers = async () => {
-        const response = await fetch(`${URL_SERVER}users/get-all-without-team`);
+        const response = await fetch(`${URL_SERVER}users/get-all-without-team`,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${loggedUser.token}`
+                },
+            }
+        );
         const data = await response.json();
         setUsers(data);
     };
 
     const fetchTeams = async () => {
-        const response = await fetch(`${URL_SERVER}teams/get-all-without-owner`);
+        const response = await fetch(`${URL_SERVER}teams/get-all-without-owner`,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${loggedUser.token}`
+                }
+            }
+        );
         const data = await response.json();
         setTeams(data);
     };
 
     const fetchPairs = async () => {
-        const response = await fetch(`${URL_SERVER}users/get-all-pairs`);
+        const response = await fetch(`${URL_SERVER}users/get-all-pairs`,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${loggedUser.token}`
+                }
+            }
+        );
         const data = await response.json();
         setSelectedPairs(data);
     };
@@ -74,6 +101,7 @@ const TeamRafflePage = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${loggedUser.token}`
                 },
                 body: JSON.stringify({
                     userId: selectedUser.id,
@@ -105,66 +133,68 @@ const TeamRafflePage = () => {
     };
 
     const handleReset = async () => {
-        try{
+        try {
             const response = await fetch(`${URL_SERVER}teams/reset-team-ownership`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${loggedUser.token}`
                 },
             });
 
             if (!response.ok) {
                 throw new Error('Failed to reset teams');
             }
-        }catch(error){
+        } catch (error) {
             console.error('Error resetting teams:', error);
-        }finally{
+        } finally {
             fetchUsers();
             fetchTeams();
             setSelectedPairs([]);
         }
     };
 
-    const handleGroupsRaffle = async () =>{
+    const handleGroupsRaffle = async () => {
         const groupCount = selectedPairs.length / 4;
         const groups = [];
         for (let i = 0; i < groupCount; i++) {
             const group = selectedPairs.slice(i * 4, (i + 1) * 4);
             groups.push(group);
         }
-        try{
+        try {
             const response = await fetch(`${URL_SERVER}groups/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${loggedUser.token}`
                 },
                 body: JSON.stringify({
                     groups,
                 }),
             });
             const data = await response.json();
-            if(!response.ok){
+            if (!response.ok) {
                 throw new Error(data.message);
             }
             router.push('/admin/groups');
-        }catch(error){
+        } catch (error) {
 
-        }finally{
+        } finally {
         }
     }
 
     if (isLoading) {
-        return <SoccerLoadingAnimation/>
+        return <SoccerLoadingAnimation />
     }
 
     return (
         <div className="flex w-full justify-between h-[90vh] gap-5">
             <div className='w-1/6 bg-gray-200 bg-opacity-70 pb-10 border-none flex flex-col items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
-                <h2 className='text-center w-full p-3 bg-transparent mb-10 text-slate-800 font-bold' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>Usuarios</h2>
+                <h2 className='text-center w-full p-3 bg-transparent mb-10 text-slate-800 font-bold' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>Usuarios</h2>
                 <ul>
                     {users.map((user, index) => (
                         <div className='flex gap-3 items-center mb-2 text-slate-800' key={index}>
-                            <Image src={URL_IMG + user.picture} alt={"User image"} width={35} height={35} className="rounded-full object-cover aspect-square"/>
+                            <Image src={URL_IMG + user.picture} alt={"User image"} width={35} height={35} className="rounded-full object-cover aspect-square" />
                             <h3>{user.username}</h3>
                         </div>
                     ))}
@@ -174,24 +204,24 @@ const TeamRafflePage = () => {
                 <h2 className='mb-5 text-center w-full p-3 bg-transparent text-slate-800 font-bold' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>Sorteo</h2>
                 <div className='flex items-center gap-5'>
                     {(selectedPairs.length === 16) ? (
-                        <MainButton text={'Armar grupos'} isLoading={isLoading} onClick={handleGroupsRaffle}/>
+                        <MainButton text={'Armar grupos'} isLoading={isLoading} onClick={handleGroupsRaffle} />
                     ) : (
-                        <MainButton text={'Sortear'} isLoading={isLoading} onClick={handleRaffle}/>
+                        <MainButton text={'Sortear'} isLoading={isLoading} onClick={handleRaffle} />
                     )}
-                    <MainButton text={'Reiniciar'} isLoading={isLoading} onClick={handleReset} isCancel={true}/>
+                    <MainButton text={'Reiniciar'} isLoading={isLoading} onClick={handleReset} isCancel={true} />
                 </div>
                 <div className='mt-5 grid'>
                     {selectedPairs.map((pair, index) => (
                         <div className='flex gap-3 items-center mb-2' key={index}>
                             <div className="flex items-center gap-2 min-w-[160px] justify-end">
                                 <p className='text-slate-800'>{pair.user.username}</p>
-                                <Image src={URL_IMG + pair.user.picture} alt={"User image"} width={35} height={35} className="rounded-full object-cover aspect-square"/>
+                                <Image src={URL_IMG + pair.user.picture} alt={"User image"} width={35} height={35} className="rounded-full object-cover aspect-square" />
                             </div>
                             <div className="flex justify-center items-center w-12">
-                                <CgArrowsExchange className='text-2xl mx-auto'/>
+                                <CgArrowsExchange className='text-2xl mx-auto' />
                             </div>
                             <div className="flex items-center gap-2 min-w-[160px]">
-                                <Image src={URL_IMG + pair.team.logo} alt={pair.team.name} width={35} height={35}/>
+                                <Image src={URL_IMG + pair.team.logo} alt={pair.team.name} width={35} height={35} />
                                 <p className='text-slate-800'>{pair.team.name}</p>
                             </div>
                         </div>
@@ -226,13 +256,13 @@ const TeamRafflePage = () => {
                                 </div>
                                 <span className="mt-2">{currentPair.team.name}</span>
                             </div>
-                            <CgArrowsExchange className='text-8xl'/>
+                            <CgArrowsExchange className='text-8xl' />
                             <div className="flex flex-col items-center">
-                                <Image src={URL_IMG + currentPair.user.picture} alt={"User image"} width={150} height={150} className="rounded-full object-cover aspect-square"/>
+                                <Image src={URL_IMG + currentPair.user.picture} alt={"User image"} width={150} height={150} className="rounded-full object-cover aspect-square" />
                                 <span className="mt-2">{currentPair.user.username}</span>
                             </div>
                         </div>
-                        <MainButton text={'Continuar'} isLoading={isLoading} onClick={handleContinue} isCancel={true}/>
+                        <MainButton text={'Continuar'} isLoading={isLoading} onClick={handleContinue} isCancel={true} />
                     </div>
                 </div>
             )}

@@ -59,7 +59,15 @@ const TransferMarket: React.FC = () => {
 
   const fetchMyPlayers = async (teamId: number) => {
     try {
-      const response = await fetch(`${URL_SERVER}players/not-on-sale-by/${teamId}`);
+      const response = await fetch(`${URL_SERVER}players/not-on-sale-by/${teamId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${loggedUser.token}`
+          },
+        }
+      );
       const data = await response.json();
       setPlayers(data);
     } catch (error) {
@@ -71,7 +79,15 @@ const TransferMarket: React.FC = () => {
 
   const fetchPlayersOnAuction = async (teamId: number) => {
     try {
-      const response = await fetch(`${URL_SERVER}players/on-sale-by/${teamId}`);
+      const response = await fetch(`${URL_SERVER}players/on-sale-by/${teamId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${loggedUser.token}`
+          },
+        }
+      );
       const data = await response.json();
       setPlayersOnAuction(data);
     } catch (error) {
@@ -87,6 +103,7 @@ const TransferMarket: React.FC = () => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${loggedUser.token}`
         },
       });
       const data = await response.json();
@@ -151,6 +168,7 @@ const TransferMarket: React.FC = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${loggedUser.token}`
         },
         body: JSON.stringify({
           playerId: selectedPlayer.id,
@@ -190,6 +208,7 @@ const TransferMarket: React.FC = () => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${loggedUser.token}`
           },
           body: JSON.stringify({
             playerId: playerId,
@@ -221,6 +240,7 @@ const TransferMarket: React.FC = () => {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${loggedUser.token}`
           },
           body: JSON.stringify({
             auctionId: auction?.id,

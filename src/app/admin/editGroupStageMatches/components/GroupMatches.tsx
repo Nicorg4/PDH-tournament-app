@@ -2,9 +2,11 @@
 
 import SoccerLoadingAnimation from "@/app/components/loadingAnimation";
 import MainButton from "@/app/components/mainButton";
+import { RootState } from "@/redux/store";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { IoStar } from "react-icons/io5";
+import { useSelector } from "react-redux";
 
 interface Match {
   match_id: number;
@@ -33,9 +35,18 @@ const GroupMatches = ({showNotification} : GroupMatchesProps) => {
   const URL_IMG = process.env.NEXT_PUBLIC_URL_IMG
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useRouter();
+  const loggedUser = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
-    fetch(`${URL_SERVER}groups/get-all-matches`)
+    fetch(`${URL_SERVER}groups/get-all-matches`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${loggedUser.token}`
+        },
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         setMatches(data.matches);
@@ -49,7 +60,15 @@ const GroupMatches = ({showNotification} : GroupMatchesProps) => {
 
   const checkIfAllMatchesPlayed = async () => {
     try {
-      const response = await fetch(`${URL_SERVER}groups/check-all-matches-played`);
+      const response = await fetch(`${URL_SERVER}groups/check-all-matches-played`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${loggedUser.token}`
+          },
+        }
+      );
       const data = await response.json();
       console.log("Respuesta desde el servidor:", data);
       setAllMatchesPlayed(data.allMatchesPlayed);
@@ -93,6 +112,7 @@ const GroupMatches = ({showNotification} : GroupMatchesProps) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${loggedUser.token}`
         },
         body: JSON.stringify({ matches }),
       });
@@ -134,6 +154,7 @@ const GroupMatches = ({showNotification} : GroupMatchesProps) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${loggedUser.token}`
         },
       });
       if(!response.ok){
