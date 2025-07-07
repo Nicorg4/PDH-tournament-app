@@ -13,7 +13,7 @@ interface User {
   username: string;
 }
 
-const deleteUser = () => {
+const DeleteUser = () => {
 
   const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
   const [isLoading, setIsLoading] = useState(true);
@@ -138,4 +138,4 @@ const deleteUser = () => {
   )
 }
 
-export default deleteUser
+export default DeleteUser

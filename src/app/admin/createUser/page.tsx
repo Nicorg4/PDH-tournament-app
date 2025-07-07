@@ -9,7 +9,7 @@ import Image from 'next/image';
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
 
-const createUser = () => {
+const CreateUser = () => {
   const [formData, setFormData] = useState({
     username: '',
     role: 'user',
@@ -168,4 +168,4 @@ const createUser = () => {
   )
 }
 
-export default createUser
+export default CreateUser

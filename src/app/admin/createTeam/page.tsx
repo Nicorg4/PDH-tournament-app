@@ -14,7 +14,7 @@ interface Team {
   name: string;
 }
 
-const createUser = () => {
+const CreateUser = () => {
   const [formData, setFormData] = useState({
     name: '',
     picture: null as File | null,
@@ -354,4 +354,4 @@ const createUser = () => {
   );
 }
 
-export default createUser
+export default CreateUser
