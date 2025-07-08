@@ -39,18 +39,6 @@
   },
   "eslintConfig": {
     "extends": [
-      "./node_modules/standard/eslintrc.json",
-      "plugin:react/recommended",
-      "plugin:react-hooks/recommended"
-    ],
-    "plugins": [
-      "react",
-      "react-hooks"
-    ],
-    "settings": {
-      "react": {
-        "version": "detect"
-      }
-    }
+      "./node_modules/standard/eslintrc.json"]
   }
 }
