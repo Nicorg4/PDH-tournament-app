@@ -49,7 +49,8 @@ const CreateUser = () => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${loggedUser.token}`
+          'Authorization': `Bearer ${loggedUser.token}`,
+          'ngrok-skip-browser-warning': 'true'
         }
       })
       if (!response.ok) {

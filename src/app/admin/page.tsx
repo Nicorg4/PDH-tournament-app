@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Card from '../components/ManagerCard'
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
+import SoccerLoadingAnimation from '../components/loadingAnimation';
 
 interface ManagerData {
     id: number,
@@ -16,30 +17,35 @@ interface ManagerData {
 const Home: React.FC = () => {
 
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
     const [width, setWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
     const [cardsData, setCardsData] = useState<ManagerData[]>([])
     const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
     const loggedUser = useSelector((state: RootState) => state.user);
 
     const fetchCardsData = async () => {
-      try{
-        const response = await fetch(`${URL_SERVER}users/get-all`,{
+      try {
+        if (!loggedUser.token) {
+          throw new Error("No hay token de usuario.");
+        }
+        const response = await fetch(`${URL_SERVER}users/get-all`, {
           method: 'GET',
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${loggedUser.token}`
+            'Authorization': `Bearer ${loggedUser.token}`,
+            'ngrok-skip-browser-warning': 'true'
           }
         });
-        if(!response.ok){
+        if (!response.ok) {
+          const text = await response.text();
+          console.error("Respuesta del servidor:", text);
           throw new Error("Error al obtener los managers");
         }
         const data = await response.json();
         setCardsData(data);
-
-      }catch(error){
-
-      }finally{
-
+      } catch (error) {
+        console.error("Error al obtener los managers:", error);
+      } finally {
+        setIsLoading(false);
       }
     }
 
@@ -68,6 +74,12 @@ const Home: React.FC = () => {
         const step = width > 800 ? 4 : 2;
         setCurrentIndex((prevIndex) => (prevIndex < cardsData.length - step ? prevIndex + step : prevIndex)); 
     }
+  
+  if (isLoading) {
+    return (
+      <SoccerLoadingAnimation />
+    );
+  }
 
   return (
     <div className={`${width > 800 ? 'grid grid-cols-2' : 'flex flex-col'} gap-4 m-auto justify-center`} style={{animation: 'moveTopToBottom 0.3s ease'}}>

@@ -49,7 +49,7 @@ const TransferMarket: React.FC = () => {
   const teamId = loggedUser.user?.team.id;
   const router = useRouter();
   const dispatch = useDispatch();
-  const money = useSelector((state: RootState) => state.user.user?.money) || 0; 
+  const money = useSelector((state: RootState) => state.user.user?.money) || 0;
 
   const [notification, setNotification] = useState({
     show: false,
@@ -64,7 +64,8 @@ const TransferMarket: React.FC = () => {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${loggedUser.token}`
+            'Authorization': `Bearer ${loggedUser.token}`,
+            'ngrok-skip-browser-warning': 'true'
           },
         }
       );
@@ -84,7 +85,8 @@ const TransferMarket: React.FC = () => {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${loggedUser.token}`
+            'Authorization': `Bearer ${loggedUser.token}`,
+            'ngrok-skip-browser-warning': 'true'
           },
         }
       );
@@ -103,7 +105,8 @@ const TransferMarket: React.FC = () => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${loggedUser.token}`
+          'Authorization': `Bearer ${loggedUser.token}`,
+          'ngrok-skip-browser-warning': 'true'
         },
       });
       const data = await response.json();
@@ -199,73 +202,73 @@ const TransferMarket: React.FC = () => {
 
   const handleRemovePlayerFromAuction = async () => {
     setIsLoading(true);
-      if (!teamId) {
-        return;
-      }
-      const playerId = selectedPlayer?.id;
-      try{
-        const response = await fetch(`${URL_SERVER}auctions/unpublish-player`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${loggedUser.token}`
-          },
-          body: JSON.stringify({
-            playerId: playerId,
-          }),
-        });
-  
-        if(!response.ok){
-          showNotification('Error al eliminar el jugador de la venta.', 'error');
-          throw new Error('Error al eliminar el jugador de la venta');
-        }
-  
-        await fetchMyPlayers(teamId);
-        await fetchPlayersOnAuction(teamId);
-        await fetchAuctions();
-
-        showNotification('El jugador ya no está a la venta.', 'success');
-      }catch(error){
-        console.error('Error al eliminar el jugador de la venta:', error);
-      } finally{
-        setIsLoading(false);
-        setShowRemovePopUpNotification(false);
-      }
-    };
-
-    const handlePlayerPurchase = async () => {
-      const auction = selectedAuction;
-      try{
-        const response = await fetch(`${URL_SERVER}auctions/purchase-player`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${loggedUser.token}`
-          },
-          body: JSON.stringify({
-            auctionId: auction?.id,
-            fromTeamId: auction?.team.id,
-            toTeamId: loggedUser.user?.team.id,
-          }),
-        });
-        if(!response.ok){
-          showNotification('Error al realizar la compra.', 'error');
-          throw new Error('Error al realizar la compra');
-        }
-        if (auction?.player.price) {
-          const newMoney = money - auction.player.price;
-          dispatch(setMoney(newMoney));
-          showNotification('Compra realizada con éxito.', 'success');
-        }
-      }catch(error){
-          console.error('Error al realizar la compra:', error);
-      }finally{
-          fetchAuctions();
-          setIsLoading(false);
-          setShowPurchasePopUpNotification(false);
-      }
-  
+    if (!teamId) {
+      return;
     }
+    const playerId = selectedPlayer?.id;
+    try {
+      const response = await fetch(`${URL_SERVER}auctions/unpublish-player`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${loggedUser.token}`
+        },
+        body: JSON.stringify({
+          playerId: playerId,
+        }),
+      });
+
+      if (!response.ok) {
+        showNotification('Error al eliminar el jugador de la venta.', 'error');
+        throw new Error('Error al eliminar el jugador de la venta');
+      }
+
+      await fetchMyPlayers(teamId);
+      await fetchPlayersOnAuction(teamId);
+      await fetchAuctions();
+
+      showNotification('El jugador ya no está a la venta.', 'success');
+    } catch (error) {
+      console.error('Error al eliminar el jugador de la venta:', error);
+    } finally {
+      setIsLoading(false);
+      setShowRemovePopUpNotification(false);
+    }
+  };
+
+  const handlePlayerPurchase = async () => {
+    const auction = selectedAuction;
+    try {
+      const response = await fetch(`${URL_SERVER}auctions/purchase-player`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${loggedUser.token}`
+        },
+        body: JSON.stringify({
+          auctionId: auction?.id,
+          fromTeamId: auction?.team.id,
+          toTeamId: loggedUser.user?.team.id,
+        }),
+      });
+      if (!response.ok) {
+        showNotification('Error al realizar la compra.', 'error');
+        throw new Error('Error al realizar la compra');
+      }
+      if (auction?.player.price) {
+        const newMoney = money - auction.player.price;
+        dispatch(setMoney(newMoney));
+        showNotification('Compra realizada con éxito.', 'success');
+      }
+    } catch (error) {
+      console.error('Error al realizar la compra:', error);
+    } finally {
+      fetchAuctions();
+      setIsLoading(false);
+      setShowPurchasePopUpNotification(false);
+    }
+
+  }
   return (
     <div className="flex flex-col justify-center align-middle items-center gap-5 w-full h-full">
       {notification.show && (
@@ -283,7 +286,7 @@ const TransferMarket: React.FC = () => {
               Estás seguro que querés publicar a <span className="text-slate-900 font-bold">{selectedPlayer?.name}</span> por <span className="text-green-600 font-bold">{new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(price || 0)}</span>?
             </p>
             <div className='flex flex-row justify-center align-middle items-center gap-5'>
-              <MainButton text={'Publicar'} isLoading={false} onClick={handlePublish}/>
+              <MainButton text={'Publicar'} isLoading={false} onClick={handlePublish} />
               <MainButton text={'Cancelar'} isLoading={false} isCancel={true} onClick={() => setShowPublishPopUpNotification(false)} />
             </div>
           </div>
@@ -296,7 +299,7 @@ const TransferMarket: React.FC = () => {
               Estás seguro que querés eliminar la publicación a <span className="text-slate-900 font-bold">{selectedPlayer?.name}</span> del mercado?
             </p>
             <div className='flex flex-row justify-center align-middle items-center gap-5'>
-              <MainButton text={'Eliminar'} isLoading={false} onClick={handleRemovePlayerFromAuction}/>
+              <MainButton text={'Eliminar'} isLoading={false} onClick={handleRemovePlayerFromAuction} />
               <MainButton text={'Cancelar'} isLoading={false} isCancel={true} onClick={() => setShowRemovePopUpNotification(false)} />
             </div>
           </div>
@@ -309,7 +312,7 @@ const TransferMarket: React.FC = () => {
               Estás seguro que querés comprar a <span className="text-slate-900 font-bold">{selectedAuction?.player.name}</span> por <span className="text-green-600 font-bold">{new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(selectedAuction?.player.price || 0)}</span>?
             </p>
             <div className='flex flex-row justify-center align-middle items-center gap-5'>
-              <MainButton text={'Comprar'} isLoading={false} onClick={handlePlayerPurchase}/>
+              <MainButton text={'Comprar'} isLoading={false} onClick={handlePlayerPurchase} />
               <MainButton text={'Cancelar'} isLoading={false} isCancel={true} onClick={() => setShowPurchasePopUpNotification(false)} />
             </div>
           </div>
@@ -370,8 +373,8 @@ const TransferMarket: React.FC = () => {
               Vender
             </button>
           </div>
-          <Market 
-            auctions={auctions} 
+          <Market
+            auctions={auctions}
             handleShowPopupNotification={handleShowPurchasePopupNotification}
             isLoading={isLoading}
           />
@@ -389,4 +392,4 @@ const TransferMarket: React.FC = () => {
       )}
     </div>
   );
-};export default TransferMarket;
+}; export default TransferMarket;

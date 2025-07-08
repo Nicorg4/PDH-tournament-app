@@ -39,45 +39,63 @@ const TeamRafflePage = () => {
     const loggedUser = useSelector((state: RootState) => state.user);
 
     const fetchUsers = async () => {
-        const response = await fetch(`${URL_SERVER}users/get-all-without-team`,
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${loggedUser.token}`
-                },
-            }
-        );
-        const data = await response.json();
-        setUsers(data);
+        try {
+            const response = await fetch(`${URL_SERVER}users/get-all-without-team`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${loggedUser.token}`,
+                        'ngrok-skip-browser-warning': 'true'
+                    },
+                }
+            );
+            const data = await response.json();
+            setUsers(data);
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        } finally {
+        }
     };
 
     const fetchTeams = async () => {
-        const response = await fetch(`${URL_SERVER}teams/get-all-without-owner`,
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${loggedUser.token}`
+        try {
+            const response = await fetch(`${URL_SERVER}teams/get-all-without-owner`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${loggedUser.token}`,
+                        'ngrok-skip-browser-warning': 'true'
+                    }
                 }
-            }
-        );
-        const data = await response.json();
-        setTeams(data);
+            );
+            const data = await response.json();
+            setTeams(data);
+        } catch (error) {
+            console.error('Error fetching teams:', error);
+        } finally {
+        }
     };
 
     const fetchPairs = async () => {
-        const response = await fetch(`${URL_SERVER}users/get-all-pairs`,
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${loggedUser.token}`
+        try {
+            const response = await fetch(`${URL_SERVER}users/get-all-pairs`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${loggedUser.token}`,
+                        'ngrok-skip-browser-warning': 'true'
+                    }
                 }
-            }
-        );
-        const data = await response.json();
-        setSelectedPairs(data);
+            );
+            const data = await response.json();
+            setSelectedPairs(data);
+        } catch (error) {
+            console.error('Error fetching pairs:', error);
+        } finally {
+        }
     };
 
     useEffect(() => {

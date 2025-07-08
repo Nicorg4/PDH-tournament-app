@@ -54,7 +54,8 @@ const GroupStandings: React.FC = ({}) => {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${loggedUser.token}`
+                    'Authorization': `Bearer ${loggedUser.token}`,
+                    'ngrok-skip-browser-warning': 'true'
                 }
             });
             const data: GroupsResponse = await response.json();

@@ -36,7 +36,6 @@ const LoginForm: React.FC = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${loggedUser.token}`
         },
         body: JSON.stringify({ username, password }),
       });

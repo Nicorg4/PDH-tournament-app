@@ -28,8 +28,8 @@ const Home: React.FC = () => {
       const response = await fetch(`${URL_SERVER}users/get-all`, {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${loggedUser.token}`
+          'Authorization': `Bearer ${loggedUser.token}`,
+          'ngrok-skip-browser-warning': 'true'
         }
 
       });
