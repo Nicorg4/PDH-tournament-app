@@ -204,7 +204,9 @@ const GroupMatches = () => {
 
   }
 
-  const groupedMatches = matches.reduce((acc, match) => {
+  const safeMatches = Array.isArray(matches) ? matches : [];
+
+  const groupedMatches = safeMatches.reduce((acc, match) => {
     if (!acc[match.phase]) {
       acc[match.phase] = [];
     }
