@@ -4,7 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "dd1afbc334a5.ngrok-free.app",
+        hostname: "pdh-tournament-app-server-production.up.railway.app",
         pathname: "/images/**",
       },
     ],
