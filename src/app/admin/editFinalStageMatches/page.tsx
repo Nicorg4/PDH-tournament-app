@@ -167,6 +167,7 @@ const GroupMatches = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${loggedUser.token}`,
         },
         body: JSON.stringify({ matches }),
       });
@@ -185,6 +186,10 @@ const GroupMatches = () => {
     try {
       const response = await fetch(`${URL_SERVER}playoffs/create-semifinals`, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${loggedUser.token}`,
+        }
       });
       fetchPlayoffMatches();
       checkIfAllQuartersPlayed();
@@ -202,6 +207,10 @@ const GroupMatches = () => {
     try {
       const response = await fetch(`${URL_SERVER}playoffs/create-final`, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${loggedUser.token}`,
+        }
       });
 
       if (!response.ok) {
@@ -477,14 +486,14 @@ const GroupMatches = () => {
                 <MainButton
                   onClick={createSemifinals}
                   text={'Armar semifinales'}
-                  isLoading={isLoading}
+                  isLoading={false}
                 />
               )}
               {allSemifinalsPlayed && (
                 <MainButton
                   onClick={createFinal}
                   text={'Armar Final'}
-                  isLoading={isLoading}
+                  isLoading={false}
                 />
               )}
             </div>
