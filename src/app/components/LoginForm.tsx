@@ -14,7 +14,6 @@ const LoginForm: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
-  const loggedUser = useSelector((state: RootState) => state.user);
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -63,7 +62,7 @@ const LoginForm: React.FC = () => {
         </h2>
       )}
       <div className='flex flex-col text-slate-800'>
-        <label htmlFor="username">Nombre de usuario</label>
+        <label htmlFor="username" className='font-bold pb-2'>Nombre de usuario</label>
         <input
           type="text"
           id="username"
@@ -73,7 +72,7 @@ const LoginForm: React.FC = () => {
         />
       </div>
       <div className='flex flex-col text-slate-800'>
-        <label htmlFor="password">Contraseña</label>
+        <label htmlFor="password" className='font-bold pb-2'>Contraseña</label>
         <div className="relative">
           <input
             type={showPassword ? "text" : "password"}

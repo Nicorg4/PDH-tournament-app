@@ -106,12 +106,23 @@ const GroupMatches = () => {
   }, []);
 
   const fetchPlayoffMatches = async () => {
-    fetch(`${URL_SERVER}playoffs/get-all`)
-      .then((res) => res.json())
-      .then((data) => {
-        setMatches(data.matches);
-      })
-      .catch((err) => console.error("Error fetching matches:", err));
+    try {
+      const response = await fetch(`${URL_SERVER}playoffs/get-all`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${loggedUser.token}`,
+            'ngrok-skip-browser-warning': 'true'
+          },
+        }
+      );
+      const data = await response.json();
+      setMatches(data.matches);
+      console.log("Respuesta desde el servidor:", data);
+    } catch (err) {
+      console.error("Error fetching matches:", err);
+    }
   }
 
   useEffect(() => {
@@ -192,6 +203,10 @@ const GroupMatches = () => {
       const response = await fetch(`${URL_SERVER}playoffs/create-final`, {
         method: "POST",
       });
+
+      if (!response.ok) {
+        throw new Error("Error al crear los partidos.");
+      }
       fetchPlayoffMatches();
       checkIfAllSemifinalsPlayed();
       showNotification("Partidos actualizados correctamente.", "success");

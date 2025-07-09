@@ -7,6 +7,12 @@ const nextConfig = {
         hostname: "pdh-tournament-app-server-production.up.railway.app",
         pathname: "/images/**",
       },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "3003",
+        pathname: "/images/**",
+      },
     ],
   },
 };
