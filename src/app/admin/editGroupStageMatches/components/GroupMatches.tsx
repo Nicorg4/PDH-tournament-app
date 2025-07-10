@@ -167,6 +167,10 @@ const GroupMatches = ({ showNotification }: GroupMatchesProps) => {
     }
   }
 
+  if (isLoading) {
+    return (<SoccerLoadingAnimation />)
+  }
+
   return (
     <>
       {matches.length === 0 ? (
@@ -204,7 +208,7 @@ const GroupMatches = ({ showNotification }: GroupMatchesProps) => {
                             onChange={(e) =>
                               handleScoreChange(match.match_id, "team_A_score", e.target.value)
                             }
-                            style={match.team_A_score !== null && match.team_B_score !== null && match.team_A_score > match.team_B_score ? {backgroundColor: '#6cac6c', color: 'white'} : {}}
+                            style={match.team_A_score !== null && match.team_B_score !== null && match.team_A_score > match.team_B_score ? { backgroundColor: '#6cac6c', color: 'white' } : {}}
                           />
                         </div>
                         <div className="flex items-center justify-between w-full">
@@ -224,7 +228,7 @@ const GroupMatches = ({ showNotification }: GroupMatchesProps) => {
                             onChange={(e) =>
                               handleScoreChange(match.match_id, "team_B_score", e.target.value)
                             }
-                            style={match.team_A_score !== null && match.team_B_score !== null && match.team_A_score < match.team_B_score ? {backgroundColor: '#6cac6c', color: 'white'} : {}}
+                            style={match.team_A_score !== null && match.team_B_score !== null && match.team_A_score < match.team_B_score ? { backgroundColor: '#6cac6c', color: 'white' } : {}}
                           />
                         </div>
                       </div>

@@ -31,8 +31,6 @@ interface Match {
 }
 const GroupMatches = () => {
   const [matches, setMatches] = useState<Match[]>([]);
-  const [allQuartersPlayed, setAllQuartersPlayed] = useState(false);
-  const [allSemifinalsPlayed, setAllSemifinalsPlayed] = useState(false);
   const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
   const URL_IMG = process.env.NEXT_PUBLIC_URL_IMG
   const [isLoading, setIsLoading] = useState(false);
@@ -61,49 +59,6 @@ const GroupMatches = () => {
       setNotification({ ...notification, show: false });
     }, 5000);
   };
-
-  const checkIfAllQuartersPlayed = async () => {
-    try {
-      const response = await fetch(`${URL_SERVER}playoffs/check-all-quarters-played`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${loggedUser.token}`,
-            'ngrok-skip-browser-warning': 'true'
-          },
-        }
-      );
-      const data = await response.json();
-      setAllQuartersPlayed(data.allMatchesPlayed);
-      console.log("Respuesta desde el servidor:", data);
-    } catch (err) {
-      console.error("Error checking if all matches played:", err);
-    }
-  };
-  const checkIfAllSemifinalsPlayed = async () => {
-    try {
-      const response = await fetch(`${URL_SERVER}playoffs/check-all-semifinals-played`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${loggedUser.token}`,
-            'ngrok-skip-browser-warning': 'true'
-          },
-        }
-      );
-      const data = await response.json();
-      setAllSemifinalsPlayed(data.allMatchesPlayed);
-      console.log("Respuesta desde el servidor:", data);
-    } catch (err) {
-      console.error("Error checking if all matches played:", err);
-    }
-  };
-  useEffect(() => {
-    checkIfAllQuartersPlayed();
-    checkIfAllSemifinalsPlayed();
-  }, []);
 
   const fetchPlayoffMatches = async () => {
     try {
@@ -171,8 +126,6 @@ const GroupMatches = () => {
         },
         body: JSON.stringify({ matches }),
       });
-      checkIfAllQuartersPlayed();
-      checkIfAllSemifinalsPlayed();
       showNotification("Partidos actualizados correctamente.", "success");
     } catch (error) {
       showNotification("Error al actualizar los partidos.", "error");
@@ -192,7 +145,6 @@ const GroupMatches = () => {
         }
       });
       fetchPlayoffMatches();
-      checkIfAllQuartersPlayed();
       showNotification("Partidos actualizados correctamente.", "success");
     }
 
@@ -217,7 +169,6 @@ const GroupMatches = () => {
         throw new Error("Error al crear los partidos.");
       }
       fetchPlayoffMatches();
-      checkIfAllSemifinalsPlayed();
       showNotification("Partidos actualizados correctamente.", "success");
     }
 
@@ -247,6 +198,10 @@ const GroupMatches = () => {
     acc[match.phase].push(match);
     return acc;
   }, {} as Record<number, Match[]>);
+
+  if (isLoading) {
+    return (<SoccerLoadingAnimation />)
+  }
 
   return (
     <div className="flex justify-center w-full mt-[80px] sm:mt-0 pb-20 sm:pb-0">
@@ -468,7 +423,6 @@ const GroupMatches = () => {
                 text={'Guardar Cambios'}
                 isLoading={isLoading}
               />
-              {/* Mostrar botón de semifinales solo si todos los cuartos tienen resultado y NO existen semifinales */}
               {allPhaseMatchesHaveResult(4) && !phaseExists(2) && (
                 <MainButton
                   onClick={createSemifinals}
@@ -476,7 +430,6 @@ const GroupMatches = () => {
                   isLoading={false}
                 />
               )}
-              {/* Mostrar botón de final solo si todos los semifinales tienen resultado y NO existe la final */}
               {allPhaseMatchesHaveResult(2) && !phaseExists(1) && (
                 <MainButton
                   onClick={createFinal}
