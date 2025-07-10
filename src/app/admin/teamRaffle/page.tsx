@@ -231,13 +231,13 @@ const TeamRafflePage = () => {
                 <div className='h-[70%] flex justify-center'>
                     <div className='mt-10 grid grid-cols-2 gap-2'>
                         {selectedPairs.map((pair, index) => (
-                            <div className='flex gap-3 items-center h-2 border border-slate-700 p-7 rounded-lg bg-slate-500/10' key={index}>
+                            <div className='flex gap-3 items-center h-2 p-7 rounded-lg bg-white/40 shadow-lg' key={index}>
                                 <div className="flex items-center gap-2 min-w-[160px] justify-end">
                                     <p className='text-slate-800'>{pair.user.username}</p>
                                     <Image src={URL_IMG + pair.user.picture} alt={"logo"} width={35} height={35} className="rounded-full object-cover aspect-square" />
                                 </div>
                                 <div className="flex justify-center items-center w-12">
-                                    <CgArrowsExchange className='text-2xl mx-auto' />
+                                    <CgArrowsExchange className='text-2xl mx-auto text-slate-800' />
                                 </div>
                                 <div className="flex items-center gap-2 min-w-[160px]">
                                     <Image src={URL_IMG + pair.team.logo} alt={pair.team.name} width={35} height={35} />

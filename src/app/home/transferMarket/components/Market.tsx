@@ -178,7 +178,7 @@ const MyAuctions: React.FC<MyAuctionsProps> = ({ auctions, handleShowPopupNotifi
 
               <tbody>
                 {currentAuctions.map((auction) => (
-                  <tr key={auction.player.id} className="hover:bg-[white] hover:bg-opacity-10">
+                  <tr key={auction.player.id} className={`hover:bg-[white] hover:bg-opacity-10 ${auction.team.name === 'Leyendas' ? 'bg-[#cca935]/40 bg-opacity-50' : ''}`}>
                     <td className="border-b border-white border-opacity-30 p-3 text-center text-slate-800 text-[15px]">{auction.player.name}</td>
                     <td className="border-b border-white border-opacity-30 p-3 text-center">
                       <div className="flex items-center w-full justify-center">

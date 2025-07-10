@@ -137,6 +137,7 @@ const GroupMatches = () => {
 
   const createSemifinals = async () => {
     try {
+      await handleSaveChanges();
       const response = await fetch(`${URL_SERVER}playoffs/create-semifinals`, {
         method: "POST",
         headers: {
@@ -144,6 +145,9 @@ const GroupMatches = () => {
           "Authorization": `Bearer ${loggedUser.token}`,
         }
       });
+      if(!response.ok) {
+        throw new Error("Error al crear los partidos.");
+      } 
       fetchPlayoffMatches();
       showNotification("Partidos actualizados correctamente.", "success");
     }
@@ -157,6 +161,7 @@ const GroupMatches = () => {
 
   const createFinal = async () => {
     try {
+      await handleSaveChanges();
       const response = await fetch(`${URL_SERVER}playoffs/create-final`, {
         method: "POST",
         headers: {

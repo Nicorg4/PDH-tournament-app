@@ -18,6 +18,7 @@ import { HiUserGroup } from "react-icons/hi2";
 import useSessionCheck from '../components/useSessionCheck';
 import ProtectedRoute from '../components/protectedRoute';
 import { PiTreeStructureFill } from "react-icons/pi";
+import { GiSoccerKick } from "react-icons/gi";
 
 interface LayoutProps {
   children: ReactNode;
@@ -101,6 +102,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <li className={`mb-2 p-3 rounded-[10px] font-bold bg-[#05113b] bg-opacity-90 ${pathname === '/admin/createTeam' ? 'bg-gray-400 text-[#02124a] ' : ''} hover:bg-gray-400 hover:bg-opacity-70 hover:text-[#02124a] flex items-center`} style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", cursor: "pointer", transition: "0.5s ease" }}>
                   <BsShieldFillPlus className="text-xl" />
                   {isExpanded && <span className="ml-3">Crear equipo</span>}
+                </li>
+              </Link>
+              <Link href="/admin/createIconAuction">
+                <li className={`mb-2 p-3 rounded-[10px] font-bold bg-[#05113b] bg-opacity-90 ${pathname === '/admin/createIconAuction' ? 'bg-gray-400 text-[#02124a] ' : ''} hover:bg-gray-400 hover:bg-opacity-70 hover:text-[#02124a] flex items-center`} style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", cursor: "pointer", transition: "0.5s ease" }}>
+                  <GiSoccerKick className="text-xl" />
+                  {isExpanded && <span className="ml-3">Vender leyenda</span>}
                 </li>
               </Link>
               <Link href="/admin/teamRaffle">
