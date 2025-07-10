@@ -1,10 +1,8 @@
 'use client'
 
 import SoccerLoadingAnimation from "@/app/components/loadingAnimation";
-import Notification from "@/app/components/notification";
 import { RootState } from "@/redux/store";
 import React, { useState, useEffect } from "react";
-import { IoStar } from "react-icons/io5";
 import { useSelector } from "react-redux";
 
 interface Match {
@@ -84,15 +82,15 @@ const GroupMatches = () => {
   }
 
   return (
-    <>
+    <div className="flex justify-center w-full pb-20 sm:pb-0 mt-[80px] sm:mt-0">
       {matches.length === 0 ?
-        <div className=' bg-gray-200 bg-opacity-70 border-none items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
-          <h1 className="text-2xl text-center p-96 text-slate-800">Todavia no hay partidos disponibles.</h1>
+        <div className="bg-gray-200 bg-opacity-70 border-none items-center rounded-md flex justify-center min-h-[40vh]" style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+          <h1 className="text-2xl text-center p-10 text-slate-800">Todavía no hay partidos disponibles.</h1>
         </div>
         : (
-          <div className='w-4/5 bg-gray-200 bg-opacity-70 p-5 border-none flex flex-col items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
-            <h1 className="text-3xl font-bold mb-10 text-slate-800">Fase final</h1>
-            <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className='w-full bg-gray-200 bg-opacity-70 p-5 border-none flex flex-col items-center rounded-md sm:w-5/6 pb-10' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+            <h1 className="text-3xl font-bold mb-10 text-slate-800">Editar Partidos</h1>
+            <div className="w-full grid grid-cols-1 xl:grid-cols-3 gap-8">
               {/* Cuartos de Final */}
               <div>
                 <h2 className="text-2xl font-semibold mb-6 text-center border-b border-slate-800 pb-2 text-slate-800 ">
@@ -118,12 +116,12 @@ const GroupMatches = () => {
                           />
                           <span className="font-semibold">{match.team_A_name}</span>
                         </div>
-                        <p className="text-slate-800 font-bold">{match.team_A_score !== null ? match.team_A_score : ""}</p>
-                        <div className="absolute ml-80 transform text-center">
-                          {match.team_A_score !== null && match.team_B_score !== null && match.team_A_score > match.team_B_score && (
-                            <span className="text-slate-800"><IoStar /></span>
-                          )}
-                        </div>
+                        <span
+                          className="w-10 rounded-lg text-center border border-slate-800"
+                          style={match.team_A_score !== null && match.team_B_score !== null && match.team_A_score > match.team_B_score ? { backgroundColor: '#6cac6c', color: 'white' } : {}}
+                        >
+                          {match.team_A_score !== null ? match.team_A_score : ""}
+                        </span>
                       </div>
                       <div className="flex items-center justify-between w-full">
                         <div className="flex items-center">
@@ -139,12 +137,12 @@ const GroupMatches = () => {
                           />
                           <span className="font-semibold">{match.team_B_name}</span>
                         </div>
-                        <p className="text-slate-800 font-bold">{match.team_B_score !== null ? match.team_B_score : ""}</p>
-                        <div className="absolute ml-80 transform text-center">
-                          {match.team_B_score !== null && match.team_A_score !== null && match.team_B_score > match.team_A_score && (
-                            <span className="text-slate-800"><IoStar /></span>
-                          )}
-                        </div>
+                        <span
+                          className="w-10 rounded-lg text-center border border-slate-800"
+                          style={match.team_B_score !== null && match.team_A_score !== null && match.team_B_score > match.team_A_score ? { backgroundColor: '#6cac6c', color: 'white' } : {}}
+                        >
+                          {match.team_B_score !== null ? match.team_B_score : ""}
+                        </span>
                       </div>
                     </div>
                   ))}
@@ -165,7 +163,7 @@ const GroupMatches = () => {
                         <div className="flex items-center">
                           <img
                             src={URL_IMG + match.user_A_picture}
-                            alt={match.team_A_name}
+                            alt={match.team_B_name}
                             className="w-8 h-8 rounded-full mr-2"
                           />
                           <img
@@ -175,12 +173,12 @@ const GroupMatches = () => {
                           />
                           <span className="font-semibold">{match.team_A_name}</span>
                         </div>
-                        <p className="text-slate-800 font-bold">{match.team_A_score !== null ? match.team_A_score : ""}</p>
-                        <div className="absolute ml-80 transform text-center">
-                          {match.team_A_score !== null && match.team_B_score !== null && match.team_A_score > match.team_B_score && (
-                            <span className="text-slate-800"><IoStar /></span>
-                          )}
-                        </div>
+                        <span
+                          className="w-10 rounded-lg text-center border border-slate-800"
+                          style={match.team_A_score !== null && match.team_B_score !== null && match.team_A_score > match.team_B_score ? { backgroundColor: '#6cac6c', color: 'white' } : {}}
+                        >
+                          {match.team_A_score !== null ? match.team_A_score : ""}
+                        </span>
                       </div>
                       <div className="flex items-center justify-between w-full">
                         <div className="flex items-center">
@@ -196,12 +194,12 @@ const GroupMatches = () => {
                           />
                           <span className="font-semibold">{match.team_B_name}</span>
                         </div>
-                        <p className="text-slate-800 font-bold">{match.team_B_score !== null ? match.team_B_score : ""}</p>
-                        <div className="absolute ml-80 transform text-center">
-                          {match.team_B_score !== null && match.team_A_score !== null && match.team_B_score > match.team_A_score && (
-                            <span className="text-slate-800"><IoStar /></span>
-                          )}
-                        </div>
+                        <span
+                          className="w-10 rounded-lg text-center border border-slate-800"
+                          style={match.team_B_score !== null && match.team_A_score !== null && match.team_B_score > match.team_A_score ? { backgroundColor: '#6cac6c', color: 'white' } : {}}
+                        >
+                          {match.team_B_score !== null ? match.team_B_score : ""}
+                        </span>
                       </div>
                     </div>
                   ))}
@@ -232,13 +230,12 @@ const GroupMatches = () => {
                           />
                           <span className="font-semibold">{match.team_A_name}</span>
                         </div>
-                        <p className="text-slate-800 font-bold">{match.team_A_score !== null ? match.team_A_score : ""}</p>
-
-                        <div className="absolute ml-80 transform text-center">
-                          {match.team_A_score !== null && match.team_B_score !== null && match.team_A_score > match.team_B_score && (
-                            <span className="text-slate-800"><IoStar /></span>
-                          )}
-                        </div>
+                        <span
+                          className="w-10 rounded-lg text-center border border-slate-800"
+                          style={match.team_A_score !== null && match.team_B_score !== null && match.team_A_score > match.team_B_score ? { backgroundColor: '#6cac6c', color: 'white' } : {}}
+                        >
+                          {match.team_A_score !== null ? match.team_A_score : ""}
+                        </span>
                       </div>
                       <div className="flex items-center justify-between w-full">
                         <div className="flex items-center">
@@ -254,12 +251,12 @@ const GroupMatches = () => {
                           />
                           <span className="font-semibold">{match.team_B_name}</span>
                         </div>
-                        <p className="text-slate-800 font-bold">{match.team_B_score !== null ? match.team_B_score : ""}</p>
-                        <div className="absolute ml-80 transform text-center">
-                          {match.team_B_score !== null && match.team_A_score !== null && match.team_B_score > match.team_A_score && (
-                            <span className="text-slate-800"><IoStar /></span>
-                          )}
-                        </div>
+                        <span
+                          className="w-10 rounded-lg text-center border border-slate-800"
+                          style={match.team_B_score !== null && match.team_A_score !== null && match.team_B_score > match.team_A_score ? { backgroundColor: '#6cac6c', color: 'white' } : {}}
+                        >
+                          {match.team_B_score !== null ? match.team_B_score : ""}
+                        </span>
                       </div>
                     </div>
                   ))}
@@ -268,7 +265,7 @@ const GroupMatches = () => {
             </div>
           </div>
         )}
-    </>
+    </div>
   );
 };
 

@@ -1,10 +1,11 @@
 'use client'
 
+import SoccerLoadingAnimation from "@/app/components/loadingAnimation";
 import MainButton from "@/app/components/mainButton";
 import { RootState } from "@/redux/store";
 import React, { useState, useEffect } from "react";
-import { IoStar } from "react-icons/io5";
 import { useSelector } from "react-redux";
+import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
 
 interface Match {
   match_id: number;
@@ -30,6 +31,7 @@ const GroupMatches = () => {
   const loggedUser = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
+    setIsLoading(true);
     fetch(`${URL_SERVER}groups/get-all-matches`,
       {
         method: "GET",
@@ -42,12 +44,16 @@ const GroupMatches = () => {
       .then((res) => res.json())
       .then((data) => {
         setMatches(data.matches);
+        setIsLoading(false);
         if (data.matches.length > 0) {
           const minMatchDay = Math.min(...data.matches.map((m: Match) => m.match_day));
           setCurrentMatchDay(minMatchDay);
         }
       })
-      .catch((err) => console.error("Error fetching matches:", err));
+      .catch((err) => {
+        console.error("Error fetching matches:", err)
+        setIsLoading(false);
+      });
   }, []);
 
   const groupedMatches = matches.reduce((acc, match) => {
@@ -71,71 +77,86 @@ const GroupMatches = () => {
     setCurrentMatchDay((prev) => Math.min(prev + 1, matchDays[matchDays.length - 1]));
   };
 
-  return (
-    <div className='w-4/5 md:w-2/5 bg-gray-200 bg-opacity-70 pb-10 border-none flex flex-col items-center rounded-md p-6 max-w-4xl mx-auto' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
-      <h1 className="text-2xl font-bold mb-6 text-slate-800">Fase de grupos</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-5 w-full">
-        {groupedMatches[currentMatchDay] && Object.entries(groupedMatches[currentMatchDay]).map(([group_id, groupMatches]) => (
-          <div key={group_id} className="space-y-4">
-            <h3 className="text-lg text-slate-800 font-bold">Grupo {group_id}</h3>
-            {groupMatches.map((match) => (
-              <div
-                key={match.match_id}
-                className="p-3 border border-slate-800 rounded-lg shadow-sm flex items-center gap-2 flex-col w-72"
-              >
-                <div className="flex items-center justify-between w-full border-b border-slate-800 pb-3">
-                  <div className="flex items-center">
-                    <img
-                      src={URL_IMG + match.team_A_logo}
-                      alt={match.team_A_name}
-                      className="w-8 h-8 rounded-full mr-2"
-                    />
-                    <span className="font-semibold">{match.team_A_name}</span>
-                  </div>
-                  <p className="w-10 text-center rounded bg-slate-400 text-slate-800">{match.team_A_score}</p>
-                  <div className="absolute ml-72 transform text-center">
-                    {match.team_A_score !== null && match.team_B_score !== null && match.team_A_score > match.team_B_score && (
-                        <span className="text-slate-800"><IoStar/></span>
-                    )}
-                  </div>
-                </div>
+  if (isLoading) {
+    return <SoccerLoadingAnimation />
+  }
 
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center">
-                    <img
-                      src={URL_IMG + match.team_B_logo}
-                      alt={match.team_B_name}
-                      className="w-8 h-8 rounded-full mr-2"
-                    />
-                    <span className="font-semibold">{match.team_B_name}</span>
+  return (
+    <>
+      {matches.length === 0 ? (
+        <div className="bg-gray-200 bg-opacity-70 border-none items-center rounded-md flex justify-center min-h-[40vh]" style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+          <h1 className="text-2xl text-center p-10 text-slate-800">Todavía no hay partidos disponibles.</h1>
+        </div>
+      ) : (
+        <div className="w-full flex flex-col items-center pb-20 sm:pb-0">
+          <div className="w-full max-w-4xl bg-gray-200 bg-opacity-70 pb-10 border-none flex flex-col items-center rounded-md p-2 sm:p-6 mx-auto" style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+            <h1 className="text-xl sm:text-2xl font-bold mb-6 text-slate-800 text-center">Fase de grupos</h1>
+            <div className="w-full flex flex-col md:grid md:grid-cols-2 gap-8 mb-5 overflow-x-auto">
+              {groupedMatches[currentMatchDay] &&
+                Object.entries(groupedMatches[currentMatchDay]).map(([group_id, groupMatches]) => (
+                  <div key={group_id} className="space-y-2 min-w-[260px] max-w-full">
+                    <h3 className="text-base sm:text-lg text-slate-800 font-bold text-center mb-2">Grupo {group_id}</h3>
+                    {groupMatches.map((match) => (
+                      <div
+                        key={match.match_id}
+                        className="p-3 border border-slate-800 rounded-lg shadow-sm flex items-center gap-2 flex-col w-full sm:w-72 mx-auto bg-opacity-80"
+                      >
+                        <div className="flex items-center justify-between w-full border-b border-slate-800 pb-3">
+                          <div className="flex items-center">
+                            <img
+                              src={URL_IMG + match.team_A_logo}
+                              alt={match.team_A_name}
+                              className="w-8 h-8 rounded-full mr-2"
+                            />
+                            <span className="font-semibold text-xs sm:text-base">{match.team_A_name}</span>
+                          </div>
+                          <span
+                            className="w-10 rounded-lg text-center border border-slate-800"
+                            style={match.team_A_score !== null && match.team_B_score !== null && match.team_A_score > match.team_B_score ? { backgroundColor: '#6cac6c', color: 'white' } : {}}>
+                            {match.team_A_score !== null ? match.team_A_score : "-"}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between w-full">
+                          <div className="flex items-center">
+                            <img
+                              src={URL_IMG + match.team_B_logo}
+                              alt={match.team_B_name}
+                              className="w-8 h-8 rounded-full mr-2"
+                            />
+                            <span className="font-semibold text-xs sm:text-base">{match.team_B_name}</span>
+                          </div>
+                          <span
+                            className="w-10 rounded-lg text-center border border-slate-800"
+                            style={match.team_A_score !== null && match.team_B_score !== null && match.team_A_score < match.team_B_score ? { backgroundColor: '#6cac6c', color: 'white' } : {}}>
+                            {match.team_B_score !== null ? match.team_B_score : "-"}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                  <p className="w-10 text-center rounded bg-slate-400 text-slate-800">{match.team_B_score}</p>
-                   <div className="absolute ml-72 transform text-center">
-                    {match.team_A_score !== null && match.team_B_score !== null && match.team_A_score < match.team_B_score && (
-                        <span className="text-slate-800"><IoStar/></span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}          
+                ))}
             </div>
-        ))}
-      </div>  
-      <div className="flex justify-between items-center mb-4 gap-5">
-        <MainButton
-          onClick={handlePrevious}
-          text={'Anterior'}
-          isLoading={false}
-          isCancel={false}
-        />
-        <h2 className="text-xl font-semibold">Fecha {currentMatchDay}</h2>
-        <MainButton
-          onClick={handleNext}
-          text={'Siguiente'}
-          isLoading={false}
-        />
-      </div>    
-    </div>
+            <div className="flex sm:flex-row justify-center items-center gap-3 mb-4 sm:gap-5 w-full max-w-md mx-auto">
+              <button
+                className={`flex p-3 border-none rounded-[15px] gap-2 items-center hover:bg-opacity-70 text-white font-bold ${currentMatchDay === 1 ? "bg-slate-500 hover:bg-slate-500 pointer-events-none" : "bg-slate-800"}`}
+                style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}
+                onClick={handlePrevious}
+                disabled={currentMatchDay === 1}>
+                <FaArrowLeft />
+              </button>
+              <h2 className="text-base sm:text-lg font-semibold text-center">Fecha {currentMatchDay}</h2>
+              <button className={`flex p-3 border-none rounded-[15px] gap-2 items-center hover:bg-opacity-70 text-white font-bold ${currentMatchDay === matchDays.length
+                ? "bg-slate-500 hover:bg-slate-500 pointer-events-none" : "bg-slate-800"}`}
+                style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}
+                onClick={handleNext}
+                disabled={currentMatchDay === matchDays.length}>
+                <FaArrowRight />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

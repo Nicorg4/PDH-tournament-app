@@ -228,6 +228,16 @@ const GroupMatches = () => {
 
   }
 
+  const allPhaseMatchesHaveResult = (phase: number) => {
+    const phaseMatches = matches.filter(m => m.phase === phase);
+    return (
+      phaseMatches.length > 0 &&
+      phaseMatches.every(m => m.team_A_score !== null && m.team_B_score !== null)
+    );
+  };
+
+  const phaseExists = (phase: number) => matches.some(m => m.phase === phase);
+
   const safeMatches = Array.isArray(matches) ? matches : [];
 
   const groupedMatches = safeMatches.reduce((acc, match) => {
@@ -239,7 +249,7 @@ const GroupMatches = () => {
   }, {} as Record<number, Match[]>);
 
   return (
-    <>
+    <div className="flex justify-center w-full mt-[80px] sm:mt-0 pb-20 sm:pb-0">
       {notification.show && (
         <Notification
           type={notification.type}
@@ -249,13 +259,13 @@ const GroupMatches = () => {
         />
       )}
       {matches.length === 0 ?
-        <div className=' bg-gray-200 bg-opacity-70 border-none items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
-          <h1 className="text-2xl text-center p-96 text-slate-800">Todavia no hay partidos disponibles.</h1>
+        <div className="bg-gray-200 bg-opacity-70 border-none items-center rounded-md flex justify-center min-h-[40vh]" style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+          <h1 className="text-2xl text-center p-10 text-slate-800">Todavía no hay partidos disponibles.</h1>
         </div>
         : (
-          <div className='w-4/5 bg-gray-200 bg-opacity-70 p-5 border-none flex flex-col items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+          <div className='w-full bg-gray-200 bg-opacity-70 p-5 border-none flex flex-col items-center rounded-md sm:w-5/6' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
             <h1 className="text-3xl font-bold mb-10 text-slate-800">Editar Partidos</h1>
-            <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="w-full grid grid-cols-1 xl:grid-cols-3 gap-8">
               {/* Cuartos de Final */}
               <div>
                 <h2 className="text-2xl font-semibold mb-6 text-center border-b border-slate-800 pb-2 text-slate-800 ">
@@ -289,12 +299,8 @@ const GroupMatches = () => {
                           onChange={(e) =>
                             handleScoreChange(match.match_id, "team_A_score", e.target.value)
                           }
+                          style={match.team_A_score !== null && match.team_B_score !== null && match.team_A_score > match.team_B_score ? { backgroundColor: '#6cac6c', color: 'white' } : {}}
                         />
-                        <div className="absolute ml-80 transform text-center">
-                          {match.team_A_score !== null && match.team_B_score !== null && match.team_A_score > match.team_B_score && (
-                            <span className="text-slate-800"><IoStar /></span>
-                          )}
-                        </div>
                       </div>
                       <div className="flex items-center justify-between w-full">
                         <div className="flex items-center">
@@ -318,12 +324,8 @@ const GroupMatches = () => {
                           onChange={(e) =>
                             handleScoreChange(match.match_id, "team_B_score", e.target.value)
                           }
+                          style={match.team_B_score !== null && match.team_A_score !== null && match.team_B_score > match.team_A_score ? { backgroundColor: '#6cac6c', color: 'white' } : {}}
                         />
-                        <div className="absolute ml-80 transform text-center">
-                          {match.team_B_score !== null && match.team_A_score !== null && match.team_B_score > match.team_A_score && (
-                            <span className="text-slate-800"><IoStar /></span>
-                          )}
-                        </div>
                       </div>
                     </div>
                   ))}
@@ -362,12 +364,8 @@ const GroupMatches = () => {
                           onChange={(e) =>
                             handleScoreChange(match.match_id, "team_A_score", e.target.value)
                           }
+                          style={match.team_A_score !== null && match.team_B_score !== null && match.team_A_score > match.team_B_score ? { backgroundColor: '#6cac6c', color: 'white' } : {}}
                         />
-                        <div className="absolute ml-80 transform text-center">
-                          {match.team_A_score !== null && match.team_B_score !== null && match.team_A_score > match.team_B_score && (
-                            <span className="text-slate-800"><IoStar /></span>
-                          )}
-                        </div>
                       </div>
                       <div className="flex items-center justify-between w-full">
                         <div className="flex items-center">
@@ -391,12 +389,8 @@ const GroupMatches = () => {
                           onChange={(e) =>
                             handleScoreChange(match.match_id, "team_B_score", e.target.value)
                           }
+                          style={match.team_B_score !== null && match.team_A_score !== null && match.team_B_score > match.team_A_score ? { backgroundColor: '#6cac6c', color: 'white' } : {}}
                         />
-                        <div className="absolute ml-80 transform text-center">
-                          {match.team_B_score !== null && match.team_A_score !== null && match.team_B_score > match.team_A_score && (
-                            <span className="text-slate-800"><IoStar /></span>
-                          )}
-                        </div>
                       </div>
                     </div>
                   ))}
@@ -435,12 +429,8 @@ const GroupMatches = () => {
                           onChange={(e) =>
                             handleScoreChange(match.match_id, "team_A_score", e.target.value)
                           }
+                          style={match.team_A_score !== null && match.team_B_score !== null && match.team_A_score > match.team_B_score ? { backgroundColor: '#6cac6c', color: 'white' } : {}}
                         />
-                        <div className="absolute ml-80 transform text-center">
-                          {match.team_A_score !== null && match.team_B_score !== null && match.team_A_score > match.team_B_score && (
-                            <span className="text-slate-800"><IoStar /></span>
-                          )}
-                        </div>
                       </div>
                       <div className="flex items-center justify-between w-full">
                         <div className="flex items-center">
@@ -464,12 +454,8 @@ const GroupMatches = () => {
                           onChange={(e) =>
                             handleScoreChange(match.match_id, "team_B_score", e.target.value)
                           }
+                          style={match.team_B_score !== null && match.team_A_score !== null && match.team_B_score > match.team_A_score ? { backgroundColor: '#6cac6c', color: 'white' } : {}}
                         />
-                        <div className="absolute ml-80 transform text-center">
-                          {match.team_B_score !== null && match.team_A_score !== null && match.team_B_score > match.team_A_score && (
-                            <span className="text-slate-800"><IoStar /></span>
-                          )}
-                        </div>
                       </div>
                     </div>
                   ))}
@@ -482,14 +468,16 @@ const GroupMatches = () => {
                 text={'Guardar Cambios'}
                 isLoading={isLoading}
               />
-              {allQuartersPlayed && (
+              {/* Mostrar botón de semifinales solo si todos los cuartos tienen resultado y NO existen semifinales */}
+              {allPhaseMatchesHaveResult(4) && !phaseExists(2) && (
                 <MainButton
                   onClick={createSemifinals}
                   text={'Armar semifinales'}
                   isLoading={false}
                 />
               )}
-              {allSemifinalsPlayed && (
+              {/* Mostrar botón de final solo si todos los semifinales tienen resultado y NO existe la final */}
+              {allPhaseMatchesHaveResult(2) && !phaseExists(1) && (
                 <MainButton
                   onClick={createFinal}
                   text={'Armar Final'}
@@ -499,7 +487,7 @@ const GroupMatches = () => {
             </div>
           </div>
         )}
-    </>
+    </div>
   );
 };
 

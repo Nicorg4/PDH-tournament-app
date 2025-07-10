@@ -35,15 +35,9 @@ const PublishForm: React.FC<PublishFormProps> = ({
   };
 
   return (
-    <div
-      className="relative bg-gray-200 bg-opacity-70 pb-10 border-none w-80 h-4/5 rounded-md"
-      style={{ boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px' }}
-    >
-      <div>
-        <h2
-          className="mb-5 text-center w-full p-3 bg-transparent text-slate-800 font-bold"
-          style={{ boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px' }}
-        >
+    <div className='md:w-auto w-full max-w-[95%] bg-gray-200 bg-opacity-70 border-none flex flex-col items-center rounded-md h-[500px]' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+      <div className="w-full">
+        <h2 className='mb-5 text-center w-full p-3 bg-transparent text-slate-800 font-bold' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
           Publicar Jugador
         </h2>
         <div className="mb-4 pl-10 pr-10">
@@ -73,9 +67,9 @@ const PublishForm: React.FC<PublishFormProps> = ({
             onChange={(e) => setPrice(Number(e.target.value))}
           />
         </div>
-      </div>
-      <div className="absolute bottom-5 left-0 w-full flex justify-center">
-        <MainButton text="Publicar" onClick={handlePlayerPublish} isLoading={isLoading} />
+        <div className="w-full flex justify-center">
+          <MainButton text="Publicar" onClick={handlePlayerPublish} isLoading={isLoading} />
+        </div>
       </div>
     </div>
   );

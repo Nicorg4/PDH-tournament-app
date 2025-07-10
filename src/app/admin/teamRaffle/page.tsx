@@ -212,7 +212,7 @@ const TeamRafflePage = () => {
                 <ul>
                     {users.map((user, index) => (
                         <div className='flex gap-3 items-center mb-2 text-slate-800' key={index}>
-                            <Image src={URL_IMG + user.picture} alt={"User image"} width={35} height={35} className="rounded-full object-cover aspect-square" />
+                            <Image src={URL_IMG + user.picture} alt={"logo"} width={35} height={35} className="rounded-full object-cover aspect-square" />
                             <h3>{user.username}</h3>
                         </div>
                     ))}
@@ -228,22 +228,24 @@ const TeamRafflePage = () => {
                     )}
                     <MainButton text={'Reiniciar'} isLoading={isLoading} onClick={handleReset} isCancel={true} />
                 </div>
-                <div className='mt-5 grid'>
-                    {selectedPairs.map((pair, index) => (
-                        <div className='flex gap-3 items-center mb-2' key={index}>
-                            <div className="flex items-center gap-2 min-w-[160px] justify-end">
-                                <p className='text-slate-800'>{pair.user.username}</p>
-                                <Image src={URL_IMG + pair.user.picture} alt={"User image"} width={35} height={35} className="rounded-full object-cover aspect-square" />
+                <div className='h-[70%] flex justify-center'>
+                    <div className='mt-10 grid grid-cols-2 gap-2'>
+                        {selectedPairs.map((pair, index) => (
+                            <div className='flex gap-3 items-center h-2 border border-slate-700 p-7 rounded-lg bg-slate-500/10' key={index}>
+                                <div className="flex items-center gap-2 min-w-[160px] justify-end">
+                                    <p className='text-slate-800'>{pair.user.username}</p>
+                                    <Image src={URL_IMG + pair.user.picture} alt={"logo"} width={35} height={35} className="rounded-full object-cover aspect-square" />
+                                </div>
+                                <div className="flex justify-center items-center w-12">
+                                    <CgArrowsExchange className='text-2xl mx-auto' />
+                                </div>
+                                <div className="flex items-center gap-2 min-w-[160px]">
+                                    <Image src={URL_IMG + pair.team.logo} alt={pair.team.name} width={35} height={35} />
+                                    <p className='text-slate-800'>{pair.team.name}</p>
+                                </div>
                             </div>
-                            <div className="flex justify-center items-center w-12">
-                                <CgArrowsExchange className='text-2xl mx-auto' />
-                            </div>
-                            <div className="flex items-center gap-2 min-w-[160px]">
-                                <Image src={URL_IMG + pair.team.logo} alt={pair.team.name} width={35} height={35} />
-                                <p className='text-slate-800'>{pair.team.name}</p>
-                            </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
             </div>
             <div className='w-1/6 bg-gray-200 bg-opacity-70 pb-10 border-none flex flex-col items-center rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
@@ -276,7 +278,7 @@ const TeamRafflePage = () => {
                             </div>
                             <CgArrowsExchange className='text-8xl' />
                             <div className="flex flex-col items-center">
-                                <Image src={URL_IMG + currentPair.user.picture} alt={"User image"} width={150} height={150} className="rounded-full object-cover aspect-square" />
+                                <Image src={URL_IMG + currentPair.user.picture} alt={"logo"} width={150} height={150} className="rounded-full object-cover aspect-square" />
                                 <span className="mt-2">{currentPair.user.username}</span>
                             </div>
                         </div>

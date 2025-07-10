@@ -13,7 +13,7 @@ const GroupStage = () => {
     };
 
     return (
-        <div className="flex flex-col justify-center align-middle items-center gap-5 w-full h-full">
+        <div className="flex flex-col justify-center align-middle items-center gap-5 w-full mt-[80px] sm:mt-0">
             {!isGroupStageVisible ? 
             <button
                 onClick={toggleComponentVisibility}

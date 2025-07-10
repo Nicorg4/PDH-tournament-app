@@ -4,7 +4,6 @@ import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import SoccerLoadingAnimation from '@/app/components/loadingAnimation';
-import MainButton from '@/app/components/mainButton';
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
 
 interface Auction {
@@ -35,7 +34,7 @@ interface MyAuctionsProps {
 const MyAuctions: React.FC<MyAuctionsProps> = ({ auctions, handleShowPopupNotification, isLoading }) => {
   const loggedUser = useSelector((state: RootState) => state.user);
   const URL_IMG = process.env.NEXT_PUBLIC_URL_IMG;
-  
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
@@ -69,10 +68,10 @@ const MyAuctions: React.FC<MyAuctionsProps> = ({ auctions, handleShowPopupNotifi
 
     const pageNumbers = [];
     const maxVisiblePages = 5;
-    
+
     let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
     let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-    
+
     if (endPage - startPage + 1 < maxVisiblePages) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);
     }
@@ -82,79 +81,67 @@ const MyAuctions: React.FC<MyAuctionsProps> = ({ auctions, handleShowPopupNotifi
     }
 
     return (
-      <div
-        className="absolute left-1/2 -translate-x-1/2 flex gap-1 justify-center items-center bottom-24 rounded-md"
-        style={{ transform: 'translateX(-30%)' }}
-      >
+      <div className="flex w-[100%] justify-center rounded-md mt-5 gap-4">
         <button
-          onClick={handlePrevPage}
-          disabled={currentPage === 1}
-          className={`px-3 py-2 rounded-md transition-colors ${
-            currentPage === 1
-              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-              : 'bg-slate-800 text-white hover:bg-slate-600'
-          }`}
-        >
-          <FaArrowLeft />
+          className={`flex p-3 border-none rounded-[15px] gap-2 items-center hover:bg-opacity-70 text-white font-bold ${currentPage === 1
+            ? "bg-slate-500 hover:bg-slate-500 pointer-events-none" : "bg-slate-800"}`}
+          style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }} onClick={handlePrevPage} disabled={currentPage === 1}><FaArrowLeft />
         </button>
-        
-        {startPage > 1 && (
-          <>
+        <div className='flex gap-2 items-center justify-center'>
+          {startPage > 1 && (
+            <>
+              <button
+                onClick={() => handlePageClick(1)}
+                className="px-3 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
+              >
+                1
+              </button>
+              {startPage > 2 && <span className="px-2 text-gray-500">...</span>}
+            </>
+          )}
+
+          {pageNumbers.map((pageNumber) => (
             <button
-              onClick={() => handlePageClick(1)}
-              className="px-3 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
+              key={pageNumber}
+              onClick={() => handlePageClick(pageNumber)}
+              className={`px-3 py-2 rounded-md transition-colors border border-slate-600/50 ${currentPage === pageNumber
+                ? 'bg-slate-800/50 text-white'
+                : 'transparent text-gray-700 hover:bg-gray-300'
+                }`}
             >
-              1
+              {pageNumber}
             </button>
-            {startPage > 2 && <span className="px-2 text-gray-500">...</span>}
-          </>
-        )}
-        
-        {pageNumbers.map((pageNumber) => (
-          <button
-            key={pageNumber}
-            onClick={() => handlePageClick(pageNumber)}
-            className={`px-3 py-2 rounded-md transition-colors ${
-              currentPage === pageNumber
-                ? 'bg-slate-800 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}
-          >
-            {pageNumber}
-          </button>
-        ))}
-        
-        {endPage < totalPages && (
-          <>
-            {endPage < totalPages - 1 && <span className="px-2 text-gray-500">...</span>}
-            <button
-              onClick={() => handlePageClick(totalPages)}
-              className="px-3 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
-            >
-              {totalPages}
-            </button>
-          </>
-        )}
-        
-        <button
-          onClick={handleNextPage}
-          disabled={currentPage === totalPages}
-          className={`px-3 py-2 rounded-md transition-colors ${
-            currentPage === totalPages
-              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-              : 'bg-slate-800 text-white hover:bg-slate-600'
-          }`}
-        >
-          <FaArrowRight />
+          ))}
+
+          {endPage < totalPages && (
+            <>
+              {endPage < totalPages - 1 && <span className="px-2 text-gray-500">...</span>}
+              <button
+                onClick={() => handlePageClick(totalPages)}
+                className="px-3 py-2 rounded-md bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
+              >
+                {totalPages}
+              </button>
+            </>
+          )}
+        </div>
+        <button className={`flex p-3 border-none rounded-[15px] gap-2 items-center hover:bg-opacity-70 text-white font-bold ${currentPage === totalPages
+          ? "bg-slate-500 hover:bg-slate-500 pointer-events-none" : "bg-slate-800"}`}
+          style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }} onClick={handleNextPage} disabled={currentPage === totalPages}><FaArrowRight />
         </button>
       </div>
     );
   };
 
-  if (!loggedUser.user){
-    return(
-      <SoccerLoadingAnimation/>
+  if (!loggedUser.user) {
+    return (
+      <SoccerLoadingAnimation />
     )
+  }
+
+  const formatPrice = (price: number): string => {
+    const formattedPrice = price > 1000000 ? `${(price / 1000000).toFixed(1)}M` : price > 1000 ? `${(price / 1000).toFixed(1)}K` : price.toString();
+    return formattedPrice
   }
 
   return (
@@ -162,9 +149,9 @@ const MyAuctions: React.FC<MyAuctionsProps> = ({ auctions, handleShowPopupNotifi
       <div className=' bg-green-500 bg-opacity-50 border-none flex flex-col items-center rounded-md p-3' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
         <p className="text-center">Presupuesto disponible: {new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(loggedUser.user.money)}</p>
       </div>
-      <div className='w-4/5 bg-gray-200 bg-opacity-70 pb-10 border-none flex flex-col items-center rounded-md min-h-[650px]' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+      <div className='md:w-auto w-full lg:min-w-[600px] max-w-[95%] bg-gray-200 bg-opacity-70 border-none flex flex-col items-center rounded-md min-h-[650px]' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
         <h2 className='mb-5 text-center w-full p-3 bg-transparent text-slate-800 font-bold' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>Ventas en curso</h2>
-        
+
         {auctions.length === 0 ? (
           <div className="flex justify-center items-center h-full min-h-[400px]">
             <p className="text-center text-xl text-gray-200">No hay jugadores en venta.</p>
@@ -179,31 +166,31 @@ const MyAuctions: React.FC<MyAuctionsProps> = ({ auctions, handleShowPopupNotifi
                 Página {currentPage} de {totalPages}
               </p>
             </div>
-          
-            
             <table className="w-11/12">
               <thead>
                 <tr className='text-xl'>
-                  <th className="p-3 text-center text-slate-800">Nombre</th>
-                  <th className="p-3 text-center text-slate-800">Equipo</th>
-                  <th className="p-3 text-center text-slate-800">Precio</th>
-                  <th className="p-3 text-center text-slate-800">Acciones</th>
+                  <th className="p-3 text-center text-slate-800 text-[16px]">Nombre</th>
+                  <th className="p-3 text-center text-slate-800 text-[16px]">Equipo</th>
+                  <th className="p-3 text-center text-slate-800 text-[16px]">Precio</th>
+                  <th className="p-3 text-center text-slate-800 text-[16px]">Acciones</th>
                 </tr>
               </thead>
-              
+
               <tbody>
                 {currentAuctions.map((auction) => (
                   <tr key={auction.player.id} className="hover:bg-[white] hover:bg-opacity-10">
-                    <td className="border-b border-white border-opacity-30 p-3 text-center text-slate-800">{auction.player.name}</td>
+                    <td className="border-b border-white border-opacity-30 p-3 text-center text-slate-800 text-[15px]">{auction.player.name}</td>
                     <td className="border-b border-white border-opacity-30 p-3 text-center">
                       <div className="flex items-center w-full justify-center">
-                        <Image src={URL_IMG + auction.team.logo} alt={auction.team.name} className="w-6 h-6 rounded-full" width={50} height={50}/>
+                        <Image src={URL_IMG + auction.team.logo} alt={auction.team.name} className="w-6 h-6 rounded-full" width={50} height={50} />
                       </div>
                     </td>
-                    <td className="border-b border-white border-opacity-30 p-3 text-center text-slate-800">{new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(auction.player.price)}</td>
+                    <td className="border-b border-white border-opacity-30 p-3 text-center text-slate-800 text-[15px]">€{formatPrice(auction.player.price)}</td>
                     <td className="border-b border-white border-opacity-30 p-3 text-center">
                       {auction.team.id !== loggedUser?.user?.team.id ? (
-                        <MainButton onClick={() => handleShowPopupNotification(auction)} text={'Comprar'} isLoading={isLoading}/>
+                        <button onClick={() => handleShowPopupNotification(auction)} className='bg-[#6cac6c] text-white p-2 rounded-md hover:bg-opacity-70 transition-all duration-300 shadow-md'>
+                          <TbPigMoney className="text-xl" />
+                        </button>
                       ) : (
                         <button disabled className="bg-[#2a2b2a] text-white p-2 rounded-md bg-opacity-80 ">
                           En venta

@@ -320,7 +320,7 @@ const TransferMarket: React.FC = () => {
       )}
       {publishFormVisible ? (
         <div
-          className="flex flex-col justify-center align-middle items-center gap-5 w-full h-full"
+          className="flex flex-col justify-center align-middle gap-10 items-center w-full pb-10"
           style={{ animation: 'moveTopToBottom 0.3s ease' }}
         >
           <div>
@@ -360,7 +360,7 @@ const TransferMarket: React.FC = () => {
         </div>
       ) : (
         <div
-          className="flex flex-col justify-center align-middle items-center gap-5 w-full h-full"
+          className="flex flex-col justify-center align-middle items-center gap-5 w-full h-full mt-[80px] sm:mt-0 pb-20 sm:pb-0"
           style={{ animation: 'moveTopToBottom 0.3s ease' }}
         >
           <div>

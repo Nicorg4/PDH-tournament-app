@@ -82,21 +82,17 @@ const Home: React.FC = () => {
   }
 
   return (
-    <div className={`${width > 800 ? 'grid grid-cols-2' : 'flex flex-col'} gap-4 m-auto justify-center`} style={{animation: 'moveTopToBottom 0.3s ease'}}>
+    <div className={`${width > 800 ? 'grid grid-cols-2' : 'flex flex-col'} gap-4 justify-center mt-[80px] sm:mt-0`} style={{animation: 'moveTopToBottom 0.3s ease'}}>
       {cardsData.slice(currentIndex, currentIndex + (width > 800 ? 4 : 2)).map((card) => (
         <Card key={card.id} {...card} />
       ))}
       <div className="col-span-2 flex justify-center mt-4 gap-4">
-        {currentIndex > 0 && (
-          <div className='flex bg-gray-200 bg-opacity-70 p-3 border-none rounded-[15px] gap-2 items-center hover:bg-[white] hover:bg-opacity-70 text-slate-800 font-bold' style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
+          <div className={`flex bg-gray-200 bg-opacity-70 p-3 border-none rounded-[15px] gap-2 items-center hover:bg-[white] hover:bg-opacity-70 text-slate-800 font-bold ${!(currentIndex > 0) ? "bg-slate-500 hover:bg-slate-500 pointer-events-none" : ""}`} style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
             <button className="" onClick={handlePrev}>Anterior</button>
         </div>
-        )}
-        {currentIndex < cardsData.length - (width > 800 ? 6 : 3) && (
-        <div className='flex bg-gray-200 bg-opacity-70 p-3 border-none rounded-[15px] gap-2 items-center hover:bg-[white] hover:bg-opacity-70 text-slate-800 font-bold' style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
+        <div className={`flex bg-gray-200 bg-opacity-70 p-3 border-none rounded-[15px] gap-2 items-center hover:bg-[white] hover:bg-opacity-70 text-slate-800 font-bold ${!(currentIndex < cardsData.length - (width > 800 ? 6 : 3)) ? "bg-slate-500 hover:bg-slate-500 pointer-events-none" : ""}`} style={{boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}>
             <button className="" onClick={handleNext}>Siguiente</button>
         </div>
-        )}
       </div>
       <style jsx>{`
         @keyframes moveTopToBottom {

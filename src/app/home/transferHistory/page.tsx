@@ -3,6 +3,7 @@
 import SoccerLoadingAnimation from '@/app/components/loadingAnimation';
 import { RootState } from '@/redux/store';
 import Image from 'next/image';
+import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
 import React, { useEffect, useState } from 'react'
 import { FaLongArrowAltRight } from "react-icons/fa";
 import { useSelector } from 'react-redux';
@@ -86,48 +87,59 @@ const TransferHistory = () => {
         }
     };
 
+    const formatPrice = (price: number): string => {
+        const formattedPrice = price > 1000000 ? `${(price / 1000000).toFixed(1)}M` : price > 1000 ? `${(price / 1000).toFixed(1)}K` : price.toString();
+        return formattedPrice
+    }
+
     const slicedTransfers = transfers.slice((currentPage - 1) * 4, currentPage * 4);
 
     return (
-        <div className='w-4/5 h-4/5 bg-gray-200 bg-opacity-70 pb-10 border-none flex flex-col items-center gap-2 rounded-md' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
-            {slicedTransfers.length === 0 ? (
-                <div className="flex justify-center items-center h-full">
-                    <p className="text-center text-xl">No se realizaron transacciones.</p>
-                </div>
-            ) : (
-                <>
-                    {slicedTransfers.map((transfer) => (
-                        <div key={transfer.id} className='w-full h-20 bg-gray-300 bg-opacity-70 flex flex-row items-center justify-center p-20 hover:bg-gray-100 hover:bg-opacity-70'>
-                            <div className='w-1/3 h-full flex flex-row items-center justify-center'>
-                                <Image src={URL_IMG + transfer.from.logo} alt={transfer.from.name} className="rounded-full" width={100} height={100} />
+        <div className="w-full flex flex-col items-center">
+            <div className="w-full max-w-4xl bg-gray-200 bg-opacity-70 pb-10 border-none flex flex-col items-center gap-2 rounded-md relative px-2 sm:px-8" style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+                {slicedTransfers.length === 0 ? (
+                    <div className="flex justify-center items-center h-full min-h-[200px]">
+                        <p className="text-center text-xl">No se realizaron transacciones.</p>
+                    </div>
+                ) : (
+                    <div className="w-full flex flex-col gap-4 py-4 mb-5">
+                        {slicedTransfers.map((transfer) => (
+                            <div
+                                key={transfer.id}
+                                className="w-full flex items-center justify-center bg-gray-300 bg-opacity-70 rounded-lg p-4 gap-4 sm:gap-0 hover:bg-gray-100 hover:bg-opacity-70 transition-all"
+                            >
+                                <div className="flex flex-row items-center justify-center w-full sm:w-1/3 gap-2 sm:gap-0">
+                                    <Image src={URL_IMG + transfer.from.logo} alt={transfer.from.name} className="rounded-full" width={60} height={60} />
+                                </div>
+                                <div className="flex flex-row items-center justify-center w-full sm:w-auto">
+                                    <FaLongArrowAltRight className="size-5 sm:size-10 text-slate-800 mx-2 sm-size-8" />
+                                </div>
+                                <div className="flex flex-col items-center justify-center w-full sm:w-1/3">
+                                    <p className="text-center text-md sm:text-2xl text-slate-800">{transfer.player.name}</p>
+                                    <p className="text-center text-green-500 font-bold text-base sm:text-lg">
+                                        {formatPrice(transfer.price)}
+                                    </p>
+                                </div>
+                                <div className="flex flex-row items-center justify-center w-full sm:w-auto">
+                                    <FaLongArrowAltRight className="size-5 sm:size-10 text-slate-800 mx-2 sm-size-8" />
+                                </div>
+                                <div className="flex flex-row items-center justify-center w-full sm:w-1/3 gap-2 sm:gap-0">
+                                    <Image src={URL_IMG + transfer.to.logo} alt={transfer.to.name} className="rounded-full" width={60} height={60} />
+                                </div>
                             </div>
-                            <div><FaLongArrowAltRight className='size-10 text-slate-800' /></div>
-                            <div className='w-1/3 h-full flex flex-col items-center justify-center'>
-                                <p className='text-center text-2xl text-slate-800'>{transfer.player.name}</p>
-                                <p className='text-center text-green-500 font-bold'>
-                                    {new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(transfer.price)}
-                                </p>
-                            </div>
-                            <div><FaLongArrowAltRight className='size-10 text-slate-800' /></div>
-                            <div className='w-1/3 h-full flex flex-row items-center justify-center'>
-                                <Image src={URL_IMG + transfer.to.logo} alt={transfer.to.name} className="rounded-full" width={100} height={100} />
-                            </div>
-                        </div>
-                    ))}
-                </>
-            )}
-            {TOTAL_PAGES > 1 && (
-                <div className='absolute bottom-10 flex flex-row gap-5 items-center'>
-                    <button className="bg-[#02124a] text-white p-2 rounded-md w-20 bg-opacity-80 hover:bg-gray-400 hover:bg-opacity-70 hover:text-[#02124a]" style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", transition: "0.5s ease" }} onClick={handlePrevPage}>
-                        Anterior
-                    </button>
-                    <p className='text-white'>Página {currentPage} de {TOTAL_PAGES}</p>
-                    <button className="bg-[#02124a] text-white p-2 rounded-md w-20 bg-opacity-80 hover:bg-gray-400 hover:bg-opacity-70 hover:text-[#02124a]" style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", transition: "0.5s ease" }} onClick={handleNextPage}>
-                        Próxima
-                    </button>
-
-                </div>
-            )}
+                        ))}
+                    </div>
+                )}
+                {TOTAL_PAGES > 1 && (
+                    <div className="absolute left-0 right-0 bottom-4 flex flex-row gap-5 items-center justify-center">
+                        <button className={`flex p-3 border-none rounded-[15px] gap-2 items-center hover:bg-opacity-70 text-white font-bold ${currentPage === 1
+                            ? "bg-slate-500 hover:bg-slate-500 pointer-events-none" : "bg-slate-800"}`} style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }} onClick={handlePrevPage} disabled={currentPage === 1}><FaArrowLeft /></button>
+                        <p className="text-white text-sm sm:text-base">Página {currentPage} de {TOTAL_PAGES}</p>
+                        <button className={`flex p-3 border-none rounded-[15px] gap-2 items-center hover:bg-opacity-70 text-white font-bold ${currentPage === TOTAL_PAGES
+                            ? "bg-slate-500 hover:bg-slate-500 pointer-events-none" : "bg-slate-800"}`} style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }} onClick={handleNextPage} disabled={currentPage === TOTAL_PAGES}><FaArrowRight /></button>
+                    </div>
+                )}
+            </div>
         </div>
 
     )
