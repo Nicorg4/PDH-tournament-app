@@ -28,7 +28,7 @@ const PublishForm = () => {
     const loggedUser = useSelector((state: RootState) => state.user);
     const [showPublishPopUpNotification, setShowPublishPopUpNotification] = useState(false);
     const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
-    const teamId = loggedUser.user?.team.id;
+    const teamId = loggedUser.user?.team?.id;
 
     const showNotification = (message: string, type: 'success' | 'error') => {
         setNotification({ show: true, message, type });
@@ -44,6 +44,11 @@ const PublishForm = () => {
     });
 
     const fetchPlayers = async () => {
+        if (!teamId) {
+            showNotification('No se encontró el equipo.', 'error');
+            return;
+        }
+        
         setIsLoading(true);
         try {
             const response = await fetch(`${URL_SERVER}players/not-on-sale-by/${teamId}`, {
@@ -67,8 +72,10 @@ const PublishForm = () => {
     }
 
     useEffect(() => {
-        fetchPlayers();
-    }, [])
+        if (teamId) {
+            fetchPlayers();
+        }
+    }, [teamId])
 
     const handlePlayerPublish = async () => {
         setShowPublishPopUpNotification(true);
