@@ -150,11 +150,13 @@ const PublishForm = () => {
                         }}
                     >
                         <option value="">Seleccionar...</option>
-                        {players.length > 0 && players.map((player) => (
-                            <option key={player.id} value={player.name}>
-                                {player.name}
-                            </option>
-                        ))}
+                        {players?.map((player, index) =>
+                            player && player.id && player.name ? (
+                                <option key={player.id} value={player.name}>
+                                    {player.name}
+                                </option>
+                            ) : null
+                        )}
                     </select>
                 </div>
                 <div className="mb-4 pl-10 pr-10">
