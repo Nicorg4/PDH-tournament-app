@@ -66,12 +66,12 @@ const Home: React.FC = () => {
     
 
     const handlePrev = () => {
-        const step = width > 800 ? 4 : 2;
+        const step = width > 800 ? 4 : 3;
         setCurrentIndex((prevIndex) => (prevIndex > 0 ? prevIndex - step : 0))
     };
 
     const handleNext = () => {
-        const step = width > 800 ? 4 : 2;
+        const step = width > 800 ? 4 : 3;
         setCurrentIndex((prevIndex) => (prevIndex < cardsData.length - step ? prevIndex + step : prevIndex)); 
     }
   
@@ -82,8 +82,8 @@ const Home: React.FC = () => {
   }
 
   return (
-    <div className={`${width > 800 ? 'grid grid-cols-2' : 'flex flex-col'} gap-4 justify-center mt-[80px] sm:mt-0`} style={{animation: 'moveTopToBottom 0.3s ease'}}>
-      {cardsData.slice(currentIndex, currentIndex + (width > 800 ? 4 : 2)).map((card) => (
+    <div className={`${width > 800 ? 'grid grid-cols-2' : 'flex flex-col'} gap-4 justify-center`} style={{animation: 'moveTopToBottom 0.3s ease'}}>
+      {cardsData.slice(currentIndex, currentIndex + (width > 800 ? 4 : 3)).map((card) => (
         <Card key={card.id} {...card} />
       ))}
       <div className="col-span-2 flex justify-center mt-4 gap-4">

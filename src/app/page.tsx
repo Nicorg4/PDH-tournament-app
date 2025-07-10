@@ -31,10 +31,10 @@ const LoginClient: React.FC = () => {
 
   return (
     <>
-      <div className="w-1/2 flex min-h-screen items-center justify-center">
+      <div className="w-1/2 flex items-center justify-center">
         <LoginForm />
       </div>
-      {showNotification && <Notification type="error" message="La sesión ha finalizado." timer={5000} closeNotification={() => setShowNotification(false)}/>}
+      {showNotification && <Notification type="error" message="La sesión ha finalizado." timer={5000} closeNotification={() => setShowNotification(false)} />}
     </>
   );
 };
@@ -42,28 +42,36 @@ const LoginClient: React.FC = () => {
 const Login: React.FC = () => {
   return (
     <main
-      className="flex min-h-screen items-center justify-center bg-slate-800"
+      className="flex min-h-screen items-center bg-slate-800 lg:flex-row flex-col w-full"
       style={{
         backgroundImage: `url(${Background2.src})`,
         backgroundSize: 'cover',
         backgroundPosition: 'right',
       }}
     >
-      <div
-        className="lg:flex hidden w-1/2 bg-[#231f20] items-center justify-center min-h-screen rounded-br-[300px]"
-        style={{
-          backgroundImage: `url(${Background.src})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'right',
-          boxShadow:
-            'rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px',
-        }}
-      >
-        <Image src={Logo} alt="Logo" width={500} height={300} />
+      <div className="flex flex-col w-full h-full lg:flex-row flex-1">
+        <div
+          className="lg:hidden flex items-center justify-center bg-slate-800 w-full h-[20vh]"
+        >
+          <Image src={Logo} alt="Logo" width={150} height={100} />
+        </div>
+        <div className="lg:flex hidden w-1/2 bg-[#231f20] items-center justify-center min-h-screen rounded-br-[300px]"
+          style={{
+            backgroundImage: `url(${Background.src})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'right',
+            boxShadow:
+              'rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px',
+          }}
+        >
+          <Image src={Logo} alt="Logo" width={500} height={300} />
+        </div>
+        <Suspense fallback={<div className="w-1/2 flex items-center justify-center flex-1"></div>}>
+          <div className="flex-1 flex items-center justify-center w-full">
+            <LoginClient />
+          </div>
+        </Suspense>
       </div>
-      <Suspense fallback={<div className="w-1/2 flex min-h-screen items-center justify-center"></div>}>
-        <LoginClient />
-      </Suspense>
     </main>
   );
 };

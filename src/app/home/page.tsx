@@ -78,7 +78,7 @@ const Home: React.FC = () => {
     );
   }
   return (
-    <div className={`flex flex-col gap-4 mt-[80px] sm:mt-0 justify-center`} style={{ animation: 'moveTopToBottom 0.3s ease' }}>
+    <div className={`flex flex-col gap-4 justify-center`} style={{ animation: 'moveTopToBottom 0.3s ease' }}>
       <div className='flex flex-col md:grid grid-cols-2 gap-4 justify-center'>
         {cardsData.slice(currentIndex, currentIndex + (width > 800 ? 4 : 3)).map((card) => (
           <Card key={card.id} {...card} />
