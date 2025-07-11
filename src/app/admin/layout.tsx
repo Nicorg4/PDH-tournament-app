@@ -134,6 +134,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   {isExpanded && <span className="ml-3">Editar partidos (fase final)</span>}
                 </li>
               </Link>
+
             </ul>
           </nav>
           <button onClick={handleLogout} className="mt-auto bg-[#ed6f6f] text-white p-3 rounded-[10px] hover:bg-gray-400 hover:bg-opacity-70 flex items-center justify-center" style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", transition: "0.5s ease" }}>
@@ -168,16 +169,18 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 &times;
               </button>
               <div className="flex flex-col items-center mt-8 mb-6">
-                {user.user && (
-                  <Image
-                    src={URL_IMG + user.user.picture}
-                    alt="Imagen de perfil"
-                    width={100}
-                    height={100}
-                    className="rounded-full object-cover object-center mb-2 border-4 border-white"
-                  />
+                {user.user && user.user.role !== 'admin' && (
+                  <>
+                    <Image
+                      src={URL_IMG + user.user.picture}
+                      alt="Imagen de perfil"
+                      width={100}
+                      height={100}
+                      className="rounded-full object-cover object-center mb-2 border-4 border-white"
+                    />
+                    <h2 className="text-xl font-bold mb-2">{user.user?.username}</h2>
+                  </>
                 )}
-                <h2 className="text-xl font-bold mb-2">{user.user?.username}</h2>
               </div>
               <ul className="flex flex-col gap-2">
                 <Link href="/admin" onClick={() => setIsMenuOpen(false)}>
@@ -239,7 +242,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   Cerrar sesión
                 </button>
               </ul>
-
             </div>
             <div className="flex-1" onClick={() => setIsMenuOpen(false)} />
           </div>

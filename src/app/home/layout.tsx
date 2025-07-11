@@ -216,7 +216,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                   Cerrar sesión
                 </button>
               </ul>
-
             </div>
             <div className="flex-1" onClick={() => setIsMenuOpen(false)} />
           </div>
