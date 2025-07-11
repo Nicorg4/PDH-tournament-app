@@ -96,7 +96,7 @@ const TransferHistory = () => {
 
     return (
         <div className="w-full flex flex-col items-center">
-            <div className="w-full max-w-4xl bg-gray-200 bg-opacity-70 pb-10 border-none flex flex-col items-center gap-2 rounded-md relative px-2 sm:px-8" style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+            <div className="w-full max-w-4xl bg-opacity-70 pb-10 border-none flex flex-col items-center gap-2 rounded-md relative px-2 sm:px-8">
                 {slicedTransfers.length === 0 ? (
                     <div className="flex justify-center items-center h-full min-h-[200px]">
                         <p className="text-center text-xl">No se realizaron transacciones.</p>
@@ -106,7 +106,7 @@ const TransferHistory = () => {
                         {slicedTransfers.map((transfer) => (
                             <div
                                 key={transfer.id}
-                                className="w-full flex items-center justify-center bg-gray-300 bg-opacity-70 rounded-lg p-4 gap-4 sm:gap-0 hover:bg-gray-100 hover:bg-opacity-70 transition-all"
+                                className="w-full flex items-center justify-center bg-gray-200 bg-opacity-70 shadow-lg rounded-lg p-10 sm:gap-0 hover:bg-gray-100 hover:bg-opacity-70 transition-all"
                             >
                                 <div className="flex flex-row items-center justify-center w-full sm:w-1/3 gap-2 sm:gap-0">
                                     <Image src={URL_IMG + transfer.from.logo} alt={transfer.from.name} className="rounded-full" width={60} height={60} />
@@ -115,8 +115,8 @@ const TransferHistory = () => {
                                     <FaLongArrowAltRight className="size-5 sm:size-10 text-slate-800 mx-2 sm-size-8" />
                                 </div>
                                 <div className="flex flex-col items-center justify-center w-full sm:w-1/3">
-                                    <p className="text-center text-md sm:text-2xl text-slate-800">{transfer.player.name}</p>
-                                    <p className="text-center text-green-500 font-bold text-base sm:text-lg">
+                                    <p className="text-center text-lg sm:text-2xl text-slate-800">{transfer.player.name}</p>
+                                    <p className="text-center text-white-500 font-bold text-base sm:text-lg bg-slate-800 rounded-md px-2">
                                         {formatPrice(transfer.price)}
                                     </p>
                                 </div>

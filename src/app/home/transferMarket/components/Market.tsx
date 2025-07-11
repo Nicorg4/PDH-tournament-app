@@ -133,12 +133,6 @@ const MyAuctions: React.FC<MyAuctionsProps> = ({ auctions, handleShowPopupNotifi
     );
   };
 
-  if (!loggedUser.user) {
-    return (
-      <SoccerLoadingAnimation />
-    )
-  }
-
   const formatPrice = (price: number): string => {
     const formattedPrice = price > 1000000 ? `${(price / 1000000).toFixed(1)}M` : price > 1000 ? `${(price / 1000).toFixed(1)}K` : price.toString();
     return formattedPrice
@@ -147,7 +141,7 @@ const MyAuctions: React.FC<MyAuctionsProps> = ({ auctions, handleShowPopupNotifi
   return (
     <>
       <div className=' bg-green-500 bg-opacity-50 border-none flex flex-col items-center rounded-md p-3' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
-        <p className="text-center">Presupuesto disponible: {new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(loggedUser.user.money)}</p>
+        <p className="text-center">Presupuesto disponible: {new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(loggedUser?.user?.money || 0)}</p>
       </div>
       <div className='md:w-auto w-full lg:min-w-[600px] max-w-[95%] bg-gray-200 bg-opacity-70 border-none flex flex-col items-center rounded-md min-h-[650px]' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
         <h2 className='mb-5 text-center w-full p-3 bg-transparent text-slate-800 font-bold' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>Ventas en curso</h2>
@@ -187,7 +181,7 @@ const MyAuctions: React.FC<MyAuctionsProps> = ({ auctions, handleShowPopupNotifi
                     </td>
                     <td className="border-b border-white border-opacity-30 p-3 text-center text-slate-800 text-[15px]">€{formatPrice(auction.player.price)}</td>
                     <td className="border-b border-white border-opacity-30 p-3 text-center">
-                      {auction.team.id !== loggedUser?.user?.team.id ? (
+                      {auction.team.id !== loggedUser?.user?.team?.id ? (
                         <button onClick={() => handleShowPopupNotification(auction)} className='bg-[#6cac6c] text-white p-2 rounded-md hover:bg-opacity-70 transition-all duration-300 shadow-md'>
                           <TbPigMoney className="text-xl" />
                         </button>

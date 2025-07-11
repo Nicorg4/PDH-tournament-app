@@ -43,6 +43,7 @@ const TransferMarket: React.FC = () => {
   const [showPurchasePopUpNotification, setShowPurchasePopUpNotification] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [selectedAuction, setSelectedAuction] = useState<Auction | null>(null);
+  const [isPageLoading, setIsPageLoading] = useState(true);
   const [price, setPrice] = useState<number>(0);
   const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
   const loggedUser = useSelector((state: RootState) => state.user);
@@ -129,10 +130,11 @@ const TransferMarket: React.FC = () => {
       fetchMyPlayers(loggedUser.user.team.id);
       fetchPlayersOnAuction(loggedUser.user.team.id);
       fetchAuctions();
+      setIsPageLoading(false);
     }
   }, [loggedUser, router]);
 
-  if (isLoading) {
+  if (isPageLoading) {
     return <SoccerLoadingAnimation />;
   }
 
@@ -269,6 +271,7 @@ const TransferMarket: React.FC = () => {
     }
 
   }
+
   return (
     <div className="flex flex-col justify-center align-middle items-center gap-5 w-full h-full">
       {notification.show && (
@@ -286,7 +289,7 @@ const TransferMarket: React.FC = () => {
               Estás seguro que querés publicar a <span className="text-slate-900 font-bold">{selectedPlayer?.name}</span> por <span className="text-green-600 font-bold">{new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(price || 0)}</span>?
             </p>
             <div className='flex flex-row justify-center align-middle items-center gap-5'>
-              <MainButton text={'Publicar'} isLoading={false} onClick={handlePublish} />
+              <MainButton text={'Publicar'} isLoading={isLoading} onClick={handlePublish} />
               <MainButton text={'Cancelar'} isLoading={false} isCancel={true} onClick={() => setShowPublishPopUpNotification(false)} />
             </div>
           </div>
@@ -299,7 +302,7 @@ const TransferMarket: React.FC = () => {
               Estás seguro que querés eliminar la publicación a <span className="text-slate-900 font-bold">{selectedPlayer?.name}</span> del mercado?
             </p>
             <div className='flex flex-row justify-center align-middle items-center gap-5'>
-              <MainButton text={'Eliminar'} isLoading={false} onClick={handleRemovePlayerFromAuction} />
+              <MainButton text={'Eliminar'} isLoading={isLoading} onClick={handleRemovePlayerFromAuction} />
               <MainButton text={'Cancelar'} isLoading={false} isCancel={true} onClick={() => setShowRemovePopUpNotification(false)} />
             </div>
           </div>
@@ -312,7 +315,7 @@ const TransferMarket: React.FC = () => {
               Estás seguro que querés comprar a <span className="text-slate-900 font-bold">{selectedAuction?.player.name}</span> por <span className="text-green-600 font-bold">{new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(selectedAuction?.player.price || 0)}</span>?
             </p>
             <div className='flex flex-row justify-center align-middle items-center gap-5'>
-              <MainButton text={'Comprar'} isLoading={false} onClick={handlePlayerPurchase} />
+              <MainButton text={'Comprar'} isLoading={isLoading} onClick={handlePlayerPurchase} />
               <MainButton text={'Cancelar'} isLoading={false} isCancel={true} onClick={() => setShowPurchasePopUpNotification(false)} />
             </div>
           </div>
