@@ -1,5 +1,6 @@
 'use client'
 
+import SoccerLoadingAnimation from '@/app/components/loadingAnimation';
 import MainButton from '@/app/components/mainButton';
 import Notification from '@/app/components/notification';
 import PopUpNotification from '@/app/components/popUpNotification';
@@ -118,6 +119,10 @@ const PublishForm = () => {
             setShowPublishPopUpNotification(false);
         }
     };
+
+    if (isLoading){
+        return <SoccerLoadingAnimation/>
+    }
 
     return (
         <div className='md:w-auto w-full max-w-[95%] bg-gray-200 bg-opacity-70 border-none flex flex-col items-center rounded-md h-[500px]' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>

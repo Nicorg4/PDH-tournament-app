@@ -6,6 +6,7 @@ import { RootState } from "@/redux/store";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
 
 interface Match {
   match_id: number;
@@ -24,38 +25,19 @@ interface Match {
 
 interface GroupMatchesProps {
   showNotification: (message: string, type: 'success' | 'error') => void;
+  fetchedMatches: Match[];
+  fetchedcurrentMatchDay: number;
 }
 
-const GroupMatches = ({ showNotification }: GroupMatchesProps) => {
-  const [matches, setMatches] = useState<Match[]>([]);
+const GroupMatches = ({ showNotification, fetchedMatches, fetchedcurrentMatchDay }: GroupMatchesProps) => {
+  const [matches, setMatches] = useState<Match[]>(fetchedMatches);
   const [allMatchesPlayed, setAllMatchesPlayed] = useState(false);
-  const [currentMatchDay, setCurrentMatchDay] = useState(1);
+  const [currentMatchDay, setCurrentMatchDay] = useState(fetchedcurrentMatchDay);
   const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
   const URL_IMG = process.env.NEXT_PUBLIC_URL_IMG
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useRouter();
   const loggedUser = useSelector((state: RootState) => state.user);
-
-  useEffect(() => {
-    fetch(`${URL_SERVER}groups/get-all-matches`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': `Bearer ${loggedUser.token}`
-        },
-      }
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        setMatches(data.matches);
-        if (data.matches.length > 0) {
-          const minMatchDay = Math.min(...data.matches.map((m: Match) => m.match_day));
-          setCurrentMatchDay(minMatchDay);
-        }
-      })
-      .catch((err) => console.error("Error fetching matches:", err));
-  }, []);
 
   const checkIfAllMatchesPlayed = async () => {
     try {
@@ -69,7 +51,6 @@ const GroupMatches = ({ showNotification }: GroupMatchesProps) => {
         }
       );
       const data = await response.json();
-      console.log("Respuesta desde el servidor:", data);
       setAllMatchesPlayed(data.allMatchesPlayed);
     } catch (err) {
       console.error("Error checking if all matches played:", err);
@@ -77,7 +58,9 @@ const GroupMatches = ({ showNotification }: GroupMatchesProps) => {
   };
   useEffect(() => {
     checkIfAllMatchesPlayed();
-  }, []);
+    setMatches(fetchedMatches);
+    setCurrentMatchDay(fetchedcurrentMatchDay);
+  }, [fetchedMatches, fetchedcurrentMatchDay]);
 
   const handleScoreChange = (
     matchId: number,
@@ -237,18 +220,21 @@ const GroupMatches = ({ showNotification }: GroupMatchesProps) => {
                 ))}
             </div>
             <div className="flex sm:flex-row justify-center items-center gap-3 mb-4 sm:gap-5 w-full max-w-md mx-auto">
-              <MainButton
+              <button
+                className={`flex p-3 border-none rounded-[15px] gap-2 items-center hover:bg-opacity-70 text-white font-bold ${currentMatchDay === 1 ? "bg-slate-500 hover:bg-slate-500 pointer-events-none" : "bg-slate-800"}`}
+                style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}
                 onClick={handlePrevious}
-                text={'Anterior'}
-                isLoading={false}
-                isCancel={false}
-              />
+                disabled={currentMatchDay === 1}>
+                <FaArrowLeft />
+              </button>
               <h2 className="text-base sm:text-lg font-semibold text-center">Fecha {currentMatchDay}</h2>
-              <MainButton
+              <button className={`flex p-3 border-none rounded-[15px] gap-2 items-center hover:bg-opacity-70 text-white font-bold ${currentMatchDay === matchDays.length
+                ? "bg-slate-500 hover:bg-slate-500 pointer-events-none" : "bg-slate-800"}`}
+                style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}
                 onClick={handleNext}
-                text={'Siguiente'}
-                isLoading={false}
-              />
+                disabled={currentMatchDay === matchDays.length}>
+                <FaArrowRight />
+              </button>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 w-[70%] mx-auto sm:w-full sm:justify-center">
               <MainButton

@@ -37,45 +37,17 @@ interface Group {
     teams: GroupTeam[];
 }
 
-interface GroupsResponse {
-    groups: Group[];
+interface GroupStandingsProps {
+    fetchedGroups: Group[];
 }
 
-const GroupStandings: React.FC = ({ }) => {
-    const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
+const GroupStandings = ({ fetchedGroups }: GroupStandingsProps) => {
     const URL_IMG = process.env.NEXT_PUBLIC_URL_IMG;
     const [groups, setGroups] = useState<Group[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const loggedUser = useSelector((state: RootState) => state.user);
-
-
-    const fetchGroups = async () => {
-        try {
-            const response = await fetch(`${URL_SERVER}groups/get-all`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${loggedUser.token}`,
-                    'ngrok-skip-browser-warning': 'true'
-                }
-            });
-            const data: GroupsResponse = await response.json();
-            setGroups(data.groups);
-            console.log(data.groups);
-        } catch (error) {
-
-        } finally {
-            setIsLoading(false);
-        }
-    }
 
     useEffect(() => {
-        fetchGroups();
-    }, []);
-
-    if (isLoading) {
-        return (<SoccerLoadingAnimation />)
-    }
+        setGroups(fetchedGroups);
+    }, [fetchedGroups]);
 
     return (
         <>

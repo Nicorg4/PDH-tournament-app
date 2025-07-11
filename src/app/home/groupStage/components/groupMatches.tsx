@@ -22,39 +22,20 @@ interface Match {
   group_id: number;
 }
 
-const GroupMatches = () => {
-  const [matches, setMatches] = useState<Match[]>([]);
-  const [currentMatchDay, setCurrentMatchDay] = useState(1);
-  const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
+interface GroupMatchesProps {
+  fetchedMatches: Match[];
+  fetchedcurrentMatchDay: number;
+}
+
+const GroupMatches = ({ fetchedMatches, fetchedcurrentMatchDay }: GroupMatchesProps) => {
+  const [matches, setMatches] = useState<Match[]>(fetchedMatches);
+  const [currentMatchDay, setCurrentMatchDay] = useState(fetchedcurrentMatchDay);
   const URL_IMG = process.env.NEXT_PUBLIC_URL_IMG
-  const [isLoading, setIsLoading] = useState(false);
-  const loggedUser = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
-    setIsLoading(true);
-    fetch(`${URL_SERVER}groups/get-all-matches`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': `Bearer ${loggedUser.token}`
-        },
-      }
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        setMatches(data.matches);
-        setIsLoading(false);
-        if (data.matches.length > 0) {
-          const minMatchDay = Math.min(...data.matches.map((m: Match) => m.match_day));
-          setCurrentMatchDay(minMatchDay);
-        }
-      })
-      .catch((err) => {
-        console.error("Error fetching matches:", err)
-        setIsLoading(false);
-      });
-  }, []);
+    setMatches(fetchedMatches);
+    setCurrentMatchDay(fetchedcurrentMatchDay);
+  }, [fetchedMatches, fetchedcurrentMatchDay]);
 
   const groupedMatches = matches.reduce((acc, match) => {
     if (!acc[match.match_day]) {
@@ -76,10 +57,6 @@ const GroupMatches = () => {
   const handleNext = () => {
     setCurrentMatchDay((prev) => Math.min(prev + 1, matchDays[matchDays.length - 1]));
   };
-
-  if (isLoading) {
-    return <SoccerLoadingAnimation />
-  }
 
   return (
     <>
