@@ -1,5 +1,6 @@
 'use client'
 
+import SoccerLoadingAnimation from '@/app/components/loadingAnimation';
 import MainButton from '@/app/components/mainButton';
 import Notification from '@/app/components/notification';
 import PopUpNotification from '@/app/components/popUpNotification';
@@ -35,6 +36,7 @@ const CreateUser = () => {
   const [showCreateTeamPopup, setShowCreateTeamPopup] = useState(false);
   const [showAddPlayerPopup, setShowAddPlayerPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [pageIsLoading, setPageIsLoading] = useState(true);
   const loggedUser = useSelector((state: RootState) => state.user);
 
   const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
@@ -57,7 +59,7 @@ const CreateUser = () => {
     } catch (error) {
       console.log(error)
     } finally {
-
+      setPageIsLoading(false);
     }
   }
 
@@ -166,6 +168,10 @@ const CreateUser = () => {
     }, 5000);
   };
 
+  if (pageIsLoading) {
+    return <SoccerLoadingAnimation/>
+  }
+
   return (
     <div className="flex flex-col justify-center align-middle items-center gap-5 w-full h-full">
       <>
@@ -185,7 +191,7 @@ const CreateUser = () => {
                 />
               )}
               <div className='flex flex-row justify-center align-middle items-center gap-5'>
-                <MainButton text={'Crear'} isLoading={false} onClick={createNewTeam} />
+                <MainButton text={'Crear'} isLoading={isLoading} onClick={createNewTeam} />
                 <MainButton text={'Cancelar'} isLoading={false} isCancel={true} onClick={() => setShowCreateTeamPopup(false)} />
               </div>
             </div>
@@ -207,7 +213,7 @@ const CreateUser = () => {
                 />
               )}
               <div className='flex flex-row justify-center align-middle items-center gap-5'>
-                <MainButton text={'Agregar'} isLoading={false} onClick={addNewPlayer} />
+                <MainButton text={'Agregar'} isLoading={isLoading} onClick={addNewPlayer} />
                 <MainButton text={'Cancelar'} isLoading={false} isCancel={true} onClick={() => setShowAddPlayerPopup(false)} />
               </div>
             </div>

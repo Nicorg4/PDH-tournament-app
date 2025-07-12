@@ -13,7 +13,8 @@ import { useSelector } from 'react-redux';
 const DeleteUser = () => {
 
   const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [pageIsLoading, setPageIsLoading] = useState(true);
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User>();
   const [showDeleteUserPopup, setShowUserDeletePopup] = useState(false);
@@ -43,11 +44,12 @@ const DeleteUser = () => {
     } catch (error) {
       console.log(error)
     } finally {
-      setIsLoading(false);
+      setPageIsLoading(false);
     }
   }
 
   const handleDelete = async () => {
+    setIsLoading(true);
     if (!selectedUser) return;
     try {
       const response = await fetch(`${URL_SERVER}users/delete/${selectedUser.id}`, {
@@ -69,6 +71,7 @@ const DeleteUser = () => {
     } finally {
       setShowUserDeletePopup(false);
       setSelectedUser(undefined);
+      setIsLoading(false);
     }
   }
 
@@ -90,7 +93,7 @@ const DeleteUser = () => {
     setShowUserDeletePopup(true);
   }
 
-  if (isLoading) {
+  if (pageIsLoading) {
     return <SoccerLoadingAnimation />
   }
   return (

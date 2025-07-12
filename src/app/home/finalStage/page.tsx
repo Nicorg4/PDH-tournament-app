@@ -10,7 +10,7 @@ const GroupMatches = () => {
   const [matches, setMatches] = useState<Match[]>([]);
   const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
   const URL_IMG = process.env.NEXT_PUBLIC_URL_IMG
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const loggedUser = useSelector((state: RootState) => state.user);
 
   const getPhaseTitle = (phase: number) => {
@@ -24,7 +24,6 @@ const GroupMatches = () => {
   };
 
   const fetchPlayoffMatches = async () => {
-    setIsLoading(true);
     fetch(`${URL_SERVER}playoffs/get-all`,
       {
         method: "GET",
@@ -37,14 +36,16 @@ const GroupMatches = () => {
       .then((res) => res.json())
       .then((data) => {
         setMatches(data.matches);
-        setIsLoading(false);
       })
       .catch((err) => console.error("Error fetching matches:", err));
-    setIsLoading(false);
   }
 
   useEffect(() => {
-    fetchPlayoffMatches();
+    const fetchData = async () => {
+      await fetchPlayoffMatches();
+      setIsLoading(false);
+    };
+    fetchData();
   }, []);
 
   const groupedMatches = matches.reduce((acc, match) => {

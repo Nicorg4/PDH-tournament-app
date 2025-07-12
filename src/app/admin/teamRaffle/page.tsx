@@ -16,7 +16,9 @@ const TeamRafflePage = () => {
     const [selectedPairs, setSelectedPairs] = useState<Pair[]>([]);
     const [showPopup, setShowPopup] = useState(false);
     const [currentPair, setCurrentPair] = useState<Pair | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
+    const [pageIsLoading, setPageIsLoading] = useState(true);
+    const [isResetting, setItResetting] = useState(false);
     const router = useRouter();
     const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
     const URL_IMG = process.env.NEXT_PUBLIC_URL_IMG;
@@ -87,10 +89,10 @@ const TeamRafflePage = () => {
             await fetchUsers();
             await fetchTeams();
             await fetchPairs();
-            setIsLoading(false);
+            setPageIsLoading(false);
         };
         fetchData();
-    }, [URL_SERVER]);
+    }, []);
 
     const handleRaffle = async () => {
         try {
@@ -135,6 +137,7 @@ const TeamRafflePage = () => {
     };
 
     const handleReset = async () => {
+        setItResetting(true);
         try {
             const response = await fetch(`${URL_SERVER}teams/reset-team-ownership`, {
                 method: 'POST',
@@ -153,10 +156,12 @@ const TeamRafflePage = () => {
             fetchUsers();
             fetchTeams();
             setSelectedPairs([]);
+            setItResetting(false);
         }
     };
 
     const handleGroupsRaffle = async () => {
+        setIsLoading(true);
         const groupCount = selectedPairs.length / 4;
         const groups = [];
         for (let i = 0; i < groupCount; i++) {
@@ -180,12 +185,13 @@ const TeamRafflePage = () => {
             }
             router.push('/admin/groups');
         } catch (error) {
-
+            console.error('Error creating groups:', error);
         } finally {
+            setIsLoading(false);
         }
     }
 
-    if (isLoading) {
+    if (pageIsLoading) {
         return <SoccerLoadingAnimation />
     }
 
@@ -208,9 +214,9 @@ const TeamRafflePage = () => {
                     {(selectedPairs.length === 16) ? (
                         <MainButton text={'Armar grupos'} isLoading={isLoading} onClick={handleGroupsRaffle} />
                     ) : (
-                        <MainButton text={'Sortear'} isLoading={isLoading} onClick={handleRaffle} />
+                        <MainButton text={'Sortear'} isLoading={false} onClick={handleRaffle} />
                     )}
-                    <MainButton text={'Reiniciar'} isLoading={isLoading} onClick={handleReset} isCancel={true} />
+                    <MainButton text={'Reiniciar'} isLoading={isResetting} onClick={handleReset} isCancel={true} />
                 </div>
                 <div className='h-[70%] flex justify-center'>
                     <div className='mt-10 grid grid-cols-2 gap-2'>

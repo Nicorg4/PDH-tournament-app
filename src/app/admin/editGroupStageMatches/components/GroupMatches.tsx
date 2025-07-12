@@ -22,7 +22,8 @@ const GroupMatches = ({ showNotification, fetchedMatches, fetchedcurrentMatchDay
   const [currentMatchDay, setCurrentMatchDay] = useState(fetchedcurrentMatchDay);
   const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
   const URL_IMG = process.env.NEXT_PUBLIC_URL_IMG
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
   const navigate = useRouter();
   const loggedUser = useSelector((state: RootState) => state.user);
 
@@ -75,7 +76,7 @@ const GroupMatches = ({ showNotification, fetchedMatches, fetchedcurrentMatchDay
   };
 
   const handleSaveChanges = async () => {
-    setIsLoading(true);
+    setIsSaving(true);
     try {
       await fetch(`${URL_SERVER}groups/update-matches`, {
         method: "POST",
@@ -91,7 +92,7 @@ const GroupMatches = ({ showNotification, fetchedMatches, fetchedcurrentMatchDay
       showNotification("Error al actualizar los partidos.", "error");
       console.error("Error updating matches", error);
     } finally {
-      setIsLoading(false);
+      setIsSaving(false);
       checkIfAllMatchesPlayed();
     }
   };
@@ -118,7 +119,7 @@ const GroupMatches = ({ showNotification, fetchedMatches, fetchedcurrentMatchDay
   };
 
   const handleCreatePlayoff = async () => {
-    setIsLoading(true);
+    setIsCreating(true);
     try {
       const response = await fetch(`${URL_SERVER}playoffs/create-all`, {
         method: 'POST',
@@ -134,12 +135,8 @@ const GroupMatches = ({ showNotification, fetchedMatches, fetchedcurrentMatchDay
     } catch (error) {
       console.error("Error al crear los partidos de playoff:", error);
     } finally {
-      setIsLoading(false);
+      setIsCreating(false);
     }
-  }
-
-  if (isLoading) {
-    return (<SoccerLoadingAnimation />)
   }
 
   return (
@@ -228,13 +225,13 @@ const GroupMatches = ({ showNotification, fetchedMatches, fetchedcurrentMatchDay
               <MainButton
                 onClick={handleSaveChanges}
                 text={'Guardar Cambios'}
-                isLoading={isLoading}
+                isLoading={isSaving}
               />
               {allMatchesPlayed && (
                 <MainButton
                   onClick={handleCreatePlayoff}
                   text={'Crear fase eliminatoria'}
-                  isLoading={isLoading}
+                  isLoading={isCreating}
                   isCancel={false}
                 />
               )}

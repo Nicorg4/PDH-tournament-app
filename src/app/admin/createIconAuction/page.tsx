@@ -14,6 +14,7 @@ const PublishForm = () => {
     const [price, setPrice] = useState<number>(0);
     const [players, setPlayers] = useState<Player[]>([])
     const [isLoading, setIsLoading] = useState(false);
+    const [pageIsLoading, setPageIsLoading] = useState(true);
     const loggedUser = useSelector((state: RootState) => state.user);
     const [showPublishPopUpNotification, setShowPublishPopUpNotification] = useState(false);
     const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
@@ -37,8 +38,6 @@ const PublishForm = () => {
             showNotification('No se encontró el equipo.', 'error');
             return;
         }
-        
-        setIsLoading(true);
         try {
             const response = await fetch(`${URL_SERVER}players/not-on-sale-by/${teamId}`, {
                 method: 'GET',
@@ -56,7 +55,7 @@ const PublishForm = () => {
         } catch (error) {
             console.error('Error fetching players:', error);
         } finally {
-            setIsLoading(false);
+            setPageIsLoading(false);
         }
     }
 
@@ -108,7 +107,7 @@ const PublishForm = () => {
         }
     };
 
-    if (isLoading){
+    if (pageIsLoading) {
         return <SoccerLoadingAnimation/>
     }
 

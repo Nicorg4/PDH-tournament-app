@@ -12,7 +12,10 @@ const GroupMatches = () => {
   const [matches, setMatches] = useState<Match[]>([]);
   const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
   const URL_IMG = process.env.NEXT_PUBLIC_URL_IMG
-  const [isLoading, setIsLoading] = useState(false);
+  const [isCreatingFinal, setIsCreatingFinal]= useState(false)
+  const [isCreatingSemifinals, setIsCreatingSemifinals]= useState(false)
+  const [isSaving, setIsSaving]= useState(false)
+  const [pageIsLoading, setPageIsLoading] = useState(true);
   const loggedUser = useSelector((state: RootState) => state.user);
 
 
@@ -60,7 +63,11 @@ const GroupMatches = () => {
   }
 
   useEffect(() => {
-    fetchPlayoffMatches();
+    const fetchData = async () => {
+      await fetchPlayoffMatches();
+      setPageIsLoading(false);
+    };
+    fetchData();
   }, []);
 
   const handleScoreChange = (
@@ -95,7 +102,7 @@ const GroupMatches = () => {
   };
 
   const handleSaveChanges = async () => {
-    setIsLoading(true);
+    setIsSaving(true);
     try {
       await fetch(`${URL_SERVER}playoffs/update-matches`, {
         method: "POST",
@@ -110,11 +117,12 @@ const GroupMatches = () => {
       showNotification("Error al actualizar los partidos.", "error");
       console.error("Error updating matches", error);
     } finally {
-      setIsLoading(false);
+      setIsSaving(false);
     }
   };
 
   const createSemifinals = async () => {
+    setIsCreatingSemifinals(true);
     try {
       await handleSaveChanges();
       const response = await fetch(`${URL_SERVER}playoffs/create-semifinals`, {
@@ -124,9 +132,9 @@ const GroupMatches = () => {
           "Authorization": `Bearer ${loggedUser.token}`,
         }
       });
-      if(!response.ok) {
+      if (!response.ok) {
         throw new Error("Error al crear los partidos.");
-      } 
+      }
       fetchPlayoffMatches();
       showNotification("Partidos actualizados correctamente.", "success");
     }
@@ -134,11 +142,14 @@ const GroupMatches = () => {
     catch (error) {
       showNotification("Error al actualizar los partidos.", "error");
       console.error("Error updating matches", error);
+    } finally{
+      setIsCreatingSemifinals(false);
     }
 
   }
 
   const createFinal = async () => {
+    setIsCreatingFinal(true);
     try {
       await handleSaveChanges();
       const response = await fetch(`${URL_SERVER}playoffs/create-final`, {
@@ -159,6 +170,8 @@ const GroupMatches = () => {
     catch (error) {
       showNotification("Error al actualizar los partidos.", "error");
       console.error("Error updating matches", error);
+    } finally {
+      setIsCreatingFinal(false);
     }
 
   }
@@ -183,7 +196,7 @@ const GroupMatches = () => {
     return acc;
   }, {} as Record<number, Match[]>);
 
-  if (isLoading) {
+  if (pageIsLoading) {
     return (<SoccerLoadingAnimation />)
   }
 
@@ -405,20 +418,20 @@ const GroupMatches = () => {
               <MainButton
                 onClick={handleSaveChanges}
                 text={'Guardar Cambios'}
-                isLoading={isLoading}
+                isLoading={isSaving}
               />
               {allPhaseMatchesHaveResult(4) && !phaseExists(2) && (
                 <MainButton
                   onClick={createSemifinals}
                   text={'Armar semifinales'}
-                  isLoading={false}
+                  isLoading={isCreatingSemifinals}
                 />
               )}
               {allPhaseMatchesHaveResult(2) && !phaseExists(1) && (
                 <MainButton
                   onClick={createFinal}
                   text={'Armar Final'}
-                  isLoading={false}
+                  isLoading={isCreatingFinal}
                 />
               )}
             </div>

@@ -61,7 +61,7 @@ interface Group {
 
 const GroupStage = () => {
     const [isGroupStageVisible, setIsGroupStageVisible] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
+    const [pageIsLoading, setPageIsLoading] = useState(true);
     const [matches, setMatches] = useState([]);
     const [groups, setGroups] = useState<Group[]>([]);
     const [currentMatchDay, setCurrentMatchDay] = useState(1);
@@ -127,12 +127,12 @@ const GroupStage = () => {
         const fetchData = async () => {
             await fetchMatches();
             await fetchGroups();
-            setIsLoading(false);
+            setPageIsLoading(false);
         };
         fetchData();
     }, []);
 
-    if (isLoading) {
+    if (pageIsLoading) {
         return <SoccerLoadingAnimation />
     }
 
