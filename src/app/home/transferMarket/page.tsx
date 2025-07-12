@@ -120,19 +120,17 @@ const TransferMarket: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!loggedUser?.user) {
-      setTimeout(() => {
-        router.push('/');
-      }, 100);
-    } else if (!loggedUser?.user?.team) {
-      router.push('/home');
-    } else {
-      fetchMyPlayers(loggedUser.user.team.id);
-      fetchPlayersOnAuction(loggedUser.user.team.id);
-      fetchAuctions();
+    const fetchData = async () => {
+      if (!loggedUser.user) {
+        return
+      }
+      await fetchMyPlayers(loggedUser.user.team.id);
+      await fetchPlayersOnAuction(loggedUser.user.team.id);
+      await fetchAuctions();
       setIsPageLoading(false);
-    }
-  }, [loggedUser, router]);
+    };
+    fetchData();
+  }, []);
 
   const showNotification = (message: string, type: 'success' | 'error') => {
     setNotification({ show: true, message, type });
