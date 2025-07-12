@@ -9,6 +9,7 @@ export interface Team {
 }
 
 export interface UserData {
+  id: number;
   username: string;
   team: Team;
   role: string;

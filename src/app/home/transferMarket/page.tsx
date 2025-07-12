@@ -47,6 +47,7 @@ const TransferMarket: React.FC = () => {
   const [price, setPrice] = useState<number>(0);
   const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;
   const loggedUser = useSelector((state: RootState) => state.user);
+  const [userMoney, setUserMoney] = useState(loggedUser.user?.money || 0);
   const teamId = loggedUser.user?.team.id;
   const router = useRouter();
   const dispatch = useDispatch();
@@ -87,7 +88,6 @@ const TransferMarket: React.FC = () => {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${loggedUser.token}`,
-            'ngrok-skip-browser-warning': 'true'
           },
         }
       );
@@ -133,10 +133,6 @@ const TransferMarket: React.FC = () => {
       setIsPageLoading(false);
     }
   }, [loggedUser, router]);
-
-  if (isPageLoading) {
-    return <SoccerLoadingAnimation />;
-  }
 
   const showNotification = (message: string, type: 'success' | 'error') => {
     setNotification({ show: true, message, type });
@@ -269,7 +265,41 @@ const TransferMarket: React.FC = () => {
       setIsLoading(false);
       setShowPurchasePopUpNotification(false);
     }
+  }
 
+  const fetchUserMoney = async () => {
+    if (!loggedUser.user) {
+      return;
+    }
+    try {
+      const response = await fetch(`${URL_SERVER}users/get-user-money/${loggedUser.user.id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${loggedUser.token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Error al obtener el dinero del usuario');
+      }
+      const data = await response.json();
+      setUserMoney(data.money);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const getUserMoney = () => {
+    fetchUserMoney();
+    return userMoney;
+  }
+
+  useEffect(() => {
+    fetchUserMoney();
+  }, []);
+
+  if (isPageLoading) {
+    return <SoccerLoadingAnimation />;
   }
 
   return (
@@ -379,7 +409,7 @@ const TransferMarket: React.FC = () => {
           <Market
             auctions={auctions}
             handleShowPopupNotification={handleShowPurchasePopupNotification}
-            isLoading={isLoading}
+            getUserMoney={getUserMoney}
           />
           <style jsx>{`
             @keyframes moveTopToBottom {

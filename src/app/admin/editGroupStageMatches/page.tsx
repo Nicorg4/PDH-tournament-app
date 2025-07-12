@@ -163,9 +163,9 @@ const GroupStage = () => {
 
             {isGroupStageVisible
                 ?
-                <GroupMatches fetchedMatches={matches} fetchedcurrentMatchDay={currentMatchDay} showNotification={showNotification} />
+                <GroupMatches fetchedMatches={matches} fetchedcurrentMatchDay={currentMatchDay} showNotification={showNotification} updateGroups={fetchGroups}/>
                 :
-                <GroupStandings fetchedGroups={groups} />}
+                <GroupStandings fetchedGroups={groups}/>}
         </div>
     )
 }
