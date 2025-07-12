@@ -124,9 +124,12 @@ const GroupStage = () => {
     }
 
     useEffect(() => {
-        fetchMatches();
-        fetchGroups();
-        setIsLoading(false);
+        const fetchData = async () => {
+            await fetchMatches();
+            await fetchGroups();
+            setIsLoading(false);
+        };
+        fetchData();
     }, []);
 
     if (isLoading) {
@@ -163,9 +166,9 @@ const GroupStage = () => {
 
             {isGroupStageVisible
                 ?
-                <GroupMatches fetchedMatches={matches} fetchedcurrentMatchDay={currentMatchDay} showNotification={showNotification} updateGroups={fetchGroups}/>
+                <GroupMatches fetchedMatches={matches} fetchedcurrentMatchDay={currentMatchDay} showNotification={showNotification} updateGroups={fetchGroups} />
                 :
-                <GroupStandings fetchedGroups={groups}/>}
+                <GroupStandings fetchedGroups={groups} />}
         </div>
     )
 }

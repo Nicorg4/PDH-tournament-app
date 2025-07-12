@@ -40,7 +40,7 @@ const GroupStage = () => {
         }
     }
 
-    const fetchMatches = () => {
+    const fetchMatches = async () => {
         fetch(`${URL_SERVER}groups/get-all-matches`,
             {
                 method: "GET",
@@ -64,9 +64,12 @@ const GroupStage = () => {
     }
 
     useEffect(() => {
-        fetchMatches();
-        fetchGroups();
-        setIsLoading(false);
+        const fetchData = async () => {
+            await fetchMatches();
+            await fetchGroups();
+            setIsLoading(false);
+        };
+        fetchData();
     }, []);
 
     if (isLoading) {
