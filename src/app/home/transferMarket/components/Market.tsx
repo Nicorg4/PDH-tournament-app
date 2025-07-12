@@ -1,43 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TbPigMoney } from "react-icons/tb";
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
-import SoccerLoadingAnimation from '@/app/components/loadingAnimation';
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
-
-interface Auction {
-  id: number;
-  player: Player;
-  team: Team;
-}
-
-interface Team {
-  id: number;
-  name: string;
-  logo: string;
-}
-
-interface Player {
-  id: number;
-  name: string;
-  team: Team;
-  price: number;
-}
+import { Auction } from '@/app/types';
 
 interface MyAuctionsProps {
   auctions: Auction[];
   handleShowPopupNotification: (auction: Auction) => void;
-  isLoading: boolean;
+  getUserMoney: () => number;
 }
 
-const MyAuctions: React.FC<MyAuctionsProps> = ({ auctions, handleShowPopupNotification, isLoading }) => {
+const MyAuctions: React.FC<MyAuctionsProps> = ({ auctions, handleShowPopupNotification, getUserMoney }) => {
   const loggedUser = useSelector((state: RootState) => state.user);
   const URL_IMG = process.env.NEXT_PUBLIC_URL_IMG;
-
+  const [userMoney, setUserMoney] = useState(getUserMoney());
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
-
   const totalPages = Math.ceil(auctions.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -59,7 +39,7 @@ const MyAuctions: React.FC<MyAuctionsProps> = ({ auctions, handleShowPopupNotifi
     setCurrentPage(pageNumber);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     setCurrentPage(1);
   }, [auctions.length]);
 
@@ -138,10 +118,14 @@ const MyAuctions: React.FC<MyAuctionsProps> = ({ auctions, handleShowPopupNotifi
     return formattedPrice
   }
 
+  useEffect(() => {
+    getUserMoney()
+  }, []);
+
   return (
     <>
       <div className=' bg-green-500 bg-opacity-50 border-none flex flex-col items-center rounded-md p-3' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
-        <p className="text-center">Presupuesto disponible: {new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(loggedUser?.user?.money || 0)}</p>
+        <p className="text-center">Presupuesto disponible: {new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(getUserMoney())}</p>
       </div>
       <div className='md:w-auto w-full lg:min-w-[600px] max-w-[95%] bg-gray-200 bg-opacity-70 border-none flex flex-col items-center rounded-md min-h-[650px]' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
         <h2 className='mb-5 text-center w-full p-3 bg-transparent text-slate-800 font-bold' style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>Ventas en curso</h2>

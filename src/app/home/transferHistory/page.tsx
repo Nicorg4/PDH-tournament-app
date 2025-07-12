@@ -7,27 +7,7 @@ import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
 import React, { useEffect, useState } from 'react'
 import { FaLongArrowAltRight } from "react-icons/fa";
 import { useSelector } from 'react-redux';
-
-
-interface Transfer {
-    id: string;
-    player: Player;
-    from: Team;
-    to: Team;
-    price: number;
-}
-
-interface Player {
-    id: number;
-    name: string;
-    position: string;
-}
-
-interface Team {
-    id: number;
-    name: string;
-    logo: string;
-}
+import { Transfer } from '@/app/types';
 
 const TransferHistory = () => {
     const [transfers, setTransfers] = useState<Transfer[]>([]);

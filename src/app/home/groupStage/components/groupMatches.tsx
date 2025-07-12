@@ -1,26 +1,8 @@
 'use client'
 
-import SoccerLoadingAnimation from "@/app/components/loadingAnimation";
-import MainButton from "@/app/components/mainButton";
-import { RootState } from "@/redux/store";
+import { Match } from "@/app/types";
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
-
-interface Match {
-  match_id: number;
-  team_A_id: number;
-  team_B_id: number;
-  team_A_name: string;
-  team_A_logo: string;
-  team_B_name: string;
-  team_B_logo: string;
-  team_A_score: number | null;
-  team_B_score: number | null;
-  isDraw: boolean;
-  match_day: number;
-  group_id: number;
-}
 
 interface GroupMatchesProps {
   fetchedMatches: Match[];

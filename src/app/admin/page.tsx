@@ -5,14 +5,7 @@ import Card from '../components/ManagerCard'
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import SoccerLoadingAnimation from '../components/loadingAnimation';
-
-interface ManagerData {
-    id: number,
-    username: string,
-    picture: string,
-    team_name: string,
-    team_logo: string,
-}
+import { ManagerData } from '../types';
 
 const Home: React.FC = () => {
 

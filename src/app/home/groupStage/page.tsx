@@ -7,56 +7,7 @@ import GroupStandings from './components/groupStandings';
 import SoccerLoadingAnimation from '@/app/components/loadingAnimation';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
-
-interface Match {
-    match_id: number;
-    team_A_id: number;
-    team_B_id: number;
-    team_A_name: string;
-    team_A_logo: string;
-    team_B_name: string;
-    team_B_logo: string;
-    team_A_score: number | null;
-    team_B_score: number | null;
-    isDraw: boolean;
-    match_day: number;
-    group_id: number;
-}
-
-interface GroupsResponse {
-    groups: Group[];
-}
-
-interface User {
-    id: number;
-    username: string;
-    picture: string;
-}
-
-interface Team {
-    id: number;
-    name: string;
-    logo: string;
-    user: User;
-}
-
-interface TeamStats {
-    points: number;
-    wins: number;
-    draws: number;
-    losses: number;
-    goal_diff: number;
-}
-
-interface GroupTeam {
-    team: Team;
-    stats: TeamStats;
-}
-
-interface Group {
-    group_id: number;
-    teams: GroupTeam[];
-}
+import { Group, GroupsResponse, Match } from '@/app/types';
 
 
 const GroupStage = () => {
@@ -115,9 +66,7 @@ const GroupStage = () => {
     useEffect(() => {
         fetchMatches();
         fetchGroups();
-        setTimeout(() => {
-            setIsLoading(false);
-        }, 3000)
+        setIsLoading(false);
     }, []);
 
     if (isLoading) {

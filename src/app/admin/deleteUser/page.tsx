@@ -4,14 +4,11 @@ import SoccerLoadingAnimation from '@/app/components/loadingAnimation';
 import MainButton from '@/app/components/mainButton';
 import Notification from '@/app/components/notification';
 import PopUpNotification from '@/app/components/popUpNotification';
+import { User } from '@/app/types';
 import { RootState } from '@/redux/store';
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 
-interface User {
-  id: number;
-  username: string;
-}
 
 const DeleteUser = () => {
 

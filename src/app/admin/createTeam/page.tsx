@@ -3,16 +3,12 @@
 import MainButton from '@/app/components/mainButton';
 import Notification from '@/app/components/notification';
 import PopUpNotification from '@/app/components/popUpNotification';
+import { Team } from '@/app/types';
 import { RootState } from '@/redux/store';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
 import { useSelector } from 'react-redux';
-
-interface Team {
-  id: number;
-  name: string;
-}
 
 const CreateUser = () => {
   const [formData, setFormData] = useState({

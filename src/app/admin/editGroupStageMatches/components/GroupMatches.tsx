@@ -7,29 +7,16 @@ import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa6";
-
-interface Match {
-  match_id: number;
-  team_A_id: number;
-  team_B_id: number;
-  team_A_name: string;
-  team_A_logo: string;
-  team_B_name: string;
-  team_B_logo: string;
-  team_A_score: number | null;
-  team_B_score: number | null;
-  isDraw: boolean;
-  match_day: number;
-  group_id: number;
-}
+import { Match } from "@/app/types";
 
 interface GroupMatchesProps {
   showNotification: (message: string, type: 'success' | 'error') => void;
   fetchedMatches: Match[];
   fetchedcurrentMatchDay: number;
+  updateGroups: () => void;
 }
 
-const GroupMatches = ({ showNotification, fetchedMatches, fetchedcurrentMatchDay }: GroupMatchesProps) => {
+const GroupMatches = ({ showNotification, fetchedMatches, fetchedcurrentMatchDay, updateGroups }: GroupMatchesProps) => {
   const [matches, setMatches] = useState<Match[]>(fetchedMatches);
   const [allMatchesPlayed, setAllMatchesPlayed] = useState(false);
   const [currentMatchDay, setCurrentMatchDay] = useState(fetchedcurrentMatchDay);
@@ -99,6 +86,7 @@ const GroupMatches = ({ showNotification, fetchedMatches, fetchedcurrentMatchDay
         body: JSON.stringify({ matches }),
       });
       showNotification("Partidos actualizados correctamente.", "success");
+      updateGroups();
     } catch (error) {
       showNotification("Error al actualizar los partidos.", "error");
       console.error("Error updating matches", error);

@@ -1,43 +1,10 @@
 'use client'
 
-import SoccerLoadingAnimation from '@/app/components/loadingAnimation';
-import { RootState } from '@/redux/store';
+import { Group } from '@/app/types';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
 
-interface User {
-    id: number;
-    username: string;
-    picture: string;
-}
-
-interface Team {
-    id: number;
-    name: string;
-    logo: string;
-    user: User;
-}
-
-interface TeamStats {
-    points: number;
-    wins: number;
-    draws: number;
-    losses: number;
-    goal_diff: number;
-}
-
-interface GroupTeam {
-    team: Team;
-    stats: TeamStats;
-}
-
-interface Group {
-    group_id: number;
-    teams: GroupTeam[];
-}
-
-interface GroupStandingsProps {
+export interface GroupStandingsProps {
     fetchedGroups: Group[];
 }
 

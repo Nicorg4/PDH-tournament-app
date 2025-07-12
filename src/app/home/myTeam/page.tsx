@@ -3,21 +3,12 @@ import { RootState } from '@/redux/store';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import Bayern from '../../../../public/bayern.png'
 import { useRouter } from 'next/navigation';
 import SoccerLoadingAnimation from '@/app/components/loadingAnimation';
+import { FormattedPlayer } from '@/app/types';
 
-interface Jugador {
-  id: number,
-  name: string;
-  number: number;
-  position: string;
-  team_id: number;
-  on_sale: boolean;
-}
-
-const groupByPosition = (jugadores: Jugador[]): Record<string, Jugador[]> => {
-  const grouped: Record<string, Jugador[]> = {};
+const groupByPosition = (jugadores: FormattedPlayer[]): Record<string, FormattedPlayer[]> => {
+  const grouped: Record<string, FormattedPlayer[]> = {};
 
   jugadores.forEach((jugador) => {
     if (!grouped[jugador.position]) {
@@ -29,10 +20,9 @@ const groupByPosition = (jugadores: Jugador[]): Record<string, Jugador[]> => {
   return grouped;
 };
 
-
 const MyTeam: React.FC = () => {
 
-  const [players, setPlayers] = useState<Jugador[]>([]);
+  const [players, setPlayers] = useState<FormattedPlayer[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const jugadoresPorPosicion = groupByPosition(players);
   const loggedUser = useSelector((state: RootState) => state.user);

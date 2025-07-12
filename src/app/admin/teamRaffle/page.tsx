@@ -2,29 +2,13 @@
 
 import SoccerLoadingAnimation from '@/app/components/loadingAnimation';
 import MainButton from '@/app/components/mainButton';
+import { Pair, Team, User } from '@/app/types';
 import { RootState } from '@/redux/store';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { CgArrowsExchange } from "react-icons/cg";
 import { useSelector } from 'react-redux';
-
-interface User {
-    id: number;
-    username: string;
-    picture: string;
-}
-
-interface Team {
-    id: number;
-    name: string;
-    logo: string;
-}
-
-interface Pair {
-    user: User;
-    team: Team;
-}
 
 const TeamRafflePage = () => {
     const [users, setUsers] = useState<User[]>([]);

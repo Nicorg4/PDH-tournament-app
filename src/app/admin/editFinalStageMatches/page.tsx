@@ -3,32 +3,11 @@
 import SoccerLoadingAnimation from "@/app/components/loadingAnimation";
 import MainButton from "@/app/components/mainButton";
 import Notification from "@/app/components/notification";
+import { Match } from "@/app/types";
 import { RootState } from "@/redux/store";
 import React, { useState, useEffect } from "react";
-import { IoStar } from "react-icons/io5";
 import { useSelector } from "react-redux";
 
-interface Match {
-  match_id: number;
-  team_A_id: number;
-  team_B_id: number;
-  winner_team_id: number | null;
-  team_A_score: number | null;
-  team_B_score: number | null;
-  team_A_penalty_score: number | null;
-  team_B_penalty_score: number | null;
-  phase: number;
-  team_A_name: string;
-  team_A_logo: string;
-  team_B_name: string;
-  team_B_logo: string;
-  user_A_id: number;
-  user_A_name: string;
-  user_A_picture: string;
-  user_B_id: number;
-  user_B_name: string;
-  user_B_picture: string;
-}
 const GroupMatches = () => {
   const [matches, setMatches] = useState<Match[]>([]);
   const URL_SERVER = process.env.NEXT_PUBLIC_URL_SERVER;

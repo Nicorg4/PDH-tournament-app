@@ -4,22 +4,10 @@ import SoccerLoadingAnimation from '@/app/components/loadingAnimation';
 import MainButton from '@/app/components/mainButton';
 import Notification from '@/app/components/notification';
 import PopUpNotification from '@/app/components/popUpNotification';
+import { Player } from '@/app/types';
 import { RootState } from '@/redux/store';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-
-interface Team {
-    id: number;
-    name: string;
-    logo: string;
-}
-
-interface Player {
-    id: number;
-    name: string;
-    team?: Team;
-    price: number;
-}
 
 const PublishForm = () => {
     const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
